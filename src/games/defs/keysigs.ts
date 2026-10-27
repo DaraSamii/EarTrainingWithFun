@@ -43,6 +43,6 @@ function level(i: number): Level {
 
 export const keysigs: Game = {
   id: 'keysigs', course: 'theory', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'notebook', worldName: S.world, arcade: 'blaster', instruments: ['piano'],
+  world: 'notebook', worldName: S.world, arcade: 'drops', instruments: ['piano'],
   levels: LEVELS.map((_, i) => level(i)),
 }

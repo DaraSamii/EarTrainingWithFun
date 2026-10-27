@@ -33,6 +33,6 @@ function level(i: number): Level {
 
 export const progressions: Game = {
   id: 'progressions', course: 'harmony', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'space', worldName: S.world, arcade: 'blaster', journeyOffset: 2, instruments: ['piano'],
+  world: 'space', worldName: S.world, arcade: 'potion', journeyOffset: 2, instruments: ['piano'],
   levels: LEVELS.map((_, i) => level(i)),
 }

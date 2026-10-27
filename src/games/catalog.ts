@@ -19,13 +19,20 @@ import { rhythm } from './defs/rhythm'
 import { meter } from './defs/meter'
 import { expression } from './defs/expression'
 import { intreader } from './defs/intreader'
+import { memory } from './defs/memory'
+import { compare } from './defs/compare'
+import { mood } from './defs/mood'
+import { motion } from './defs/motion'
+import { count } from './defs/count'
+import { tempo } from './defs/tempo'
+import { families } from './defs/families'
 
 export type { CourseId, Game, GameId, Level, Option, Question, Visual } from './types'
 export { resolution } from './defs/degrees'
 
 export const GAMES: Record<GameId, Game> = {
   pitch, tuneup, intervals, harmonic, degrees, scales, contour, spot, chords, progressions, cadences,
-  rhythm, meter, timbre, expression, notes, intreader, keysigs,
+  rhythm, meter, timbre, expression, notes, intreader, keysigs, memory, compare, mood, motion, count, tempo, families,
 }
 
 export type Course = { id: CourseId; title: string; blurb: string; color: string; games: GameId[] }
@@ -33,13 +40,13 @@ export type Course = { id: CourseId; title: string; blurb: string; color: string
 /** Courses group games by skill (ADR-017) */
 export const COURSES: Course[] = (
   [
-    ['pitch', 'red', ['pitch', 'tuneup']],
-    ['intervals', 'iris', ['intervals', 'harmonic']],
-    ['scales', 'yellow', ['degrees', 'scales']],
-    ['melody', 'green', ['contour', 'spot']],
-    ['harmony', 'pink', ['chords', 'progressions', 'cadences']],
-    ['rhythm', 'orange', ['rhythm', 'meter']],
-    ['sounds', 'sky', ['timbre', 'expression']],
+    ['pitch', 'red', ['pitch', 'memory', 'tuneup']],
+    ['intervals', 'iris', ['intervals', 'compare', 'harmonic']],
+    ['scales', 'yellow', ['degrees', 'mood', 'scales']],
+    ['melody', 'green', ['contour', 'motion', 'spot']],
+    ['harmony', 'pink', ['chords', 'count', 'progressions', 'cadences']],
+    ['rhythm', 'orange', ['rhythm', 'tempo', 'meter']],
+    ['sounds', 'sky', ['timbre', 'families', 'expression']],
     ['theory', 'ink', ['notes', 'intreader', 'keysigs']],
   ] as [CourseId, string, GameId[]][]
 ).map(([id, color, games]) => ({ id, color, games, ...en.courses[id] }))
@@ -66,6 +73,7 @@ const tier = (games: GameId[], t: number, useOffset: boolean): Node[] =>
 const JOURNEY_ORDER: GameId[] = [
   'pitch', 'degrees', 'intervals', 'rhythm', 'chords', 'notes', 'timbre', 'contour', 'expression',
   'scales', 'harmonic', 'meter', 'spot', 'intreader', 'keysigs', 'tuneup', 'progressions', 'cadences',
+  'mood', 'motion', 'families', 'tempo', 'compare', 'memory', 'count',
 ]
 const SECTIONS = Math.max(...JOURNEY_ORDER.map((g) => GAMES[g].levels.length + (GAMES[g].journeyOffset ?? 0)))
 const journeyTiers = Array.from({ length: SECTIONS }, (_, t) => tier(JOURNEY_ORDER, t, true))
@@ -134,7 +142,7 @@ export const findUnit = (key: string) => [...JOURNEY, ...COURSES.flatMap(courseP
 export const reviewOpen = (p: Progress, u: Unit) => u.nodes.every(([g, l]) => levelStats(p, levelId(g, l)).done)
 
 /** Games whose answers change with every question remember the level, not the answer (ADR-022) */
-const BY_LEVEL = new Set<GameId>(['pitch', 'tuneup', 'spot', 'rhythm'])
+const BY_LEVEL = new Set<GameId>(['pitch', 'tuneup', 'spot', 'rhythm', 'memory', 'compare', 'tempo'])
 
 /** What a question trains, as a memory item: e.g. "intervals:P5", or "rhythm:L3" */
 export const itemKey = (g: GameId, level: number, answer: string) => (BY_LEVEL.has(g) ? `${g}:L${level}` : `${g}:${answer}`)
@@ -144,4 +152,11 @@ export const isByLevel = (g: GameId) => BY_LEVEL.has(g)
 export function currentStage(units: Unit[], done: (id: string) => boolean): Stage {
   const u = units.find((x) => x.nodes.some(([g, l]) => !done(levelId(g, l))))
   return u?.stage ?? 2
+}
+
+/** The next level to play on the path the learner came from (a course page or the Journey) */
+export function nextActivity(p: Progress, from: string): string {
+  const course = COURSES.find((c) => from === `/course/${c.id}`)
+  const node = currentNode(p, course ? coursePath(course) : JOURNEY)
+  return node ? `/level/${node[0]}/${node[1]}?from=${encodeURIComponent(from)}` : from
 }
