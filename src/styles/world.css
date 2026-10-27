@@ -134,3 +134,58 @@
 .w-doodle { width: 6cqmin; aspect-ratio: 1; border: 3px solid var(--color-electric-iris); border-radius: 50%; }
 .w-doodle0 { left: 50%; top: 60%; } .w-doodle1 { left: 64%; top: 70%; border-color: var(--color-jelly-green); border-radius: 0; rotate: 20deg; }
 .w-doodle2 { left: 22%; top: 50%; width: 4cqmin; } .w-doodle3 { left: 80%; top: 78%; border-color: var(--color-marker-red); }
+
+/* Paper River (Melody) */
+.world-river { background: #e3f4ff; }
+.world-river .w-cloud0 { left: 10%; top: 12%; } .world-river .w-cloud1 { left: 62%; top: 22%; height: 8cqmin; }
+.w-bank { bottom: 0; height: 52cqh; background: var(--color-jelly-green); border-radius: 0 60% 0 0; }
+.w-bank.b1 { left: 0; width: 46%; }
+.w-bank.b2 { right: 0; width: 46%; background: #5fcf8a; border-radius: 60% 0 0 0; }
+.w-stream { left: 34%; width: 32%; bottom: 0; height: 56cqh; background: repeating-linear-gradient(to bottom, #6fc6e3 0 14px, #91d8ec 14px 28px); clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%); animation: flow 1.6s linear infinite; }
+.w-pine { bottom: 30cqh; height: 26cqmin; aspect-ratio: .7; background: #0e8a46; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.w-pine0 { left: 8%; } .w-pine1 { left: 18%; height: 20cqmin; } .w-pine2 { right: 10%; height: 30cqmin; }
+.w-paperboat { left: 47%; bottom: 18cqh; width: 9cqmin; height: 4cqmin; background: var(--color-paper-white); border: 2px solid var(--color-ink-black); border-radius: 0 0 40px 40px; animation: bob 2.4s ease-in-out infinite; }
+
+/* Potion Lab (Harmony) */
+.world-lab { background: #ece2ff; background-image: repeating-linear-gradient(90deg, transparent 0 46px, rgb(17 17 24 / .05) 46px 48px); }
+.w-shelf { left: 6%; right: 6%; height: 3cqmin; background: #b07a46; border: 2px solid var(--color-ink-black); border-radius: 4px; }
+.w-shelf0 { top: 26%; } .w-shelf1 { top: 52%; left: 52%; } .w-shelf2 { top: 78%; right: 52%; }
+.w-flask { width: 9cqmin; height: 14cqmin; border: 2px solid var(--color-ink-black); border-radius: 30% 30% 45% 45%; }
+.w-flask::before { content: ''; position: absolute; left: 30%; top: -30%; width: 40%; height: 35%; background: #b07a46; border: 2px solid var(--color-ink-black); border-radius: 2px; }
+.w-flask0 { left: 10%; top: calc(26% - 14cqmin); background: var(--color-marker-red); } .w-flask1 { left: 20%; top: calc(26% - 14cqmin); background: var(--color-hi-yellow); }
+.w-flask2 { left: 74%; top: calc(26% - 14cqmin); background: var(--color-jelly-green); } .w-flask3 { left: 62%; top: calc(52% - 14cqmin); background: var(--color-powder-sky); }
+.w-flask4 { left: 80%; top: calc(52% - 14cqmin); background: var(--color-bubblegum-pink); } .w-flask5 { left: 14%; top: calc(78% - 14cqmin); background: #8f8fff; }
+.w-flask6 { left: 30%; top: calc(78% - 14cqmin); background: #ff9a3c; }
+.w-window { right: 8%; top: 6%; width: 18cqmin; height: 14cqmin; border: 3px solid var(--color-ink-black); border-radius: 50% 50% 6px 6px; background: #c8e9ff; }
+.w-bigflask { left: 40%; top: 58%; width: 18cqmin; height: 22cqmin; border-radius: 50% 50% 45% 45%; background: var(--color-bubblegum-pink); border: 3px solid var(--color-ink-black); opacity: .55; }
+
+/* Paper Stadium (Rhythm) */
+.world-track { background: #fff0d6; }
+.w-stands { left: 0; right: 0; top: 30%; height: 28%; background: repeating-linear-gradient(to bottom, #f2c28b 0 18px, #e8a868 18px 36px); border-top: 3px solid var(--color-ink-black); }
+.w-fan { width: 3.4cqmin; aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--color-ink-black); animation: bob 1.2s ease-in-out infinite; }
+.w-fan:nth-child(odd) { animation-delay: -.6s; }
+.w-fan0 { left: 6%; top: 33%; background: var(--color-marker-red); } .w-fan1 { left: 14%; top: 40%; background: var(--color-hi-yellow); } .w-fan2 { left: 22%; top: 34%; background: var(--color-powder-sky); }
+.w-fan3 { left: 30%; top: 44%; background: var(--color-bubblegum-pink); } .w-fan4 { left: 38%; top: 35%; background: var(--color-jelly-green); } .w-fan5 { left: 46%; top: 41%; background: #8f8fff; }
+.w-fan6 { left: 54%; top: 34%; background: var(--color-marker-red); } .w-fan7 { left: 62%; top: 43%; background: var(--color-hi-yellow); } .w-fan8 { left: 70%; top: 36%; background: var(--color-powder-sky); }
+.w-fan9 { left: 78%; top: 42%; background: var(--color-bubblegum-pink); } .w-fan10 { left: 86%; top: 35%; background: var(--color-jelly-green); } .w-fan11 { left: 93%; top: 45%; background: #ff9a3c; }
+.w-lanes { left: 0; right: 0; bottom: 0; height: 42%; background: repeating-linear-gradient(to bottom, #e88c4a 0 calc(10cqh - 3px), #fff calc(10cqh - 3px) 10cqh); border-top: 4px solid var(--color-ink-black); }
+.w-finish { right: 12%; bottom: 0; width: 3cqmin; height: 42%; background: repeating-conic-gradient(var(--color-ink-black) 0 25%, #fff 0 50%) 0 0 / 1.5cqmin 1.5cqmin; }
+.track-sun { width: 22cqmin; aspect-ratio: 1; left: 8%; top: 4%; border-radius: 50%; background: var(--color-hi-yellow); }
+
+/* Lily Pond (Sounds) */
+.world-pond { background: #c9f0b5; }
+.w-water { left: 6%; right: 6%; top: 14%; bottom: 8%; border-radius: 50%; background: radial-gradient(ellipse at 40% 35%, #a6e4f2, #5fc0dc 75%); border: 3px solid var(--color-ink-black); }
+.w-pad { width: 12cqmin; aspect-ratio: 1; border-radius: 50%; background: var(--color-jelly-green); border: 2px solid var(--color-ink-black); clip-path: polygon(50% 50%, 62% 0, 100% 0, 100% 100%, 0 100%, 0 0, 38% 0); }
+.w-pad0 { left: 18%; top: 30%; rotate: 20deg; } .w-pad1 { left: 70%; top: 26%; rotate: -40deg; width: 9cqmin; }
+.w-pad2 { left: 26%; top: 66%; rotate: 120deg; width: 10cqmin; } .w-pad3 { left: 64%; top: 64%; rotate: 200deg; }
+.w-pad0::after { content: ''; position: absolute; left: 30%; top: 30%; width: 34%; height: 34%; border-radius: 50%; background: var(--color-bubblegum-pink); }
+.w-reed { bottom: 4%; width: 1.4cqmin; height: 30cqh; background: #0e8a46; border-radius: 4px; transform-origin: bottom; animation: sway 2.6s ease-in-out infinite alternate; }
+.w-reed::after { content: ''; position: absolute; left: -60%; top: 0; width: 220%; height: 22%; border-radius: 8px; background: #8a5a2b; }
+.w-reed0 { left: 4%; } .w-reed1 { left: 7%; height: 22cqh; animation-delay: -1s; } .w-reed2 { right: 5%; height: 26cqh; animation-delay: -.5s; }
+.w-koi { width: 8cqmin; height: 4cqmin; border-radius: 50% 60% 60% 50%; background: #ff9a3c; border: 2px solid var(--color-ink-black); animation: koi 16s linear infinite; }
+.w-koi.k1 { top: 45%; left: 20%; } .w-koi.k2 { top: 56%; left: 50%; background: var(--color-paper-white); animation-duration: 22s; animation-delay: -8s; }
+@keyframes koi { 0% { translate: 0 0; } 25% { translate: 30cqw -4cqh; } 50% { translate: 40cqw 6cqh; scale: -1 1; } 75% { translate: 10cqw 8cqh; scale: -1 1; } 100% { translate: 0 0; } }
+.w-ripple { width: 10cqmin; aspect-ratio: 1; border-radius: 50%; border: 2px solid rgb(255 255 255 / .8); animation: ring 3s ease-out infinite; }
+.w-ripple0 { left: 44%; top: 40%; } .w-ripple1 { left: 58%; top: 72%; animation-delay: -1.5s; }
+
+.world-bg-river { --bg: #eef8ff; } .world-bg-lab { --bg: #f4eeff; } .world-bg-track { --bg: #fff6e8; } .world-bg-pond { --bg: #eefae6; }

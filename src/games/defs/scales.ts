@@ -49,6 +49,6 @@ function level(i: number): Level {
 
 export const scales: Game = {
   id: 'scales', course: 'scales', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'ocean', worldName: S.world, arcade: 'breaker', instruments: ['piano'],
+  world: 'garden', worldName: S.world, arcade: 'breaker', instruments: ['piano'],
   levels: LEVELS.map((_, i) => level(i)),
 }

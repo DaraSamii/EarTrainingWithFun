@@ -51,6 +51,6 @@ function level(i: number): Level {
 
 export const timbre: Game = {
   id: 'timbre', course: 'sounds', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'garden', worldName: S.world, arcade: 'fishing', instruments: [...new Set(LEVELS.flat())],
+  world: 'pond', worldName: S.world, arcade: 'fishing', instruments: [...new Set(LEVELS.flat())],
   levels: LEVELS.map((_, i) => level(i)),
 }

@@ -36,6 +36,6 @@ function level(i: number): Level {
 
 export const families: Game = {
   id: 'families', course: 'sounds', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'ocean', worldName: S.world, arcade: 'fishing', instruments: [...new Set(Object.values(FAMILY).flat())],
+  world: 'pond', worldName: S.world, arcade: 'fishing', instruments: [...new Set(Object.values(FAMILY).flat())],
   levels: LEVELS.map((_, i) => level(i)),
 }

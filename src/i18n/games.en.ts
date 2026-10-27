@@ -90,7 +90,7 @@ export const games = {
   },
   harmonic: {
     title: 'Twin Notes',
-    world: 'Bubble Reef',
+    world: 'Paper Space',
     blurb: 'Two notes rise together in a bubble. Name the interval before it floats away!',
     instruction: 'Which interval do the two notes make together?',
     colors: {
@@ -144,7 +144,7 @@ export const games = {
   },
   scales: {
     title: 'Scale Shapes',
-    world: 'Bubble Reef',
+    world: 'Sunset Garden',
     blurb: 'Every scale has a mood. Hear it run up the ladder and name its color.',
     instruction: 'Which scale is this?',
     names: {
@@ -178,7 +178,7 @@ export const games = {
   // ---------------- Melody ----------------
   contour: {
     title: 'Contour Catcher',
-    world: 'Paper Peaks',
+    world: 'Paper River',
     blurb: 'Melodies have shapes. Hear a little tune and catch the line it draws.',
     instruction: 'Which shape does the melody make?',
     names: {
@@ -208,7 +208,7 @@ export const games = {
   },
   spot: {
     title: 'Spot the Change',
-    world: 'Sunset Garden',
+    world: 'Paper River',
     blurb: 'A melody plays twice, but one note sneaks off. Catch the note that changed!',
     instruction: 'Which note changed the second time?',
     note: 'Note',
@@ -230,7 +230,7 @@ export const games = {
   // ---------------- Harmony ----------------
   chords: {
     title: 'Chord Colors',
-    world: 'Bubble Reef',
+    world: 'Potion Lab',
     blurb: 'Three or four notes at once make a chord, and every chord has a color. Blast the right one!',
     instruction: 'What kind of chord is this?',
     names: {
@@ -261,7 +261,7 @@ export const games = {
   },
   progressions: {
     title: 'Progression Path',
-    world: 'Paper Space',
+    world: 'Potion Lab',
     blurb: 'Chords follow each other like stepping stones. Hear the path and pick its Roman numerals.',
     instruction: 'Which chord progression is this?',
     levels: ['Two moves', 'Three chords', 'Pop staple', 'Four-chord songs', 'Jazz step', 'Minor paths', 'Twists', 'Major or minor'],
@@ -286,7 +286,7 @@ export const games = {
   },
   cadences: {
     title: 'Cadence Call',
-    world: 'Paper Notebook',
+    world: 'Potion Lab',
     blurb: 'Every musical sentence ends with punctuation. Is it a full stop, a comma, or a surprise?',
     instruction: 'How does this phrase end?',
     names: { authentic: 'Authentic', plagal: 'Plagal', half: 'Half', deceptive: 'Deceptive' } as Dict,
@@ -310,7 +310,7 @@ export const games = {
   // ---------------- Rhythm ----------------
   rhythm: {
     title: 'Rhythm Match',
-    world: 'Sunset Garden',
+    world: 'Paper Stadium',
     blurb: 'Hear a one-bar rhythm on the woodblock, then blast the beat grid that matches it.',
     instruction: 'Which rhythm did you hear?',
     pattern: 'Pattern',
@@ -339,7 +339,7 @@ export const games = {
   },
   meter: {
     title: 'Meter Detective',
-    world: 'Paper Peaks',
+    world: 'Paper Stadium',
     blurb: 'Music groups beats into bars. Count the strong beats and crack the time signature.',
     instruction: 'What is the meter?',
     names: { '2/4': 'march: 1-2', '3/4': 'waltz: 1-2-3', '4/4': 'common: 1-2-3-4', '6/8': 'two big beats in 3s', '5/4': 'five: 1-2-3-4-5', '7/8': 'seven: 2+2+3' } as Dict,
@@ -360,7 +360,7 @@ export const games = {
   // ---------------- Sounds ----------------
   timbre: {
     title: "Who's Playing?",
-    world: 'Sunset Garden',
+    world: 'Lily Pond',
     blurb: 'Real instruments drop into the garden. Name each one before it lands!',
     instruction: 'Which instrument is playing?',
     names: {
@@ -390,7 +390,7 @@ export const games = {
   },
   expression: {
     title: 'Expression Detective',
-    world: 'Bubble Reef',
+    world: 'Lily Pond',
     blurb: 'Music breathes: louder, softer, shorter, smoother, faster, slower. Catch how it is played!',
     instruction: 'How is this music being played?',
     names: {
@@ -542,7 +542,7 @@ export const games = {
   },
   motion: {
     title: 'Steps & Leaps',
-    world: 'Sunset Garden',
+    world: 'Paper River',
     blurb: 'Melodies repeat, step, skip or leap. Steer your boat through the gate that matches the move.',
     instruction: 'How does the melody move?',
     names: { repeat: 'Repeat', step: 'Step', skip: 'Skip', leap: 'Leap' } as Dict,
@@ -560,7 +560,7 @@ export const games = {
   },
   count: {
     title: 'How Many Notes?',
-    world: 'Bubble Reef',
+    world: 'Potion Lab',
     blurb: 'Notes stacked into one sound. Count them and pour the right potion!',
     instruction: 'How many different notes are sounding?',
     notes: 'notes',
@@ -577,7 +577,7 @@ export const games = {
   },
   tempo: {
     title: 'Tempo Check',
-    world: 'Paper Peaks',
+    world: 'Paper Stadium',
     blurb: 'Two bars of beat. Did the second speed up, slow down, or stay steady? Jump the hurdle!',
     instruction: 'Is the second bar faster, slower, or the same?',
     names: { faster: 'Faster', slower: 'Slower', same: 'Same' } as Dict,
@@ -595,7 +595,7 @@ export const games = {
   },
   families: {
     title: 'Instrument Families',
-    world: 'Bubble Reef',
+    world: 'Lily Pond',
     blurb: 'Instruments come in families. Hear one and catch the fish carrying its family name.',
     instruction: 'Which family does this instrument belong to?',
     names: { strings: 'Strings', woodwinds: 'Woodwinds', brass: 'Brass', keys: 'Keyboard', plucked: 'Plucked', mallets: 'Mallets' } as Dict,

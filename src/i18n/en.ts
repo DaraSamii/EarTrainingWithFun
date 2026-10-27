@@ -1,5 +1,6 @@
 // Every UI string lives here (ADR-010).
 import { games } from './games.en'
+import { guides } from './guides.en'
 export const en = {
   appName: 'EarTrainingWithFun',
   nav: { path: 'Home', courses: 'Courses', games: 'Games', profile: 'Profile', home: 'Home', back: 'Back' },
@@ -12,6 +13,7 @@ export const en = {
     P5: 'Perfect 5th', m6: 'Minor 6th', M6: 'Major 6th', m7: 'Minor 7th', M7: 'Major 7th', P8: 'Octave',
   },
   games,
+  guides,
   courses: {
     pitch: { title: 'Pitch', blurb: 'High, low, and everything in between' },
     intervals: { title: 'Intervals', blurb: 'The distance between two notes' },
@@ -116,6 +118,9 @@ export const en = {
   },
   learn: {
     title: 'Learn',
+    cards: { idea: 'The idea', what: 'What is it?', listen: 'How to listen', watch: 'Watch out', real: 'In real music' },
+    explain: 'Let me explain.',
+    prev: 'Back',
     next: 'Next',
     listenKey: "First, the key. This sets up home.",
     demoIntro: 'Listen to each one. Tap a card to hear it again.',
