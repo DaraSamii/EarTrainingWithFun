@@ -14,6 +14,9 @@ import { Staff } from '../../ui/Staff'
 import { OptionFace } from '../../ui/OptionFace'
 import { ExitBar } from '../../ui/ExitBar'
 import { useKeys } from '../../app/keys'
+import { animate } from '../../app/motion'
+import { Rich } from '../../ui/Rich'
+import { RatioWaves } from '../../ui/RatioWaves'
 import { en } from '../../i18n/en'
 
 const TRIES = 3
@@ -28,17 +31,24 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
   const back = `/level/${gameId}/${level}`
   // lesson cards before the demos: the level's idea plus the game's guide (user feedback 0.7.0)
   const guide = en.guides[gameId]
+  const sci = en.science[gameId]
+  // first levels show everything; later levels the idea, one listening tip and one rotating extra card
+  const extra = level % 4
   const cards = ([
     lv.concept ? ['idea', 'book', lv.concept] : null,
     level === 0 && guide ? ['what', 'ear', guide.what] : null,
-    // first levels get every listening tip; later levels one tip each
     guide ? ['listen', 'volume', level === 0 ? guide.listen.join('\n') : guide.listen[level % 3]] : null,
-    guide && (level === 0 || level % 2 === 0) ? ['watch', 'target', guide.watch] : null,
-    guide && (level === 0 || level % 2 === 1) ? ['real', 'star', guide.real] : null,
+    sci && (level === 0 || extra === 0) ? ['why', 'ear', sci.why] : null,
+    sci && (level === 0 || extra === 1) ? ['math', 'target', sci.math] : null,
+    guide && (level === 0 || extra === 2) ? ['watch', 'target', guide.watch] : null,
+    guide && (level === 0 || extra === 3) ? ['real', 'star', guide.real] : null,
   ].filter(Boolean) as [keyof typeof en.learn.cards, IconName, string][])
   const [page, setPage] = useState(0)
-  const [phase, setPhase] = useState<Phase>(cards.length ? 'concept' : 'demo')
-  const nextCard = () => (page + 1 < cards.length ? setPage(page + 1) : setPhase('demo'))
+  const [phase, setPhaseNow] = useState<Phase>(cards.length ? 'concept' : 'demo')
+  // every swap of what is on screen crossfades: old content leaves, new arrives
+  const setPhase = (p: Phase) => animate(() => setPhaseNow(p))
+  const turn = (k: number) => animate(() => setPage(k))
+  const nextCard = () => (page + 1 < cards.length ? turn(page + 1) : setPhase('demo'))
   const [heard, setHeard] = useState<string[]>([])
   const [active, setActive] = useState<string | null>(null)
   const [rng] = useState(() => mulberry32(Date.now()))
@@ -105,7 +115,8 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
     }
   }
 
-  function nextTry() {
+  function nextTry() { animate(nextTryNow) }
+  function nextTryNow() {
     if (tryN + 1 >= TRIES) {
       commit((p) => applyLearn(p, levelId(gameId, level), dayKey()))
       sfx.cheer()
@@ -128,7 +139,7 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
       : phase === 'demo' ? (heard.length >= demoItems.length ? startTries : playAll)
       : phase === 'try' ? (right ? nextTry : undefined)
       : () => go(`/practice/${gameId}/${level}`),
-    back: phase === 'concept' && page > 0 ? () => setPage(page - 1) : () => go(back),
+    back: phase === 'concept' && page > 0 ? () => turn(page - 1) : () => go(back),
     exit: () => go(back),
   })
 
@@ -154,7 +165,7 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
       <main className="learn-body">
         <div className="pip-stage">
           <Pip mood={mood} size={128} />
-          <Bubble side="bottom"><p aria-live="polite">{say}</p></Bubble>
+          <Bubble side="bottom"><p aria-live="polite"><Rich text={say ?? ''} /></p></Bubble>
         </div>
 
         {phase === 'concept' && cards[page] && (
@@ -166,12 +177,13 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
                 <span className="lesson-card-count">{page + 1} / {cards.length}</span>
               </header>
               {cards[page][2].includes('\n')
-                ? <ul>{cards[page][2].split('\n').map((t) => <li key={t}>{t}</li>)}</ul>
-                : <p>{cards[page][2]}</p>}
+                ? <ul>{cards[page][2].split('\n').map((t) => <li key={t}><Rich text={t} /></li>)}</ul>
+                : <p><Rich text={cards[page][2]} /></p>}
+              {cards[page][0] === 'math' && sci?.ratio && <RatioWaves ratio={sci.ratio} />}
             </article>
             <div className="card-dots" aria-hidden="true">{cards.map((_, k) => <i key={k} className={k === page ? 'on' : k < page ? 'seen' : ''} />)}</div>
             <div className="actions">
-              {page > 0 && <button className="btn-ghost" onClick={() => setPage(page - 1)}><Icon name="back" size={18} /> {en.learn.prev}</button>}
+              {page > 0 && <button className="btn-ghost" onClick={() => turn(page - 1)}><Icon name="back" size={18} /> {en.learn.prev}</button>}
               <button className="btn-primary" autoFocus onClick={nextCard}>{en.learn.next} <Icon name="arrow" size={20} /></button>
             </div>
           </>
@@ -190,7 +202,7 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
                   <span className="demo-play"><Icon name={active === o.id ? 'volume' : 'play'} size={22} /></span>
                   {lv.demoVisual && <Staff v={lv.demoVisual(o.id)} width={170} />}
                   <span className="demo-label"><OptionFace o={o} /></span>
-                  <span className="demo-hint">{lv.hint(o.id)}</span>
+                  <span className="demo-hint"><Rich text={lv.hint(o.id)} /></span>
                 </button>
               ))}
             </div>

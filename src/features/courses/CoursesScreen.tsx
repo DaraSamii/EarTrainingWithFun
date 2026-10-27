@@ -11,6 +11,7 @@ import { level as stats } from '../../progress/progress'
 import { currentStage, type Stage } from '../../games/catalog'
 import { ExitBar } from '../../ui/ExitBar'
 import { useKeys } from '../../app/keys'
+import { animate } from '../../app/motion'
 import { en } from '../../i18n/en'
 
 export function CoursesScreen() {
@@ -66,7 +67,7 @@ export function CourseScreen({ id }: { id: string }) {
             </div>
           ))}
         </div>
-        <StageTabs units={units} stage={stage} onChange={setStage} />
+        <StageTabs units={units} stage={stage} onChange={(s) => animate(() => setStage(s))} />
         <PathView key={stage} units={units.filter((u) => u.stage === stage)} from={`/course/${c.id}`} />
       </div>
     </div>

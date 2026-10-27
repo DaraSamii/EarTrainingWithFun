@@ -13,6 +13,7 @@ import { OptionFace } from '../../ui/OptionFace'
 import { Staff } from '../../ui/Staff'
 import { Countdown, Hud, Popups, StartOverlay, type Popup } from './shared'
 import { useGame, useLater } from './hooks'
+import { Presence } from '../../ui/Presence'
 import { en } from '../../i18n/en'
 
 const WAVES = 12
@@ -196,15 +197,15 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
         {g.phase === 'wave' && !g.q?.visual && <span className="signal" style={{ left: '50%', top: '62%' }} />}
         {g.q?.visual && g.phase !== 'intro' && <div className="stage-visual" key={g.results.length}><Staff v={g.q.visual} width={200} /></div>}
         <Popups items={g.popups} />
-        {g.banner && <div className="banner" role="status">{g.banner}</div>}
+        <Presence show={!!g.banner} className="banner-wrap"><div className="banner" role="status">{g.banner}</div></Presence>
       </div>
 
       <div className="timer"><span ref={barRef} /></div>
 
-      {g.phase === 'intro' && (
+      <Presence show={g.phase === 'intro'}>
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.shoot}
           help={en.arcadeHelp.blaster} onStart={() => { g.phase = 'count'; render() }} />
-      )}
+      </Presence>
       {g.phase === 'count' && <Countdown onDone={wave} />}
     </div>
   )

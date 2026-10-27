@@ -6,6 +6,7 @@ import { Icon } from '../../ui/Icon'
 import { Pip, Bubble } from '../../ui/Pip'
 import { ExitBar } from '../../ui/ExitBar'
 import { useKeys } from '../../app/keys'
+import { Rich } from '../../ui/Rich'
 import { en } from '../../i18n/en'
 
 export type Popup = { id: number; x: number; y: number; text: string; kind: 'good' | 'bad' }
@@ -40,7 +41,7 @@ export function StartOverlay({ title, text, help, onStart }: { title: string; te
     <div className="overlay">
       <div className="overlay-card">
         <Pip mood="talk" size={110} />
-        <Bubble side="bottom"><p>{text}</p></Bubble>
+        <Bubble side="bottom"><p><Rich text={text} /></p></Bubble>
         <h2>{title}</h2>
         <ul className="how-to">{help.map((h) => <li key={h}>{h}</li>)}</ul>
         <button className="btn-primary big" autoFocus onClick={onStart}>{en.arcade.ready} <Icon name="play" size={20} /></button>
@@ -60,5 +61,5 @@ export function Countdown({ onDone }: { onDone(): void }) {
     later(1950, () => { setN(0); sfx.whoosh() })
     later(2450, onDone)
   }, []) // oxlint-disable-line react-hooks/exhaustive-deps -- run once on mount
-  return <div className="countdown" aria-live="assertive"><span key={n}>{n || en.arcade.go}</span></div>
+  return <div className="countdown" aria-live="assertive"><span key={n} className={n ? '' : 'go'}>{n || en.arcade.go}</span></div>
 }

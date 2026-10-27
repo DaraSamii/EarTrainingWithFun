@@ -10,6 +10,8 @@ import { Staff } from '../../ui/Staff'
 import { OptionFace } from '../../ui/OptionFace'
 import { ExitBar } from '../../ui/ExitBar'
 import { World } from '../../ui/World'
+import { Presence } from '../../ui/Presence'
+import { animate } from '../../app/motion'
 import type { WorldId } from '../../games/types'
 import { en } from '../../i18n/en'
 
@@ -66,8 +68,7 @@ export function Quiz({ start, label, world, back, onDone }: {
     if (i + 1 < items.length) {
       const nq = items[i + 1].q
       playQ(nq, nq.key !== q.key || items[i + 1].game !== gid)
-      setPicked(null)
-      setI(i + 1)
+      animate(() => { setPicked(null); setI(i + 1) })
       return
     }
     const answers = start.map((it, k) => ({ key: itemKey(it.game, it.level, it.q.answer), ok: !!firstTry[k], lvl: it.level }))
@@ -150,12 +151,12 @@ export function Quiz({ start, label, world, back, onDone }: {
         )}
       </section>
 
-      {needsTap && (
+      <Presence show={needsTap}>
         <button className="tap-overlay" onClick={() => { setNeedsTap(false); playQ(q, true) }}>
           <span className="replay" aria-hidden="true"><Icon name="play" size={44} /></span>
           {en.lesson.tapToStart}
         </button>
-      )}
+      </Presence>
     </div>
   )
 }
