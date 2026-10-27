@@ -64,8 +64,8 @@
 }
 .answer:hover:not([aria-disabled='true']) { border-color: var(--action); }
 .answer:active:not([aria-disabled='true']) { transform: translateY(4px); box-shadow: none; }
-.answer kbd { position: absolute; top: 8px; left: 12px; font-size: 11px; color: var(--muted); }
-.answer-label { font: 400 22px/1.1 var(--font-display); letter-spacing: -0.02em; }
+.answer kbd { position: absolute; top: 8px; left: 12px; font-size: 13px; color: var(--muted); }
+.answer-label { font: 400 24px/1.1 var(--font-display); letter-spacing: -0.02em; }
 .answer-sub { font: 400 var(--text-caption-mono)/1.35 var(--font-mono); color: var(--muted); }
 .answer.is-correct { background: var(--success); color: var(--on-feedback); border-color: transparent; animation: pop 300ms; }
 .answer.is-wrong { background: var(--error); color: var(--on-feedback); border-color: transparent; animation: shake 300ms; }
