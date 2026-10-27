@@ -24,7 +24,7 @@ export function PlayScreen({ gameId, level }: { gameId: GameId; level: number })
   }
 
   if (res)
-    return <Results kind="play" gameId={gameId} level={level} correct={res.r.correct} total={res.r.total} xp={playXp(res.r)}
+    return <Results kind="play" gameId={gameId} level={level} world={game.world} back={`/level/${gameId}/${level}`} correct={res.r.correct} total={res.r.total} xp={playXp(res.r)}
       score={res.r.score} maxCombo={res.r.maxCombo} stars={starsFor(res.r.correct / res.r.total)} newBest={res.newBest}
       badges={res.badges} again={() => { setRes(null); setRun((x) => x + 1) }} />
 

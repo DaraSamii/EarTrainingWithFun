@@ -5,6 +5,8 @@ import { duration, play } from '../../audio/engine'
 import { sfx } from '../../audio/sfx'
 import { points, LATE_POINTS } from '../../games/score'
 import type { PlayResult } from '../../progress/progress'
+import type { Answer } from '../../progress/srs'
+import { itemKey } from '../../games/catalog'
 import { go } from '../../app/router'
 import { World } from '../../ui/World'
 import { OptionFace } from '../../ui/OptionFace'
@@ -43,6 +45,7 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
     deadline: 0,
     shot: false,
     results: [] as boolean[],
+    answers: [] as Answer[],
     score: 0,
     combo: 0,
     maxCombo: 0,
@@ -87,7 +90,7 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
     sfx.zap()
     const ok = k === g.ans
     const first = !g.shot
-    if (first) { g.results.push(ok); g.shot = true }
+    if (first) { g.results.push(ok); g.answers.push({ key: itemKey(game.id, level, g.q!.answer), ok, lvl: level }); g.shot = true }
     if (ok) {
       g.phase = 'between'
       g.ships[k] = 'boom'
@@ -116,7 +119,7 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
   }
 
   function timeout() {
-    if (!g.shot) { g.results.push(false); g.combo = 0 }
+    if (!g.shot) { g.results.push(false); g.answers.push({ key: itemKey(game.id, level, g.q!.answer), ok: false, lvl: level }); g.combo = 0 }
     g.phase = 'between'
     g.ships[g.ans] = 'escape'
     g.banner = `${en.arcade.late} ${g.q!.options[g.ans].label}`
@@ -147,7 +150,7 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
     if (g.results.length >= WAVES) {
       g.phase = 'over'
       render()
-      later(600, () => onFinish({ correct: g.results.filter(Boolean).length, total: WAVES, score: g.score, maxCombo: g.maxCombo }))
+      later(600, () => onFinish({ correct: g.results.filter(Boolean).length, total: WAVES, score: g.score, maxCombo: g.maxCombo, answers: g.answers }))
     } else later(350, wave)
     render()
   }
