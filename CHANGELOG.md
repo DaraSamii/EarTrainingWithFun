@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-27 · Full curriculum
+
+Eight courses, 18 games, 110 levels: rhythm, progressions, cadences, expression and reading join pitch, intervals, scales, melody and timbre.
+
 ### Added
 - **Rhythm course** with Rhythm Match (beat-grid answers) and Meter Detective (2/4, 3/4, 4/4, 6/8), plus a synthesized drum kit.
 - **9 new games**: Tune Up, Twin Notes, Spot the Change, Progression Path, Cadence Call, Rhythm Match, Meter Detective, Expression Detective, Interval Reader. 18 games and 110 levels in total; every course now has 2–3 games.
@@ -81,7 +85,8 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.4.0...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.5.0...develop
+[0.5.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/DaraSamii/EarTrainingWithFun/releases/tag/v0.2.0
