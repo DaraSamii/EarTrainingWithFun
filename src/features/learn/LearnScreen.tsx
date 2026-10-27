@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GAMES, levelId, type GameId } from '../../games/catalog'
 import { mulberry32, type Step } from '../../music/theory'
-import { play } from '../../audio/engine'
+import { duration, loadInstruments, play } from '../../audio/engine'
 import { sfx } from '../../audio/sfx'
 import { commit } from '../../progress/store'
 import { applyLearn, dayKey } from '../../progress/progress'
@@ -10,11 +10,13 @@ import { Icon } from '../../ui/Icon'
 import { Pip, Bubble, type Mood } from '../../ui/Pip'
 import { Confetti } from '../../ui/Confetti'
 import { World } from '../../ui/World'
+import { Staff } from '../../ui/Staff'
+import { OptionFace } from '../../ui/OptionFace'
+import { ExitBar } from '../../ui/ExitBar'
 import { en } from '../../i18n/en'
 
 const TRIES = 3
 const GAP: Step = { notes: [], dur: 0.6 }
-const durOf = (steps: Step[]) => steps.reduce((s, x) => s + x.dur, 0)
 
 type Phase = 'concept' | 'demo' | 'try' | 'ready'
 
@@ -22,6 +24,7 @@ type Phase = 'concept' | 'demo' | 'try' | 'ready'
 export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }) {
   const game = GAMES[gameId]
   const lv = game.levels[level]
+  const back = `/level/${gameId}/${level}`
   const [phase, setPhase] = useState<Phase>(lv.concept ? 'concept' : 'demo')
   const [heard, setHeard] = useState<string[]>([])
   const [active, setActive] = useState<string | null>(null)
@@ -31,26 +34,27 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
   const [wrong, setWrong] = useState<string | null>(null)
   const [right, setRight] = useState(false)
   const [mood, setMood] = useState<Mood>('talk')
-  const demoItems = lv.options.filter((o) => lv.fresh.includes(o.id))
+  // a level that only introduces a concept (e.g. new direction) still demonstrates every option
+  const demoItems = lv.fresh.length ? lv.options.filter((o) => lv.fresh.includes(o.id)) : lv.options
+
+  useEffect(() => { void loadInstruments(game.instruments) }, [game])
 
   function demo(id: string, withContext = false) {
     const steps = [...(withContext && lv.demoContext ? lv.demoContext : []), ...lv.demo(id)]
     play(steps)
     setActive(id)
     setHeard((h) => (h.includes(id) ? h : [...h, id]))
-    const ms = durOf(steps) * 1000
-    setTimeout(() => setActive((a) => (a === id ? null : a)), ms)
+    setTimeout(() => setActive((a) => (a === id ? null : a)), duration(steps) * 1000)
   }
 
   function playAll() {
     // schedule each demo back to back so Pip "presents" them one by one
     const ctx = lv.demoContext ?? []
-    let t = durOf(ctx) * 1000
+    let t = duration(ctx) * 1000
     play([...ctx, ...demoItems.flatMap((o) => [...lv.demo(o.id), GAP])])
     demoItems.forEach((o) => {
-      const len = durOf([...lv.demo(o.id), GAP]) * 1000
       setTimeout(() => setActive(o.id), t)
-      t += len
+      t += duration([...lv.demo(o.id), GAP]) * 1000
     })
     setTimeout(() => setActive(null), t)
     setHeard(demoItems.map((o) => o.id))
@@ -71,7 +75,7 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
       setRight(true)
       setWrong(null)
       setMood('happy')
-      play(q.after ?? [])
+      play(q.after ?? q.hear(q.answer))
     } else {
       sfx.shield()
       setWrong(id)
@@ -101,19 +105,19 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
     : phase === 'demo' ? en.learn.demoIntro
     : phase === 'ready' ? en.learn.ready
     : right ? en.learn.tryRight[tryN % en.learn.tryRight.length]
-    : wrong ? en.learn.tryAgain : en.learn.tryIntro
+    : wrong ? en.learn.tryAgain : q.visual ? en.learn.tryRead : en.learn.tryIntro
 
   return (
-    <div className={`learn theme-${gameId}`}>
-      <div className="learn-sky"><World game={gameId} /></div>
+    <div className={`learn world-bg-${game.world}`}>
+      <div className="learn-sky"><World world={game.world} /></div>
       <header className="lesson-top">
-        <button className="icon-btn" aria-label={en.lesson.exit} onClick={() => go(`/level/${gameId}/${level}`)}><Icon name="close" /></button>
+        <ExitBar back={back} onWorld />
         <div className="learn-steps" aria-hidden="true">
           {(['concept', 'demo', 'try', 'ready'] as Phase[]).filter((x) => x !== 'concept' || lv.concept).map((x) => (
             <span key={x} className={x === phase ? 'on' : ''} />
           ))}
         </div>
-        <span className="tag">{en.learn.title}</span>
+        <span className="tag">{en.learn.title} · {game.title}</span>
       </header>
 
       <main className="learn-body">
@@ -123,7 +127,7 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
         </div>
 
         {phase === 'concept' && (
-          <button className="btn-primary big" onClick={() => setPhase('demo')}>{en.learn.next} <Icon name="arrow" size={20} /></button>
+          <button className="btn-primary big" autoFocus onClick={() => setPhase('demo')}>{en.learn.next} <Icon name="arrow" size={20} /></button>
         )}
 
         {phase === 'demo' && (
@@ -132,11 +136,13 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
               <button className="btn-soft" onClick={() => play(lv.demoContext!)}><Icon name="key" size={18} /> {en.learn.listenKey}</button>
             )}
             <div className="demo-cards">
-              {demoItems.map((o) => (
-                <button key={o.id} className={`demo-card ${active === o.id ? 'playing' : ''} ${heard.includes(o.id) ? 'heard' : ''}`}
+              {demoItems.map((o, i) => (
+                <button key={o.id} style={{ animationDelay: `${i * 80}ms` }}
+                  className={`demo-card ${active === o.id ? 'playing' : ''} ${heard.includes(o.id) ? 'heard' : ''}`}
                   onClick={() => demo(o.id, heard.length === 0)}>
                   <span className="demo-play"><Icon name={active === o.id ? 'volume' : 'play'} size={22} /></span>
-                  <span className="demo-label">{o.label}{o.sub && <small> · {o.sub}</small>}</span>
+                  {lv.demoVisual && <Staff v={lv.demoVisual(o.id)} width={170} />}
+                  <span className="demo-label"><OptionFace o={o} /></span>
                   <span className="demo-hint">{lv.hint(o.id)}</span>
                 </button>
               ))}
@@ -153,14 +159,14 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
         {phase === 'try' && (
           <>
             <p className="try-count">{en.learn.try} {tryN + 1} {en.learn.of} {TRIES}</p>
-            <button className="replay small" aria-label={en.lesson.replay} onClick={() => playQ()}><Icon name="play" size={34} /></button>
+            {q.visual ? <div className="visual-card"><Staff v={q.visual} width={240} /></div>
+              : <button className="replay small" aria-label={en.lesson.replay} onClick={() => playQ()}><Icon name="play" size={34} /></button>}
             <div className="answers" data-count={q.options.length}>
               {q.options.map((o, k) => (
                 <button key={o.id} onClick={() => answer(o.id)} aria-disabled={right}
                   className={`answer ${right && o.id === q.answer ? 'is-correct' : o.id === wrong ? 'is-wrong' : right ? 'is-dim' : ''}`}>
                   <kbd aria-hidden="true">{k + 1}</kbd>
-                  <span className="answer-label">{o.label}</span>
-                  {o.sub && <span className="answer-sub">{o.sub}</span>}
+                  <OptionFace o={o} />
                 </button>
               ))}
             </div>

@@ -5,6 +5,30 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-27 · Courses & real instruments
+
+Seven courses, a Journey through all of them, 7 new games, real sampled instruments, and a design pass from user feedback.
+
+### Added
+- **Courses** (ADR-017): Pitch, Intervals, Scales & Keys, Melody, Harmony, Sounds, Music Theory, each with its own path page; the Courses tab; Games tab grouped by course or all.
+- **The Journey** on Home: one roadmap through every game, with a "Jump back in" card for the next level.
+- **7 new games**, each with Learn → Practice → Play and 5 levels: Higher or Lower, Scale Shapes, Contour Catcher, Chord Colors, Who's Playing?, Note Reader (staff reading), Key Signatures (theory concepts).
+- **Drops** arcade (falling items; a wrong answer lurches the item down); Breaker and Blaster now work for any game.
+- **Real instruments** (ADR-018): 12 sampled instruments (piano, flute, guitar, trumpet, violin, cello, clarinet, saxophone, xylophone, French horn, trombone, harp) with microtone repitching and synth fallback.
+- Hand-drawn **music staff** (treble/bass clef, key signatures, ledger lines) and **melodic contour** drawings as answer faces.
+- Home **stat panels** after Duolingo: streak week calendar, daily-goal picker with 7-day XP chart, stars by course; XP history per day.
+- Three new paper worlds: Paper Peaks, Bubble Reef, Paper Notebook; course colors; Explorer badge.
+- Theme toggle (sun/moon) in the top bar; light mode is the default.
+- Motion: page transitions, staggered path nodes and cards, Pip blinking, hover lifts, animated meters.
+
+### Changed
+- Practice: feedback and Continue now appear directly under the answers instead of a bottom sheet (ADR-019).
+- Every full-screen page has Home + Back buttons; levels remember where they were opened from.
+- Patterned backgrounds everywhere (paper confetti + dot grid); game pages use their world's tint.
+- The scrolling ticker became static tag pills.
+- Levels unlock per game (previous level of the same game), not along a single path.
+
+
 ## [0.3.0] - 2026-10-27 · Game worlds
 
 Every level is now Learn → Practice → Play, with two arcade games, the mascot Pip, stars and badges.
@@ -44,6 +68,7 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.3.0...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.4.0...develop
+[0.4.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/DaraSamii/EarTrainingWithFun/releases/tag/v0.2.0

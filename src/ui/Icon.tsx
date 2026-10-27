@@ -16,6 +16,12 @@ const PATHS = {
   star: 'M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z',
   volume: 'M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11',
   arrow: 'M5 12h14M13 6l6 6-6 6',
+  back: 'M19 12H5M11 6l-6 6 6 6',
+  home: 'M3 11l9-7 9 7M5 9.5V20h5v-6h4v6h5V9.5',
+  sun: 'M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
+  moon: 'M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z',
+  map: 'M9 4L3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14',
+  chevron: 'M9 6l6 6-6 6',
 } as const
 
 export type IconName = keyof typeof PATHS

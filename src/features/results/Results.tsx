@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import type { GameId } from '../../games/catalog'
 import type { BadgeId } from '../../progress/progress'
 import { sfx } from '../../audio/sfx'
 import { go } from '../../app/router'
@@ -8,6 +7,8 @@ import { Pip, Bubble } from '../../ui/Pip'
 import { Stars } from '../../ui/Stars'
 import { Confetti } from '../../ui/Confetti'
 import { Badge } from '../../ui/Badge'
+import { ExitBar } from '../../ui/ExitBar'
+import { GAMES, type GameId } from '../../games/catalog'
 import { en } from '../../i18n/en'
 
 function useCountUp(target: number, ms = 900) {
@@ -52,7 +53,8 @@ export function Results({ kind, gameId, level, correct, total, xp, score = 0, ma
   const line = kind === 'practice' ? en.results.playUnlocked : stars >= 2 ? en.results.levelDone : en.results.needStars
 
   return (
-    <div className={`results theme-${gameId}`}>
+    <div className={`results world-bg-${GAMES[gameId].world}`}>
+      <div className="results-exit"><ExitBar back={`/level/${gameId}/${level}`} /></div>
       {celebrate && <Confetti />}
       <span className="shape deco pentagon right" aria-hidden="true" />
       <span className="shape deco circle left" aria-hidden="true" />

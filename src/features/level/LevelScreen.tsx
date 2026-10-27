@@ -1,7 +1,10 @@
+import { useEffect } from 'react'
 import { GAMES, isUnlocked, levelId, nextStep, stepOpen, type GameId, type Step3 } from '../../games/catalog'
+import { loadInstruments } from '../../audio/engine'
 import { useProgress } from '../../progress/store'
 import { level as stats } from '../../progress/progress'
-import { go } from '../../app/router'
+import { fromParam, go } from '../../app/router'
+import { ExitBar } from '../../ui/ExitBar'
 import { Icon, type IconName } from '../../ui/Icon'
 import { Pip, Bubble } from '../../ui/Pip'
 import { Stars } from '../../ui/Stars'
@@ -17,17 +20,17 @@ export function LevelScreen({ gameId, level }: { gameId: GameId; level: number }
   const lv = game.levels[level]
   const id = levelId(gameId, level)
   const s = stats(p, id)
-  const unlocked = isUnlocked(p, id)
+  const unlocked = isUnlocked(p, gameId, level)
+  // warm up the samples this game needs while the learner reads the level card
+  useEffect(() => { void loadInstruments(game.instruments) }, [game])
   const next = nextStep(p, id)
   const done = (st: Step3) => (st === 'learn' ? s.learned : st === 'practice' ? s.practiced : (s.stars ?? 0) > 0)
 
   return (
-    <div className={`level-screen theme-${gameId}`}>
-      <header className={`level-hero hero-${gameId}`}>
-        <World game={gameId} />
-        <button className="icon-btn on-world" aria-label={en.lesson.exit} onClick={() => history.length > 1 ? history.back() : go('/')}>
-          <Icon name="close" />
-        </button>
+    <div className={`level-screen world-bg-${game.world}`}>
+      <header className={`level-hero hero-${game.world}`}>
+        <World world={game.world} />
+        <ExitBar back={fromParam()} onWorld />
         <div className="level-hero-inner">
           <span className="tag">{game.title} · {en.path.level} {level + 1}</span>
           <h1>{lv.title}</h1>

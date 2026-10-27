@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { GAMES, levelId, type GameId, type Question } from '../../games/catalog'
 import { mulberry32 } from '../../music/theory'
-import { isRunning, play } from '../../audio/engine'
+import { isRunning, loadInstruments, play } from '../../audio/engine'
 import { commit } from '../../progress/store'
 import { applyPractice, dayKey, sessionXp, type BadgeId } from '../../progress/progress'
 import { sfx } from '../../audio/sfx'
 import { Results } from '../results/Results'
 import { go } from '../../app/router'
 import { Icon } from '../../ui/Icon'
+import { Staff } from '../../ui/Staff'
+import { OptionFace } from '../../ui/OptionFace'
+import { ExitBar } from '../../ui/ExitBar'
+import { World } from '../../ui/World'
 import { en } from '../../i18n/en'
 
 const SESSION = 8
@@ -26,6 +30,7 @@ export function LessonScreen(props: Props) {
 
 function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
   const game = GAMES[gameId]
+  const back = `/level/${gameId}/${level}`
   const [items, setItems] = useState(() => {
     const rng = mulberry32(Date.now())
     return Array.from({ length: SESSION }, (_, n) => ({ q: game.levels[level].generate(rng), n }))
@@ -35,15 +40,19 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
   const [firstTry, setFirstTry] = useState<boolean[]>([])
   const [right, setRight] = useState(0)
   const [combo, setCombo] = useState(0)
-  const [needsTap, setNeedsTap] = useState(() => !isRunning())
+  const [needsTap, setNeedsTap] = useState(() => !isRunning() && items[0].q.prompt.length > 0)
   const [summary, setSummary] = useState<{ correct: number; badges: BadgeId[] } | null>(null)
+  const feedbackRef = useRef<HTMLDivElement>(null)
 
   const { q, n } = items[i]
   const ok = picked === q.answer
+  const audible = q.prompt.length > 0
 
+  useEffect(() => { void loadInstruments(game.instruments) }, [game])
   // Play the first question once on mount; later questions play from the Continue click (inside the gesture).
   // oxlint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (!needsTap) playQ(q, true) }, [])
+  useEffect(() => { if (picked) feedbackRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }) }, [picked])
 
   function answer(id: string) {
     if (picked) return
@@ -51,10 +60,11 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
     setPicked(id)
     if (firstTry[n] === undefined) setFirstTry((f) => Object.assign([...f], { [n]: correct }))
     setCombo((c) => (correct ? c + 1 : 0))
-    if (correct) sfx.pop()
-    else sfx.shield()
-    if (correct) setRight((r) => r + 1)
-    else if (items.length < SESSION + MAX_REQUEUE) setItems((xs) => [...xs, items[i]])
+    if (correct) { sfx.pop(); setRight((r) => r + 1) }
+    else {
+      sfx.shield()
+      if (items.length < SESSION + MAX_REQUEUE) setItems((xs) => [...xs, items[i]])
+    }
     play(q.after ?? (correct ? [] : q.hear(q.answer)))
   }
 
@@ -75,7 +85,7 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
     const onKey = (e: KeyboardEvent) => {
       if (summary || e.metaKey || e.ctrlKey || e.altKey) return
       if (e.key === ' ') { e.preventDefault(); playQ(q, false) }
-      else if (e.key === 'Escape') go(`/level/${gameId}/${level}`)
+      else if (e.key === 'Escape') go(back)
       else if (!picked && /^[1-9]$/.test(e.key)) { const o = q.options[+e.key - 1]; if (o) answer(o.id) }
     }
     addEventListener('keydown', onKey)
@@ -88,13 +98,14 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
 
   const label = (id: string) => {
     const o = q.options.find((x) => x.id === id)!
-    return gameId === 'degrees' ? `${o.label} (${o.sub})` : o.label
+    return o.sub && !o.shape ? `${o.label} (${o.sub})` : o.label
   }
 
   return (
-    <div className={`lesson theme-${gameId}`}>
+    <div className={`lesson world-bg-${game.world}`}>
+      <div className="lesson-sky"><World world={game.world} /></div>
       <header className="lesson-top">
-        <button className="icon-btn" aria-label={en.lesson.exit} onClick={() => go(`/level/${gameId}/${level}`)}><Icon name="close" /></button>
+        <ExitBar back={back} onWorld />
         <div className="bar" role="progressbar" aria-valuemin={0} aria-valuemax={SESSION} aria-valuenow={right}>
           <span style={{ width: `${(Math.min(right, SESSION) / SESSION) * 100}%` }} />
         </div>
@@ -107,9 +118,12 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
         <span className="tag">{en.lesson.practice} · {game.title} · {en.path.level} {level + 1}</span>
         <h1>{game.instruction}</h1>
         <div className="listen">
-          <button className="replay" aria-label={`${en.lesson.replay} (Space)`} onClick={() => playQ(q, false)}>
-            <Icon name="play" size={44} />
-          </button>
+          {q.visual && <div className="visual-card" key={i}><Staff v={q.visual} width={260} /></div>}
+          {audible && (
+            <button className="replay" aria-label={`${en.lesson.replay} (Space)`} onClick={() => playQ(q, false)}>
+              <Icon name="play" size={44} />
+            </button>
+          )}
           {q.context && (
             <button className="btn-soft" onClick={() => play(q.context!)}>
               <Icon name="key" size={18} /> {en.lesson.key}
@@ -121,14 +135,29 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
             <button key={o.id} onClick={() => answer(o.id)} aria-disabled={!!picked}
               className={`answer ${picked ? (o.id === q.answer ? 'is-correct' : o.id === picked ? 'is-wrong' : 'is-dim') : ''}`}>
               <kbd aria-hidden="true">{k + 1}</kbd>
-              <span className="answer-label">{o.label}</span>
-              {o.sub && <span className="answer-sub">{o.sub}</span>}
+              <OptionFace o={o} />
             </button>
           ))}
         </div>
-      </section>
 
-      {picked && <Feedback ok={ok} q={q} picked={picked} label={label} next={next} />}
+        {picked && (
+          <div ref={feedbackRef} className={`feedback ${ok ? 'ok' : 'bad'}`} role="status">
+            <span className="sheet-icon" aria-hidden="true"><Icon name={ok ? 'check' : 'close'} size={26} /></span>
+            <div className="sheet-text">
+              <strong>{ok ? en.lesson.correct[n % en.lesson.correct.length] : en.lesson.wrong}</strong>
+              <p>{ok ? label(q.answer) : `${en.lesson.youChose} ${label(picked)}. ${en.lesson.itWas} ${label(q.answer)}.`}</p>
+            </div>
+            <div className="sheet-actions">
+              {!ok && (
+                <button className="btn-ghost" onClick={() => play([...q.hear(picked), GAP, ...q.hear(q.answer)])}>
+                  <Icon name="volume" size={18} /> {en.lesson.hearDiff}
+                </button>
+              )}
+              <button className="btn-dark" autoFocus onClick={next}>{en.lesson.continue} <Icon name="arrow" size={18} /></button>
+            </div>
+          </div>
+        )}
+      </section>
 
       {needsTap && (
         <button className="tap-overlay" onClick={() => { setNeedsTap(false); playQ(q, true) }}>
@@ -136,29 +165,6 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
           {en.lesson.tapToStart}
         </button>
       )}
-    </div>
-  )
-}
-
-function Feedback({ ok, q, picked, label, next }: { ok: boolean; q: Question; picked: string; label(id: string): string; next(): void }) {
-  const [praise] = useState(() => en.lesson.correct[Math.floor(Math.random() * en.lesson.correct.length)])
-  return (
-    <div className={`sheet ${ok ? 'ok' : 'bad'}`} role="status">
-      <div className="sheet-inner">
-        <span className="sheet-icon" aria-hidden="true"><Icon name={ok ? 'check' : 'close'} size={28} /></span>
-        <div className="sheet-text">
-          <strong>{ok ? praise : en.lesson.wrong}</strong>
-          <p>{ok ? label(q.answer) : `${en.lesson.youChose} ${label(picked)}. ${en.lesson.itWas} ${label(q.answer)}.`}</p>
-        </div>
-        <div className="sheet-actions">
-          {!ok && (
-            <button className="btn-ghost" onClick={() => play([...q.hear(picked), GAP, ...q.hear(q.answer)])}>
-              {en.lesson.hearDiff}
-            </button>
-          )}
-          <button className="btn-dark" autoFocus onClick={next}>{en.lesson.continue}</button>
-        </div>
-      </div>
     </div>
   )
 }

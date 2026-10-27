@@ -8,6 +8,7 @@ const LOOK: Record<BadgeId, [IconName, string]> = {
   combo10: ['bolt', 'var(--color-jelly-green)'],
   streak3: ['flame', 'var(--color-marker-red)'],
   stars10: ['star', 'var(--color-powder-sky)'],
+  explorer: ['games', 'var(--color-jelly-green)'],
   sectionA: ['check', 'var(--color-hi-yellow)'],
 }
 

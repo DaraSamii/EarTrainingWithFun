@@ -17,11 +17,13 @@ export type Progress = {
   lastGoalDay: string | null
   bestCombo: number
   badges: string[]
+  /** XP earned per local day (last ~5 weeks) for the streak calendar and goal chart */
+  xpDays: Record<string, number>
   levels: Record<string, LevelStats>
 }
 
 export const initialProgress: Progress = {
-  xp: 0, dailyGoal: 20, today: null, todayXp: 0, streak: 0, lastGoalDay: null, bestCombo: 0, badges: [], levels: {},
+  xp: 0, dailyGoal: 20, today: null, todayXp: 0, streak: 0, lastGoalDay: null, bestCombo: 0, badges: [], xpDays: {}, levels: {},
 }
 
 export const PASS = 0.8
@@ -31,10 +33,13 @@ const EMPTY: LevelStats = { best: 0, done: false, plays: 0 }
 export const dayKey = (d = new Date()) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
-function prevDay(day: string) {
+/** Day key `n` days before `day` (local calendar, DST-safe) */
+export function shiftDay(day: string, n: number) {
   const [y, m, d] = day.split('-').map(Number)
-  return dayKey(new Date(y, m - 1, d - 1))
+  return dayKey(new Date(y, m - 1, d - n))
 }
+const prevDay = (day: string) => shiftDay(day, 1)
+const HISTORY_DAYS = 35
 
 export const sessionXp = (correct: number, total: number) => 10 + correct + (correct === total ? 5 : 0)
 
@@ -53,14 +58,30 @@ export function addXp(p: Progress, xp: number, today: string): Progress {
   const before = todayXp(p, today)
   const after = before + xp
   const metGoal = before < p.dailyGoal && after >= p.dailyGoal
+  const oldest = shiftDay(today, HISTORY_DAYS)
+  const xpDays = Object.fromEntries(Object.entries({ ...p.xpDays, [today]: (p.xpDays?.[today] ?? 0) + xp }).filter(([d]) => d > oldest))
   return {
     ...p,
     xp: p.xp + xp,
+    xpDays,
     today,
     todayXp: after,
     streak: metGoal ? currentStreak(p, today) + 1 : p.streak,
     lastGoalDay: metGoal ? today : p.lastGoalDay,
   }
+}
+
+export const GOALS = [10, 20, 30, 50]
+export const setGoal = (p: Progress, goal: number): Progress => ({ ...p, dailyGoal: goal })
+
+/** The 7 days of the current week (Mon–Sun) with the XP earned on each */
+export function week(p: Progress, today: string) {
+  const [y, m, d] = today.split('-').map(Number)
+  const mondayOffset = (new Date(y, m - 1, d).getDay() + 6) % 7
+  return Array.from({ length: 7 }, (_, i) => {
+    const day = shiftDay(today, mondayOffset - i)
+    return { day, xp: p.xpDays?.[day] ?? 0, future: day > today }
+  })
 }
 
 const patch = (p: Progress, id: string, f: (l: LevelStats) => Partial<LevelStats>): Progress =>
@@ -92,7 +113,7 @@ export function applyPlay(p: Progress, id: string, r: PlayResult, today: string)
 
 // ---------- Badges (derived once, then kept forever) ----------
 
-export const BADGES = ['firstLearn', 'firstPlay', 'triple', 'combo10', 'streak3', 'stars10', 'sectionA'] as const
+export const BADGES = ['firstLearn', 'firstPlay', 'triple', 'combo10', 'streak3', 'stars10', 'explorer', 'sectionA'] as const
 export type BadgeId = (typeof BADGES)[number]
 
 export const totalStars = (p: Progress) => Object.values(p.levels).reduce((s, l) => s + (l.stars ?? 0), 0)
@@ -106,6 +127,7 @@ export function earnedBadges(p: Progress, allLevelIds: string[]): BadgeId[] {
     combo10: p.bestCombo >= 10,
     streak3: p.streak >= 3,
     stars10: totalStars(p) >= 10,
+    explorer: new Set(Object.keys(p.levels).filter((id) => p.levels[id].learned).map((id) => id.split(':')[0])).size >= 5,
     sectionA: allLevelIds.every((id) => level(p, id).done),
   }
   return BADGES.filter((b) => ok[b])
