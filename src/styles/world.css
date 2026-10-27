@@ -5,24 +5,24 @@
 .world-garden { background: #fff1c9; }
 .w-sun { width: 62cqmin; aspect-ratio: 1; right: 6cqw; top: 6cqh; border-radius: 50%; background: var(--color-marker-red); }
 .w-cloud { height: 13cqmin; aspect-ratio: 3; border-radius: 999px; background: var(--color-paper-white); box-shadow: 0 3px 0 0 var(--color-ink-black); }
-.w-cloud.c1 { left: 6%; top: 14%; animation: drift 40s linear infinite alternate; }
-.w-cloud.c2 { left: 46%; top: 30%; height: 9cqmin; animation: drift 55s linear infinite alternate-reverse; }
+.w-cloud0 { left: 6%; top: 14%; animation: drift 40s linear infinite alternate; }
+.w-cloud1 { left: 46%; top: 30%; height: 9cqmin; animation: drift 55s linear infinite alternate-reverse; }
 .w-hill { height: 46cqh; bottom: 0; border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
 .w-hill.h1 { left: -15cqw; width: 80cqw; background: var(--color-jelly-green); }
 .w-hill.h2 { right: -20cqw; width: 75cqw; height: 36cqh; background: #5fcf8a; }
 .w-tri { height: 36cqmin; aspect-ratio: 0.75; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: #0e8a46; bottom: 30cqh; }
-.w-tri.t1 { left: 10cqw; } .w-tri.t2 { left: calc(10cqw + 20cqmin); height: 28cqmin; bottom: 32cqh; }
+.w-tri0 { left: 10cqw; } .w-tri1 { left: calc(10cqw + 20cqmin); height: 28cqmin; bottom: 32cqh; }
 .w-flower { width: 7cqmin; aspect-ratio: 1; border-radius: 50%; background: var(--color-bubblegum-pink); box-shadow: 0 0 0 4px var(--color-hi-yellow); bottom: 9%; }
-.w-flower.f1 { right: 18%; } .w-flower.f2 { right: 30%; bottom: 6%; background: var(--color-paper-white); }
+.w-flower0 { right: 18%; } .w-flower1 { right: 30%; bottom: 6%; background: var(--color-paper-white); }
 @keyframes drift { to { translate: 40% 0; } }
 
 .world-space { background: #16163d; }
 .w-star { width: 10px; aspect-ratio: 1; clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%); background: var(--color-hi-yellow); animation: twinkle 2.4s ease-in-out infinite; }
-.w-star.s0 { left: 8%; top: 12%; } .w-star.s1 { left: 22%; top: 40%; width: 6px; } .w-star.s2 { left: 35%; top: 8%; width: 14px; }
-.w-star.s3 { left: 48%; top: 55%; width: 6px; } .w-star.s4 { left: 62%; top: 18%; } .w-star.s5 { left: 75%; top: 48%; width: 16px; }
-.w-star.s6 { left: 88%; top: 10%; width: 7px; } .w-star.s7 { left: 15%; top: 70%; } .w-star.s8 { left: 92%; top: 66%; width: 6px; }
-.w-star.s9 { left: 55%; top: 80%; width: 12px; } .w-star.s10 { left: 30%; top: 88%; width: 6px; } .w-star.s11 { left: 70%; top: 92%; }
-.w-star.s12 { left: 4%; top: 45%; width: 6px; } .w-star.s13 { left: 82%; top: 30%; width: 8px; }
+.w-star0 { left: 8%; top: 12%; } .w-star1 { left: 22%; top: 40%; width: 6px; } .w-star2 { left: 35%; top: 8%; width: 14px; }
+.w-star3 { left: 48%; top: 55%; width: 6px; } .w-star4 { left: 62%; top: 18%; } .w-star5 { left: 75%; top: 48%; width: 16px; }
+.w-star6 { left: 88%; top: 10%; width: 7px; } .w-star7 { left: 15%; top: 70%; } .w-star8 { left: 92%; top: 66%; width: 6px; }
+.w-star9 { left: 55%; top: 80%; width: 12px; } .w-star10 { left: 30%; top: 88%; width: 6px; } .w-star11 { left: 70%; top: 92%; }
+.w-star12 { left: 4%; top: 45%; width: 6px; } .w-star13 { left: 82%; top: 30%; width: 8px; }
 .w-star:nth-child(3n) { animation-delay: -0.8s; } .w-star:nth-child(3n + 1) { animation-delay: -1.6s; }
 .w-planet { border-radius: 50%; }
 .w-planet.p1 { width: 60cqmin; aspect-ratio: 1; left: -18cqmin; bottom: -16cqmin; background: var(--color-bubblegum-pink); box-shadow: inset -18px -10px 0 0 rgb(0 0 0 / 0.12); }
@@ -93,3 +93,44 @@
 /* Themed backgrounds for full-screen game pages */
 .lesson.theme-degrees, .learn.theme-degrees, .results.theme-degrees { background: color-mix(in srgb, #fff1c9 55%, var(--bg)); }
 .lesson.theme-intervals, .learn.theme-intervals, .results.theme-intervals { background: color-mix(in srgb, #c8c8f5 35%, var(--bg)); }
+
+/* Bubble Reef */
+.world-ocean { background: #bfeaf6; }
+.w-wave { left: -10%; width: 120%; height: 30cqh; border-radius: 50% 50% 0 0 / 40% 40% 0 0; }
+.w-wave0 { bottom: 0; height: 26cqh; background: #4fb6d6; }
+.w-wave1 { bottom: 0; height: 16cqh; background: #2a8fb4; left: -30%; }
+.w-wave2 { bottom: 0; height: 8cqh; background: var(--color-hi-yellow); left: 20%; width: 70%; }
+.w-bubble { width: 5cqmin; aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--color-paper-white); background: rgb(255 255 255 / .35); animation: rise 9s linear infinite; }
+.w-bubble0 { left: 10%; bottom: 10%; } .w-bubble1 { left: 26%; bottom: 30%; width: 3cqmin; animation-delay: -3s; }
+.w-bubble2 { left: 44%; bottom: 5%; animation-delay: -6s; } .w-bubble3 { left: 62%; bottom: 20%; width: 7cqmin; animation-delay: -1s; }
+.w-bubble4 { left: 78%; bottom: 40%; animation-delay: -4s; } .w-bubble5 { left: 90%; bottom: 12%; width: 3cqmin; animation-delay: -7s; }
+.w-bubble6 { left: 34%; bottom: 55%; width: 4cqmin; animation-delay: -2s; }
+@keyframes rise { to { translate: 0 -120cqh; } }
+.w-fish { width: 14cqmin; aspect-ratio: 2; background: var(--color-marker-red); clip-path: polygon(0 50%, 25% 15%, 70% 15%, 100% 0, 88% 50%, 100% 100%, 70% 85%, 25% 85%); animation: swim 18s linear infinite; }
+.w-fish.f1 { top: 30%; left: -20%; } .w-fish.f2 { top: 52%; left: -20%; background: var(--color-bubblegum-pink); width: 10cqmin; animation-delay: -9s; animation-duration: 24s; }
+@keyframes swim { to { left: 110%; } }
+.w-weed { left: 6%; bottom: 0; width: 6cqmin; height: 40cqh; border-radius: 999px 999px 0 0; background: var(--color-jelly-green); transform-origin: bottom; animation: sway 3s ease-in-out infinite alternate; }
+
+/* Paper Peaks */
+.world-mountains { background: #ffe0e6; }
+.peak-sun { width: 34cqmin; aspect-ratio: 1; left: 12cqw; top: 10cqh; border-radius: 50%; background: var(--color-hi-yellow); }
+.w-peak { bottom: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.w-peak0 { left: -10%; width: 60%; height: 78cqh; background: var(--color-electric-iris); }
+.w-peak1 { left: 34%; width: 52%; height: 62cqh; background: #5c5cf0; }
+.w-peak2 { left: 62%; width: 56%; height: 86cqh; background: #3b3bdb; }
+.w-peak0::after, .w-peak2::after { content: ''; position: absolute; inset: 0 0 72% 0; background: var(--color-paper-white); }
+.w-bird { width: 5cqmin; aspect-ratio: 2; border: 3px solid var(--color-ink-black); border-bottom: 0; border-radius: 50% 50% 0 0; animation: drift 30s linear infinite alternate; }
+.w-bird0 { left: 40%; top: 18%; } .w-bird1 { left: 50%; top: 26%; width: 3.5cqmin; } .w-bird2 { left: 70%; top: 14%; }
+.world-mountains .w-cloud0 { left: 60%; top: 30%; } .world-mountains .w-cloud1 { left: 8%; top: 52%; height: 8cqmin; }
+
+/* Paper Notebook */
+.world-notebook { background: #fffdf4 repeating-linear-gradient(to bottom, transparent 0 27px, #bcd4f5 27px 29px); }
+.w-margin { left: 9%; top: 0; bottom: 0; width: 2px; background: var(--color-marker-red); }
+.w-sticky { width: 14cqmin; aspect-ratio: 1; box-shadow: 0 4px 0 0 rgb(17 17 24 / .25); }
+.w-sticky0 { right: 6%; top: 10%; background: var(--color-hi-yellow); rotate: 6deg; }
+.w-sticky1 { right: 24%; top: 40%; background: var(--color-bubblegum-pink); rotate: -8deg; width: 10cqmin; }
+.w-sticky2 { left: 14%; bottom: 10%; background: var(--color-powder-sky); rotate: -4deg; width: 11cqmin; }
+.w-pencil { left: 30%; top: 16%; width: 26cqmin; height: 3.4cqmin; background: linear-gradient(to right, var(--color-hi-yellow) 0 82%, #f2c28b 82% 94%, var(--color-ink-black) 94%); clip-path: polygon(0 0, 88% 0, 100% 50%, 88% 100%, 0 100%); rotate: -18deg; }
+.w-doodle { width: 6cqmin; aspect-ratio: 1; border: 3px solid var(--color-electric-iris); border-radius: 50%; }
+.w-doodle0 { left: 50%; top: 60%; } .w-doodle1 { left: 64%; top: 70%; border-color: var(--color-jelly-green); border-radius: 0; rotate: 20deg; }
+.w-doodle2 { left: 22%; top: 50%; width: 4cqmin; } .w-doodle3 { left: 80%; top: 78%; border-color: var(--color-marker-red); }
