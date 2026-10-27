@@ -8,6 +8,8 @@ describe('every game level generates valid, reproducible questions', () => {
   for (const game of Object.values(GAMES)) {
     game.levels.forEach((level, i) => {
       test(`${game.id} level ${i + 1}`, () => {
+        expect(level.title, 'level title').toBeTruthy()
+        expect(level.skill, 'level skill').toBeTruthy()
         expect(level.options.length).toBeGreaterThanOrEqual(2)
         expect(level.options.length).toBeLessThanOrEqual(7)
         for (let s = 0; s < 150; s++) {
