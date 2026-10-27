@@ -47,6 +47,16 @@ Path
 
 The detailed level parameters per game live in [game-catalog.md](game-catalog.md).
 
+### Review in practice (implemented in 0.6.0, ADR-022)
+
+| Principle | How the app applies it |
+|---|---|
+| Retrieval to criterion | Every miss in Practice or Review is asked again before the session ends |
+| Successive relearning (Rawson & Dunlosky 2022) | Each learned sound returns after 1, 3, 7, 16, 35, 75 days; misses return tomorrow |
+| Interleaving | Practice mixes 2 older due items into each round; Review alternates games |
+| Spacing over cramming | An item reviewed before it is due does not move to a longer gap |
+| Cumulative review | Every unit ends with a review node over all its levels |
+
 ## 3. Engagement loop
 
 ```
@@ -97,5 +107,6 @@ Daily goal set → short session → immediate feedback + XP → streak extended
 - Hattie, J., & Timperley, H. (2007). The power of feedback. *Review of Educational Research*, 77(1).
 - Settles, B., & Meeder, B. (2016). A trainable spaced repetition model for language learning. *ACL*.
 - FSRS (Free Spaced Repetition Scheduler) — https://github.com/open-spaced-repetition
+- Rawson, K. A., & Dunlosky, J. (2022). Successive relearning: An underexplored but potent technique for obtaining and maintaining knowledge. *Current Directions in Psychological Science*, 31(4).
 - Csikszentmihalyi, M. (1990). *Flow*.
 - Deci, E. L., & Ryan, R. M. (2000). Self-determination theory. *American Psychologist*, 55(1).

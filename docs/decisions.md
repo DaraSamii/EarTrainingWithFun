@@ -107,3 +107,17 @@ Format: `ADR-NNN · Title · Status · Date` → Context / Decision / Consequenc
 
 ### ADR-021 · Hand-drawn SVG icons for games and courses · Accepted · 2026-10-27
 **Decision:** Replace text glyphs (↕, ♫, Do, 〰) with paper-cut-style SVG icons drawn in-house (`ui/GameIcon.tsx`): a tuning fork (Pitch), measured note pair (Intervals), note staircase (Scales), flowing note line (Melody), stacked chord (Harmony), drum (Rhythm), plus one icon per game. The treble clef 𝄞 (Music Theory) and violin 🎻 (Sounds) are kept as the user approved them.
+
+### ADR-022 · Successive relearning: spaced memory, interleaved practice, unit reviews · Accepted · 2026-10-27
+**Context:** "We look back and practice everything we learnt again along the new things." The strongest evidence for durable memory is **successive relearning**: retrieval practice to criterion, then relearning in spaced sessions (Rawson & Dunlosky 2022; in one study three spaced recalls beat three massed recalls, 68% vs 26% one-week retention). Interleaving categories improves discrimination (Kornell & Bjork 2008).
+**Decision:**
+- Every first-try answer in Practice, Play and Review updates a **memory item**: the trained sound (e.g. `intervals:P5`, `chords:min`), or the level for games whose answers vary per question (`rhythm:L3`).
+- Items sit in **Leitner boxes** with expanding gaps of 1, 3, 7, 16, 35 and 75 days. A correct recall *when due* moves an item up; reviewing early does not; a miss drops it two boxes and brings it back tomorrow.
+- **Practice rounds interleave**: 6 questions from the level and 2 due items from earlier levels (same game first, then any game), placed in the second half.
+- **Review sessions** (`/review/due`): due items first, then the weakest, interleaved across games, worth 1.5× XP. Misses are re-asked before the end (criterion).
+- Every unit ends with a **unit review node**, unlocked when all its levels are done and passed at 80%.
+- Home shows a **Memory card** with the count due and how many items are strong (box ≥ 4). New badge: Steel Trap (3 unit reviews).
+**Consequences:** Progress gains `memory` and `reviews`; arcades report per-question answers. FSRS (knowledge base) remains a possible upgrade once there is enough review data.
+
+### ADR-023 · Beginner / Intermediate / Advanced tabs; page transitions · Accepted · 2026-10-27
+**Decision:** The Journey and every course path are split into three tabs, each with its own progress bar. Journey sections are assigned by their midpoint so each tab holds about a third of the levels (44 / 54 / 36). The tab holding the next level opens by default. Route changes use the **View Transitions API**: the old page fades up and out, the new one fades in, and the top bar and tab bar stay fixed (with a fallback to the per-page fade-in, and off under reduced motion). The Home sidebar scrolls on its own when taller than the window, and stat panels animate closed as smoothly as they open.
