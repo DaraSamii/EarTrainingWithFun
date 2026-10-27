@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { CourseIcon } from '../../ui/GameIcon'
 import { COURSES, GAMES, JOURNEY, courseMax, courseStars, currentNode } from '../../games/catalog'
 import { setProgress, useProgress } from '../../progress/store'
 import { GOALS, currentStreak, dayKey, setGoal, todayXp, totalStars, week, type Progress } from '../../progress/progress'
@@ -89,7 +90,7 @@ export function HomeScreen() {
             {COURSES.map((c) => (
               <li key={c.id}>
                 <button className={`course-row c-${c.color}`} onClick={() => go(`/course/${c.id}`)}>
-                  <span className="course-dot">{GAMES[c.games[0]].glyph}</span>
+                  <span className="course-dot"><CourseIcon id={c.id} size={34} /></span>
                   <span className="course-name">{c.title}<small>{c.blurb}</small></span>
                   <span className="course-stars"><Icon name="star" size={14} /> {courseStars(p, c)}/{courseMax(c)}</span>
                 </button>

@@ -1,4 +1,5 @@
 import { COURSES, GAMES, courseMax, courseStars, coursePath } from '../../games/catalog'
+import { CourseIcon, GameIcon } from '../../ui/GameIcon'
 import { useProgress } from '../../progress/store'
 import { go } from '../../app/router'
 import { Icon } from '../../ui/Icon'
@@ -19,7 +20,7 @@ export function CoursesScreen() {
           const m = courseMax(c)
           return (
             <button key={c.id} className={`card course-card c-${c.color}`} style={{ animationDelay: `${i * 50}ms` }} onClick={() => go(`/course/${c.id}`)}>
-              <div className="course-art"><World world={GAMES[c.games[0]].world} /><span className="course-glyph">{GAMES[c.games[0]].glyph}</span></div>
+              <div className="course-art"><World world={GAMES[c.games[0]].world} /><span className="course-glyph"><CourseIcon id={c.id} size={46} /></span></div>
               <h2>{c.title}</h2>
               <p>{c.blurb}</p>
               <span className="course-games">{c.games.map((g) => GAMES[g].title).join(' · ')}</span>
@@ -52,7 +53,7 @@ export function CourseScreen({ id }: { id: string }) {
         <div className="course-game-list">
           {c.games.map((g) => (
             <div key={g} className="card mini-game">
-              <span className="course-dot">{GAMES[g].glyph}</span>
+              <span className="course-dot"><GameIcon id={g} size={34} /></span>
               <div><strong>{GAMES[g].title}</strong><p>{GAMES[g].blurb}</p></div>
             </div>
           ))}
