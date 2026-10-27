@@ -6,7 +6,7 @@ import { sfx } from '../../audio/sfx'
 import { commit } from '../../progress/store'
 import { applyLearn, dayKey } from '../../progress/progress'
 import { go } from '../../app/router'
-import { Icon } from '../../ui/Icon'
+import { Icon, type IconName } from '../../ui/Icon'
 import { Pip, Bubble, type Mood } from '../../ui/Pip'
 import { Confetti } from '../../ui/Confetti'
 import { World } from '../../ui/World'
@@ -26,7 +26,19 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
   const game = GAMES[gameId]
   const lv = game.levels[level]
   const back = `/level/${gameId}/${level}`
-  const [phase, setPhase] = useState<Phase>(lv.concept ? 'concept' : 'demo')
+  // lesson cards before the demos: the level's idea plus the game's guide (user feedback 0.7.0)
+  const guide = en.guides[gameId]
+  const cards = ([
+    lv.concept ? ['idea', 'book', lv.concept] : null,
+    level === 0 && guide ? ['what', 'ear', guide.what] : null,
+    // first levels get every listening tip; later levels one tip each
+    guide ? ['listen', 'volume', level === 0 ? guide.listen.join('\n') : guide.listen[level % 3]] : null,
+    guide && (level === 0 || level % 2 === 0) ? ['watch', 'target', guide.watch] : null,
+    guide && (level === 0 || level % 2 === 1) ? ['real', 'star', guide.real] : null,
+  ].filter(Boolean) as [keyof typeof en.learn.cards, IconName, string][])
+  const [page, setPage] = useState(0)
+  const [phase, setPhase] = useState<Phase>(cards.length ? 'concept' : 'demo')
+  const nextCard = () => (page + 1 < cards.length ? setPage(page + 1) : setPhase('demo'))
   const [heard, setHeard] = useState<string[]>([])
   const [active, setActive] = useState<string | null>(null)
   const [rng] = useState(() => mulberry32(Date.now()))
@@ -112,15 +124,15 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
 
   // → does whatever the big button on screen does; ← and Esc go back to the level
   useKeys({
-    next: phase === 'concept' ? () => setPhase('demo')
+    next: phase === 'concept' ? nextCard
       : phase === 'demo' ? (heard.length >= demoItems.length ? startTries : playAll)
       : phase === 'try' ? (right ? nextTry : undefined)
       : () => go(`/practice/${gameId}/${level}`),
-    back: () => go(back),
+    back: phase === 'concept' && page > 0 ? () => setPage(page - 1) : () => go(back),
     exit: () => go(back),
   })
 
-  const say = phase === 'concept' ? lv.concept
+  const say = phase === 'concept' ? en.learn.explain
     : phase === 'demo' ? en.learn.demoIntro
     : phase === 'ready' ? en.learn.ready
     : right ? en.learn.tryRight[tryN % en.learn.tryRight.length]
@@ -132,7 +144,7 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
       <header className="lesson-top">
         <ExitBar back={back} onWorld />
         <div className="learn-steps" aria-hidden="true">
-          {(['concept', 'demo', 'try', 'ready'] as Phase[]).filter((x) => x !== 'concept' || lv.concept).map((x) => (
+          {(['concept', 'demo', 'try', 'ready'] as Phase[]).filter((x) => x !== 'concept' || cards.length).map((x) => (
             <span key={x} className={x === phase ? 'on' : ''} />
           ))}
         </div>
@@ -145,8 +157,24 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
           <Bubble side="bottom"><p aria-live="polite">{say}</p></Bubble>
         </div>
 
-        {phase === 'concept' && (
-          <button className="btn-primary big" autoFocus onClick={() => setPhase('demo')}>{en.learn.next} <Icon name="arrow" size={20} /></button>
+        {phase === 'concept' && cards[page] && (
+          <>
+            <article className={`lesson-card card-${cards[page][0]}`} key={page}>
+              <header>
+                <span className="lesson-card-icon"><Icon name={cards[page][1]} size={26} /></span>
+                <h2>{en.learn.cards[cards[page][0]]}</h2>
+                <span className="lesson-card-count">{page + 1} / {cards.length}</span>
+              </header>
+              {cards[page][2].includes('\n')
+                ? <ul>{cards[page][2].split('\n').map((t) => <li key={t}>{t}</li>)}</ul>
+                : <p>{cards[page][2]}</p>}
+            </article>
+            <div className="card-dots" aria-hidden="true">{cards.map((_, k) => <i key={k} className={k === page ? 'on' : k < page ? 'seen' : ''} />)}</div>
+            <div className="actions">
+              {page > 0 && <button className="btn-ghost" onClick={() => setPage(page - 1)}><Icon name="back" size={18} /> {en.learn.prev}</button>}
+              <button className="btn-primary" autoFocus onClick={nextCard}>{en.learn.next} <Icon name="arrow" size={20} /></button>
+            </div>
+          </>
         )}
 
         {phase === 'demo' && (
