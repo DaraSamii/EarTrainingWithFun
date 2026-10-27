@@ -5,6 +5,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-10-27 · Hotfix
+
+### Fixed
+- Pip's speech bubbles rendered one word per line over the mascot: Potion Lab's cauldron bubbles reused the `.bubble` class. They are now `.brew-bubble`, scoped to the cauldron, with a regression test.
+
 ## [0.7.0] - 2026-10-27 · Arcades for every course
 
 Every course plays differently, 25 games, a passing score you choose, and the keyboard works everywhere.
@@ -123,7 +128,8 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.0...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.1...develop
+[0.7.1]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.4.0...v0.5.0
