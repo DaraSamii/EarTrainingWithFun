@@ -9,6 +9,8 @@ const LEVELS: Inst[][] = [
   ['piano', 'flute', 'guitar', 'trumpet', 'violin'],
   ['violin', 'cello', 'flute', 'clarinet', 'saxophone'],
   ['trumpet', 'horn', 'trombone', 'saxophone', 'clarinet', 'xylophone'],
+  ['harp', 'guitar', 'piano', 'xylophone'],
+  ['cello', 'trombone', 'horn', 'clarinet', 'saxophone', 'violin'],
 ]
 /** Comfortable middle range of each instrument (MIDI) */
 const RANGE: Record<Inst, [number, number]> = {
@@ -48,6 +50,6 @@ function level(i: number): Level {
 
 export const timbre: Game = {
   id: 'timbre', course: 'sounds', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'garden', worldName: S.world, arcade: 'drops', glyph: '🎻', instruments: [...new Set(LEVELS.flat())],
+  world: 'garden', worldName: S.world, arcade: 'drops', instruments: [...new Set(LEVELS.flat())],
   levels: LEVELS.map((_, i) => level(i)),
 }
