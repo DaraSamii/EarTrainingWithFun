@@ -40,6 +40,6 @@ function level(i: number): Level {
 
 export const pitch: Game = {
   id: 'pitch', course: 'pitch', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'mountains', worldName: S.world, arcade: 'drops', instruments: ['piano', 'flute', 'violin', 'clarinet', 'cello', 'trombone', 'trumpet', 'guitar'],
+  world: 'mountains', worldName: S.world, arcade: 'climber', instruments: ['piano', 'flute', 'violin', 'clarinet', 'cello', 'trombone', 'trumpet', 'guitar'],
   levels: LEVELS.map((_, i) => level(i)),
 }

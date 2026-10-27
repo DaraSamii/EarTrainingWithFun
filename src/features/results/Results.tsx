@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
-import type { GameId } from '../../games/catalog'
+import { nextActivity, type GameId } from '../../games/catalog'
+import { getProgress } from '../../progress/store'
+import { verdict } from '../../progress/progress'
+import { lastFrom } from '../../app/router'
+import { usePassMark } from '../../app/settings'
+import { useKeys } from '../../app/keys'
 import type { WorldId } from '../../games/types'
 import type { BadgeId } from '../../progress/progress'
 import { sfx } from '../../audio/sfx'
@@ -49,17 +54,38 @@ type Props = {
 export function Results({ kind, gameId, level, world, back, correct, total, xp, score = 0, maxCombo = 0, stars = 0, newBest, badges, again }: Props) {
   const shown = useCountUp(score)
   const shownXp = useCountUp(xp, 700)
+  const pass = usePassMark()
   const acc = Math.round((correct / total) * 100)
-  const celebrate = kind === 'practice' || (kind === 'review' ? acc >= 80 : stars >= 2)
+  const v = verdict(correct / total, pass)
+  const passed = correct / total >= pass
+  const celebrate = passed
   useEffect(() => { if (celebrate) sfx.cheer() }, [celebrate])
 
-  const title = kind === 'practice' ? en.results.practiceDone : kind === 'review' ? en.review.done : en.results.title[stars]
-  const line = kind === 'practice' ? en.results.playUnlocked
-    : kind === 'review' ? (acc >= 80 ? en.review.strong : en.review.again)
-    : stars >= 2 ? en.results.levelDone : en.results.needStars
+  // what passing unlocks, or what is needed to pass
+  const need = `${en.verdicts.need} ${Math.round(pass * 100)}%`
+  const title = en.verdicts[v][0]
+  const line = !passed
+    ? `${en.verdicts[v][1]} ${need} ${kind === 'practice' ? en.verdicts.toUnlockPlay : kind === 'play' ? en.verdicts.toComplete : en.verdicts.toPassReview}`
+    : kind === 'practice' ? `${en.verdicts[v][1]} ${en.results.playUnlocked}`
+    : kind === 'review' ? `${en.verdicts[v][1]} ${en.review.strong}`
+    : `${en.verdicts[v][1]} ${en.results.levelDone}`
+
+  // the primary move: forward when passed, try again when not
+  const primary = !passed ? again
+    : kind === 'practice' && gameId ? () => go(`/play/${gameId}/${level}`)
+    : kind === 'play' ? () => go(nextActivity(getProgress(), lastFrom()))
+    : () => go(back)
+  const primaryLabel = !passed
+    ? (kind === 'practice' ? en.results.againPractice : kind === 'review' ? en.review.more : en.results.again)
+    : kind === 'practice' ? en.level.go.play : kind === 'play' ? en.results.nextActivity : en.results.toLevel
+  const secondary = passed ? again : () => go(back)
+  const secondaryLabel = passed
+    ? (kind === 'practice' ? en.results.againPractice : kind === 'review' ? en.review.more : en.results.again)
+    : en.nav.back
+  useKeys({ next: primary, back: secondary, exit: () => go(back) })
 
   return (
-    <div className={`results world-bg-${world}`}>
+    <div className={`results world-bg-${world} verdict-${v}`}>
       <div className="results-exit"><ExitBar back={back} /></div>
       {celebrate && <Confetti />}
       <span className="shape deco pentagon right" aria-hidden="true" />
@@ -70,6 +96,7 @@ export function Results({ kind, gameId, level, world, back, correct, total, xp, 
           <Bubble side="bottom"><p>{line}</p></Bubble>
         </div>
         <h1>{title}</h1>
+        <span className={`score-pill ${passed ? 'pass' : 'fail'}`}>{acc}% · {passed ? en.verdicts.passLabel : en.verdicts.failLabel} ({Math.round(pass * 100)}%)</span>
         {kind === 'play' && <Stars n={stars} size={52} pop />}
         <div className="stat-grid">
           {kind === 'play' && (
@@ -93,19 +120,12 @@ export function Results({ kind, gameId, level, world, back, correct, total, xp, 
           </div>
         ))}
         <div className="actions">
-          <button className="btn-ghost" onClick={again}>
-            {kind === 'practice' ? en.results.againPractice : kind === 'review' ? en.review.more : en.results.again}
+          <button className="btn-ghost" onClick={secondary}><Icon name="back" size={18} /> {secondaryLabel}</button>
+          <button className="btn-primary" autoFocus onClick={primary}>
+            {primaryLabel} <Icon name={passed ? 'arrow' : 'play'} size={20} />
           </button>
-          {kind === 'practice' && gameId ? (
-            <button className="btn-primary" autoFocus onClick={() => go(`/play/${gameId}/${level}`)}>
-              {en.level.go.play} <Icon name="gamepad" size={20} />
-            </button>
-          ) : (
-            <button className="btn-primary" autoFocus onClick={() => go(back)}>
-              {en.results.toLevel} <Icon name="arrow" size={20} />
-            </button>
-          )}
         </div>
+        <p className="key-hint">{en.keys.results}</p>
       </div>
     </div>
   )

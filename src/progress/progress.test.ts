@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import {
-  addXp, setGoal, week, applyLearn, applyPlay, applyPractice, currentStreak, initialProgress, level, playXp, sessionXp, starsFor, withBadges,
+  verdict, addXp, setGoal, week, applyLearn, applyPlay, applyPractice, currentStreak, initialProgress, level, playXp, sessionXp, starsFor, withBadges,
 } from './progress'
 
 test('xp: 10 per session, 1 per correct, 5 for perfect; play adds 5 per star', () => {
@@ -39,7 +39,7 @@ test('learn → practice → play gating data', () => {
   let p = applyLearn(initialProgress, 'x', '2026-10-30')
   expect(level(p, 'x').learned).toBe(true)
   expect(applyLearn(p, 'x', '2026-10-30').xp).toBe(p.xp) // learn XP only once
-  p = applyPractice(p, 'x', 6, 8, '2026-10-30')
+  p = applyPractice(p, 'x', 7, 8, '2026-10-30')
   expect(level(p, 'x')).toMatchObject({ learned: true, practiced: true, done: false })
   p = applyPlay(p, 'x', { correct: 7, total: 10, score: 900, maxCombo: 4 }, '2026-10-30')
   expect(level(p, 'x')).toMatchObject({ stars: 1, done: false, plays: 1, hiScore: 900 })
@@ -69,4 +69,14 @@ test('xp history per day feeds the week view and trims old days', () => {
   expect(w.map((d) => d.xp)).toEqual([8, 0, 10, 0, 0, 0, 0])
   expect(w.map((d) => d.future)).toEqual([false, false, false, true, true, true, true])
   expect(setGoal(p, 50).dailyGoal).toBe(50)
+})
+
+test('passing score is configurable; practice must pass to unlock play', () => {
+  let p = applyPractice(initialProgress, 'x', 5, 8, '2026-10-30', [], 0.8)
+  expect(level(p, 'x').practiced).toBe(false)
+  p = applyPractice(p, 'x', 5, 8, '2026-10-30', [], 0.6)
+  expect(level(p, 'x').practiced).toBe(true)
+  p = applyPlay(p, 'x', { correct: 7, total: 10, score: 1, maxCombo: 1 }, '2026-10-30', 0.7)
+  expect(level(p, 'x').done).toBe(true)
+  expect([1, 0.95, 0.85, 0.7, 0.4].map((a) => verdict(a, 0.8))).toEqual(['perfect', 'great', 'passed', 'close', 'low'])
 })

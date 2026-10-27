@@ -37,7 +37,7 @@ function level(i: number): Level {
 
 export const tuneup: Game = {
   id: 'tuneup', course: 'pitch', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'mountains', worldName: S.world, arcade: 'blaster', journeyOffset: 2,
+  world: 'mountains', worldName: S.world, arcade: 'climber', journeyOffset: 2,
   instruments: ['piano', 'flute', 'violin', 'clarinet', 'trumpet', 'cello', 'trombone', 'horn'],
   levels: LEVELS.map((_, i) => level(i)),
 }

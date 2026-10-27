@@ -23,3 +23,14 @@ export const go = (path: string) => { location.hash = path }
 
 /** Where a level was opened from (`?from=`), so "back" returns there; defaults to Home */
 export const fromParam = () => new URLSearchParams(location.hash.split('?')[1] ?? '').get('from') ?? '/'
+
+const FROM_KEY = 'etwf.from'
+
+/** Remember which path (Journey or a course) the learner is following, for "Next activity" */
+export function rememberFrom(path: string) {
+  try { sessionStorage.setItem(FROM_KEY, path) } catch { /* private mode */ }
+}
+
+export function lastFrom() {
+  try { return sessionStorage.getItem(FROM_KEY) ?? '/' } catch { return '/' }
+}

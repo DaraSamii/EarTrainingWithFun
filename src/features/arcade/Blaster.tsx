@@ -203,7 +203,7 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
 
       {g.phase === 'intro' && (
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.shoot}
-          onStart={() => { g.phase = 'count'; render() }} />
+          help={en.arcadeHelp.blaster} onStart={() => { g.phase = 'count'; render() }} />
       )}
       {g.phase === 'count' && <Countdown onDone={wave} />}
     </div>
