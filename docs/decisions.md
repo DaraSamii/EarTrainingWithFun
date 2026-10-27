@@ -86,3 +86,24 @@ Format: `ADR-NNN · Title · Status · Date` → Context / Decision / Consequenc
 (d) **No plain backgrounds:** a paper-confetti + dot-grid pattern everywhere; game pages use their world's tint.
 (e) The scrolling ticker is replaced by static tag pills, so no text is ever hidden.
 (f) Home stat cards **expand into detail panels** (streak week calendar, daily-goal picker + 7-day XP chart, stars by course), after Duolingo.
+
+### ADR-020 · Full curriculum: Rhythm course, 18 games, coverage map · Accepted · 2026-10-27
+**Context:** The user asked for the app to cover "all music hearing training in all aspects", with more lessons and units per course.
+**Decision:** Add an eighth course, **Rhythm**, and grow to **18 games** (2–3 per course) with 5–8 levels each (110 levels). Harder games join the Journey later (`journeyOffset`), and the Journey is grouped into 10 named sections. Coverage against the skill taxonomy in the knowledge base:
+
+| Skill (methods doc §1) | Covered by |
+|---|---|
+| Pitch discrimination, fine tuning | Higher or Lower (to 12 cents), Tune Up |
+| Intervals, melodic and harmonic | Interval Blaster (all simple intervals, up/down), Twin Notes |
+| Tonality / scale degrees, major and minor | Scale Breaker (major + minor, any key) |
+| Scales and modes | Scale Shapes (all 7 modes, pentatonic, blues, whole tone, chromatic) |
+| Melody: contour and memory | Contour Catcher, Spot the Change |
+| Harmony: quality, inversions, function, cadences | Chord Colors, Progression Path, Cadence Call |
+| Rhythm and meter | Rhythm Match, Meter Detective |
+| Timbre and expression | Who's Playing?, Expression Detective (dynamics, articulation, tempo) |
+| Reading (eye ↔ ear) | Note Reader, Interval Reader, Key Signatures |
+
+**Known gaps (by decision, not oversight):** singing and pitch-matching (needs the microphone, excluded in ADR-005); play-back games on the on-screen piano (Echo) and rhythm tap-back need new input mechanics (planned); absolute-pitch training and real-music transcription are out of scope.
+
+### ADR-021 · Hand-drawn SVG icons for games and courses · Accepted · 2026-10-27
+**Decision:** Replace text glyphs (↕, ♫, Do, 〰) with paper-cut-style SVG icons drawn in-house (`ui/GameIcon.tsx`): a tuning fork (Pitch), measured note pair (Intervals), note staircase (Scales), flowing note line (Melody), stacked chord (Harmony), drum (Rhythm), plus one icon per game. The treble clef 𝄞 (Music Theory) and violin 🎻 (Sounds) are kept as the user approved them.
