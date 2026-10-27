@@ -5,6 +5,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added
+- **Lesson cards in Learn** (ADR-026): every game has a guide (what it is, how to listen, a common mistake, where you hear it in real music) shown as paged cards before the sound demos, with Back/Next and arrow keys.
+- **A unique world for every course**: new Paper River (Melody), Potion Lab (Harmony), Paper Stadium (Rhythm) and Lily Pond (Sounds) scenes; all games in a course share its world.
+
+
 ## [0.7.1] - 2026-10-27 · Hotfix
 
 ### Fixed
