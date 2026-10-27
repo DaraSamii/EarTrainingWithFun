@@ -14,6 +14,8 @@ Game = Mechanic (UI + interaction + grader)  ×  Content ladder (ordered item po
 - **Item:** the smallest thing we remember about a learner, e.g. `interval:P5:asc`, `degree:major:6`, `chord:min7:root`. The spaced-repetition scheduler works on items (see [learning-science-and-progression.md](learning-science-and-progression.md)).
 - **Level:** a set of active items plus presentation settings (instruments, register range, context on/off, tempo).
 
+Every level runs through three modes (ADR-013): **Learn** (mascot explanation, a demonstration of each new sound with a hint, 3 guided tries), **Practice** (the calm K1 lesson loop), **Play** (the game's arcade mechanic, ADR-014/016).
+
 Input modes in scope (ADR-005): **buttons/multiple-choice**, **on-screen piano**, **on-screen guitar fretboard**, and a **tap pad** (button/spacebar) for rhythm. No microphone and no MIDI in v1.
 
 ## 2. Mechanics
@@ -26,6 +28,8 @@ Input modes in scope (ADR-005): **buttons/multiple-choice**, **on-screen piano**
 | K4 | **Spot** | Hear a reference and a variant; tap the changed note in a note-strip | index match | M9 |
 | K5 | **Tap** | Hear a rhythm, tap it back | onset alignment within tolerance windows (latency-calibrated) | M11 |
 | K6 | **Predict** | Hear a phrase stop; choose or play what comes next, then hear the real continuation | match | M6 |
+| K8 | **Breaker** | Breakout: a broken brick plays the prompt; tap the answer zone to move the paddle and catch the ball before it lands. The ball fades mid-flight from level 2 | zone match + time left | M3, scaffold fading |
+| K9 | **Blaster** | Shooter: each wave plays the prompt; shoot the ship with the matching label before the wave timer ends. A wrong shot costs 1.5 s | label match + time left | M2 |
 | K7 | **Speed round** | K1 under a soft time pressure; the score is a streak of correct answers | exact match + response time | fluency |
 
 ## 3. Game list
@@ -41,14 +45,14 @@ Input modes in scope (ADR-005): **buttons/multiple-choice**, **on-screen piano**
 ### Tonality (flagship track: functional hearing)
 | Game | Mechanic | Trains | Level ladder | Release |
 |---|---|---|---|---|
-| **Degree Detective** | K1 | Name the scale degree of a note after a cadence; the resolution to the tonic plays as feedback | Major: 1-3-5 → 1-2-3 → 1–5 → all diatonic → minor → chromatic degrees; cadence → drone → no context | **MVP** |
+| **Scale Breaker** (was Degree Detective) | Learn → K1 practice → **K8** play | Name the scale degree of a note after a cadence; the resolution to the tonic plays as feedback | Major: 1-3-5 → 1-2-3 → 1–5 → all diatonic → minor → chromatic degrees; cadence → drone → no context | **MVP** |
 | **Home Base** | K1 / K2 | Find the tonic of a short phrase | Clear I–V–I phrases → melodies ending off-tonic → minor/modal | v1 |
 | **What Comes Next** | K6 | Audiation: predict the next degree | Step-wise motion → leaps | v1 |
 
 ### Intervals
 | Game | Mechanic | Trains | Level ladder | Release |
 |---|---|---|---|---|
-| **Interval Ladder** | K1 | Interval identification | P8 vs P5 → +M3 → +P4 → +M2/m3 → all simple; ascending → descending → harmonic; in-key → random root | **MVP** |
+| **Interval Blaster** (was Interval Ladder) | Learn → K1 practice → **K9** play | Interval identification | P8 vs P5 → +M3 → +P4 → +M2/m3 → all simple; ascending → descending → harmonic; in-key → random root | **MVP** |
 | **Interval Builder** | K3 | Interval production | Same ladder as Interval Ladder, played on the piano or fretboard | v1 |
 
 ### Melody
@@ -91,7 +95,8 @@ Input modes in scope (ADR-005): **buttons/multiple-choice**, **on-screen piano**
 1. **Replay is free.** The learner can replay the prompt any number of times without penalty. We record replays for analytics and to adjust difficulty, but they never cost points.
 2. **Reference available.** Context (cadence/drone) can be replayed at any time on tonal games.
 3. **Feedback teaches.** On a wrong answer, play *both* the correct answer and the learner's answer so the difference is audible.
-4. **No timer** except in K7 speed rounds.
+4. **No timer in Learn or Practice.** Play mode (K7–K9) is timed and scored but has no lives; a round always finishes (ADR-014).
+8. **Learn before you play.** No level can be played before its Learn step, and no arcade round before one Practice round (ADR-013).
 5. **Variability is a level parameter.** Instrument pool, register and key randomization are part of the level definition, not hard-coded.
 6. **Deterministic generators.** Question generation takes a seed, so sessions are reproducible for tests and the daily challenge.
 7. **Accessible input.** Every K1 answer has a keyboard shortcut; the piano and fretboard have keyboard mappings and ARIA labels.

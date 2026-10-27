@@ -53,3 +53,18 @@ Format: `ADR-NNN · Title · Status · Date` → Context / Decision / Consequenc
 **Context:** The first playable demo (0.2.0) should ship before Firebase and the sample library exist.
 **Decision:** (a) Hash routes (`#/games`, `#/play/degrees/0`) instead of clean URLs; this amends ADR-008 and needs no `404.html` trick. (b) Progress is stored in `localStorage` until Firestore lands in 0.4.0 (ADR-002). (c) A Web Audio synth voice stands in for sampled instruments until 0.3.0 (ADR-004). Each shortcut carries a `shortcut:` comment in code.
 **Consequences:** Progress is per device until sign-in ships. Switching to clean URLs later means a redirect from `#/…` paths.
+
+### ADR-013 · Every level is Learn → Practice → Play · Accepted · 2026-10-27
+**Context:** The learner must not be able to jump straight into a game without an explanation and a demonstration (user feedback on the 0.2.0 demo).
+**Decision:** Each level has three gated steps. **Learn**: the mascot explains the idea, plays a demonstration of every new sound with a hint, then runs 3 guided tries that repeat until correct. **Practice**: the calm lesson loop (no clock, free replay, hints). **Play**: the arcade game. Play unlocks after one finished Practice round; Practice unlocks after Learn. Learn can be replayed at any time.
+**Consequences:** A level screen sits between the path and the game. Level progress stores `learned`, `practiced` and `stars`.
+
+### ADR-014 · Play mode has speed and score, never lives · Accepted · 2026-10-27
+**Context:** Theta's arcade games use a clock plus lives. ADR-007 excluded hearts, and game-catalog rule 4 allowed timers only in speed rounds.
+**Decision:** Play mode is time-pressured (falling ball, wave timer) and scored (speed bonus, combo multiplier). A miss costs time and points only; the round always runs to the end. Stars (1–3) come from first-try accuracy: ≥ 60%, ≥ 80%, ≥ 95%. A level is complete at 2 stars. Learn and Practice stay untimed. This amends game-catalog rule 4.
+
+### ADR-015 · Paper-cut worlds and the mascot Pip · Accepted · 2026-10-27
+**Decision:** Each game lives in its own paper-cut scene built from DESIGN.md shapes and colors (Scale Breaker: a sunset garden; Interval Blaster: paper space). A paper-cut bird with headphones, **Pip**, explains in Learn, demonstrates sounds and reacts to results. Celebrations use paper-cut confetti. UI sound effects are unpitched (noise-based), so they never interfere with pitch training, and can be switched off.
+
+### ADR-016 · A different arcade mechanic per game · Accepted · 2026-10-27
+**Decision:** Scale degrees → **Scale Breaker** (Breakout, after Theta's Paddle Tones): each broken brick plays a degree, and naming it moves the paddle to catch the ball. From level 2 the ball fades out mid-flight so the ear, not the eye, decides. Intervals → **Interval Blaster** (shooter, after Theta's Number Blaster): each wave plays an interval; shoot the ship carrying its name before the wave timer runs out. The game ids `degrees` and `intervals` are kept so saved progress carries over.

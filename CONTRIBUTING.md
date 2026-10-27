@@ -49,7 +49,8 @@ git switch develop && git merge --no-ff main && git push   # back-merge
 |---|---|
 | 0.1.0 | Knowledge base, design criteria, project skeleton (folded into 0.2.0, not tagged separately) |
 | 0.2.0 | ✅ First playable demo: app shell, home path, Degree Detective + Interval Ladder L1–5 |
-| 0.3.0 | "First sounds": audio engine + Degree Detective, Interval Ladder, Higher or Lower |
+| 0.3.0 | Game worlds: Learn → Practice → Play, mascot Pip, Scale Breaker + Interval Blaster arcades, stars and badges |
+| 0.3.x | Sampled instruments (piano, guitar, strings) |
 | 0.4.0 | Firebase: anonymous + Google sign-in, Firestore progress, settings |
 | 0.5.0 | Path, XP, streaks, daily goal, achievements |
 | 0.6.0 | Echo, Chord Colors, Tap Back; spaced-repetition Practice mode |
