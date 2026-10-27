@@ -1,0 +1,84 @@
+/* Design tokens: DESIGN.md base + resolutions and dark theme from docs/design/design-criteria.md §2 */
+:root {
+  /* Palette (DESIGN.md) */
+  --color-electric-iris: #2727e6;
+  --color-ink-black: #111118;
+  --color-paper-white: #ffffff;
+  --color-chalk-blue: #f0f6ff;
+  --color-frost-blue: #e1edff;
+  --color-marker-red: #ff4141;
+  --color-hi-yellow: #ffda00;
+  --color-powder-sky: #91d8ec;
+  --color-bubblegum-pink: #ffbac4;
+  --color-jelly-green: #16ab59;
+
+  /* Semantic: light */
+  --bg: var(--color-chalk-blue);
+  --surface: var(--color-paper-white);
+  --surface-2: var(--color-frost-blue);
+  --text: var(--color-ink-black);
+  --border: var(--color-frost-blue);
+  --action: var(--color-electric-iris);
+  --action-label: var(--color-paper-white);
+  --action-text: var(--color-electric-iris);
+  --shadow-ink: var(--color-ink-black);
+  --success: var(--color-jelly-green);
+  --error: var(--color-marker-red);
+  --on-feedback: var(--color-ink-black);
+
+  /* Type */
+  --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-text: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Martian Mono', ui-monospace, monospace;
+  --text-caption-mono: 12px;
+  --text-body-sm: 16px;
+  --text-body: 20px;
+  --text-heading-sm: 24px;
+  --text-heading-lg: 42px;
+  --text-display: 52px;
+  --text-display-xl: 72px;
+
+  /* Space & shape */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --radius-small: 16px;
+  --radius-cards: 24px;
+  --radius-buttons: 48px;
+  --radius-pill: 5000px;
+  --shadow-button: 0 4px 0 0 var(--shadow-ink);
+  --shadow-card: 0 2px 0 0 var(--shadow-ink);
+  --page-max-width: 1200px;
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0d0e1a;
+  --surface: #171933;
+  --surface-2: #23264d;
+  --text: #f0f6ff;
+  --border: #2c3060;
+  --action: #4545f0;
+  --action-text: #8f8fff;
+  --shadow-ink: #8f8fff;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0d0e1a;
+    --surface: #171933;
+    --surface-2: #23264d;
+    --text: #f0f6ff;
+    --border: #2c3060;
+    --action: #4545f0;
+    --action-text: #8f8fff;
+    --shadow-ink: #8f8fff;
+    color-scheme: dark;
+  }
+}

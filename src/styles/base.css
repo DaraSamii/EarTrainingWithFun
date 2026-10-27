@@ -1,0 +1,79 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 var(--text-body-sm)/1.4 var(--font-text);
+  letter-spacing: -0.02em;
+  font-feature-settings: 'tnum';
+}
+
+:focus-visible { outline: 2px solid var(--action); outline-offset: 2px; }
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-48) var(--space-16);
+}
+
+.hero-content {
+  position: relative;
+  max-width: 720px;
+  text-align: center;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-24);
+}
+
+.hero h1 {
+  margin: 0;
+  font: 400 clamp(40px, 9vw, var(--text-display-xl))/1.05 var(--font-display);
+  letter-spacing: -0.03em;
+  white-space: pre-line;
+}
+
+.hero p { margin: 0; font-size: var(--text-body); max-width: 36ch; }
+
+.icon-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  background: var(--action);
+  color: var(--action-label);
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+}
+
+.btn-primary {
+  font: inherit;
+  font-size: var(--text-body);
+  min-height: 48px;
+  padding: var(--space-12) var(--space-24);
+  border: 0;
+  border-radius: var(--radius-buttons);
+  background: var(--action);
+  color: var(--action-label);
+  box-shadow: var(--shadow-button);
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+}
+.btn-primary:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+.btn-primary:disabled { cursor: default; }
+
+/* Paper-cut decorative layer (DESIGN.md "Decorative Shape System") */
+.shapes { position: absolute; inset: 0; pointer-events: none; }
+.shape { position: absolute; display: block; }
+.pentagon { width: 38vmin; height: 38vmin; background: var(--color-hi-yellow); clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%); top: -10vmin; left: -12vmin; rotate: -12deg; }
+.semicircle { width: 44vmin; height: 22vmin; background: var(--color-marker-red); border-radius: 44vmin 44vmin 0 0; bottom: -2vmin; right: -10vmin; rotate: 8deg; }
+.triangle { width: 26vmin; height: 26vmin; background: var(--color-jelly-green); clip-path: polygon(50% 0, 100% 100%, 0 100%); bottom: 6vmin; left: -6vmin; rotate: 14deg; }
+.circle { width: 24vmin; height: 24vmin; background: var(--color-powder-sky); border-radius: 50%; top: 4vmin; right: -6vmin; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
