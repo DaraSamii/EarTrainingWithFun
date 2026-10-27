@@ -7,8 +7,10 @@ import { Results } from '../results/Results'
 import { Breaker } from './Breaker'
 import { Blaster } from './Blaster'
 import { Drops } from './Drops'
+import { Climber, Fishing, Hurdles, Potion, River } from './Themed'
+import { passMark } from '../../app/settings'
 
-const ARCADES = { breaker: Breaker, blaster: Blaster, drops: Drops }
+const ARCADES = { breaker: Breaker, blaster: Blaster, drops: Drops, climber: Climber, river: River, potion: Potion, hurdles: Hurdles, fishing: Fishing }
 
 export function PlayScreen({ gameId, level }: { gameId: GameId; level: number }) {
   const game = GAMES[gameId]
@@ -19,7 +21,7 @@ export function PlayScreen({ gameId, level }: { gameId: GameId; level: number })
   function finish(r: PlayResult) {
     const id = levelId(gameId, level)
     const prevHi = stats(getProgress(), id).hiScore ?? 0
-    const badges = commit((p) => applyPlay(p, id, r, dayKey()))
+    const badges = commit((p) => applyPlay(p, id, r, dayKey(), passMark()))
     setRes({ r, badges, newBest: prevHi > 0 && r.score > prevHi })
   }
 

@@ -5,6 +5,7 @@ import { sfx } from '../../audio/sfx'
 import { Icon } from '../../ui/Icon'
 import { Pip, Bubble } from '../../ui/Pip'
 import { ExitBar } from '../../ui/ExitBar'
+import { useKeys } from '../../app/keys'
 import { en } from '../../i18n/en'
 
 export type Popup = { id: number; x: number; y: number; text: string; kind: 'good' | 'bad' }
@@ -13,8 +14,8 @@ export function Popups({ items }: { items: Popup[] }) {
   return <>{items.map((p) => <span key={p.id} className={`popup ${p.kind}`} style={{ left: `${p.x}%`, top: `${p.y}%` }}>{p.text}</span>)}</>
 }
 
-export function Hud({ total, results, score, combo, back, onReplay }: {
-  total: number; results: boolean[]; score: number; combo: number; back: string; onReplay?(): void
+export function Hud({ total, results, score, combo, back, onReplay, onHelp }: {
+  total: number; results: boolean[]; score: number; combo: number; back: string; onReplay?(): void; onHelp?(): void
 }) {
   const m = multiplier(combo)
   return (
@@ -27,18 +28,21 @@ export function Hud({ total, results, score, combo, back, onReplay }: {
       </ol>
       <span className={`mult ${m > 1 ? 'on' : ''}`} key={m}>×{m}</span>
       <span className="score" aria-label={en.arcade.score}><Icon name="star" size={16} /> {score}</span>
+      {onHelp && <button className="icon-btn on-world help-btn" aria-label={en.arcade.howTo} title={en.arcade.howTo} onClick={onHelp}>?</button>}
       {onReplay && <button className="icon-btn on-world" aria-label={`${en.arcade.replay} (Space)`} onClick={onReplay}><Icon name="volume" /></button>}
     </header>
   )
 }
 
-export function StartOverlay({ title, text, onStart }: { title: string; text: string; onStart(): void }) {
+export function StartOverlay({ title, text, help, onStart }: { title: string; text: string; help: string[]; onStart(): void }) {
+  useKeys({ next: onStart })
   return (
     <div className="overlay">
       <div className="overlay-card">
         <Pip mood="talk" size={110} />
         <Bubble side="bottom"><p>{text}</p></Bubble>
         <h2>{title}</h2>
+        <ul className="how-to">{help.map((h) => <li key={h}>{h}</li>)}</ul>
         <button className="btn-primary big" autoFocus onClick={onStart}>{en.arcade.ready} <Icon name="play" size={20} /></button>
       </div>
     </div>
