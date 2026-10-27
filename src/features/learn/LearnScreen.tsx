@@ -13,6 +13,7 @@ import { World } from '../../ui/World'
 import { Staff } from '../../ui/Staff'
 import { OptionFace } from '../../ui/OptionFace'
 import { ExitBar } from '../../ui/ExitBar'
+import { useKeys } from '../../app/keys'
 import { en } from '../../i18n/en'
 
 const TRIES = 3
@@ -38,6 +39,14 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
   const demoItems = lv.fresh.length ? lv.options.filter((o) => lv.fresh.includes(o.id)) : lv.options
 
   useEffect(() => { void loadInstruments(game.instruments) }, [game])
+  useEffect(() => {
+    const on = (e: KeyboardEvent) => {
+      if (phase === 'try' && /^[1-9]$/.test(e.key)) { const o = q.options[+e.key - 1]; if (o) answer(o.id) }
+      else if (e.key === ' ' && phase === 'try') { e.preventDefault(); playQ() }
+    }
+    addEventListener('keydown', on)
+    return () => removeEventListener('keydown', on)
+  })
 
   function demo(id: string, withContext = false) {
     const steps = [...(withContext && lv.demoContext ? lv.demoContext : []), ...lv.demo(id)]
@@ -100,6 +109,16 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
     setMood('think')
     play(nq.prompt)
   }
+
+  // → does whatever the big button on screen does; ← and Esc go back to the level
+  useKeys({
+    next: phase === 'concept' ? () => setPhase('demo')
+      : phase === 'demo' ? (heard.length >= demoItems.length ? startTries : playAll)
+      : phase === 'try' ? (right ? nextTry : undefined)
+      : () => go(`/practice/${gameId}/${level}`),
+    back: () => go(back),
+    exit: () => go(back),
+  })
 
   const say = phase === 'concept' ? lv.concept
     : phase === 'demo' ? en.learn.demoIntro
@@ -174,6 +193,7 @@ export function LearnScreen({ gameId, level }: { gameId: GameId; level: number }
           </>
         )}
 
+        <p className="key-hint">{en.keys.learn}</p>
         {phase === 'ready' && (
           <>
             <Confetti />

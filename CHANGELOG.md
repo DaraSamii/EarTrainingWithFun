@@ -5,6 +5,25 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-10-27 · Arcades for every course
+
+Every course plays differently, 25 games, a passing score you choose, and the keyboard works everywhere.
+
+### Added
+- **A different arcade for every course** (ADR-024): Peak Climber (Pitch), River Run (Melody), Potion Lab (Harmony), Hurdle Dash (Rhythm), Fishing Pond (Sounds), joining Breaker (Scales), Blaster (Intervals) and Drops (Theory).
+- **How to play** list on every arcade's start card and behind a "?" button during play.
+- **7 new games**: Note Twins, Bigger Jump, Mood Ring, Steps & Leaps, How Many Notes?, Tempo Check, Instrument Families. 25 games and 169 levels in total.
+- **Passing score** in Profile (60–90%): Practice, Play and unit reviews must reach it to move on, otherwise you replay (ADR-025).
+- **Score-based messages** (Perfect, Outstanding, Passed, So close, Keep at it) with the pass mark shown.
+- **Next activity** button after a passed Play, following the path you came from.
+- **Keyboard everywhere**: → next/continue/start, ← back, Esc exit; 1–9 answers in Learn too.
+
+### Changed
+- Stage tabs have a sliding highlight.
+- Home sidebar: streak, goal, stars and Memory stay put; only the course list scrolls.
+- Bubble Reef fish now swim forwards.
+
+
 ## [0.6.0] - 2026-10-27 · Spaced review
 
 What you learn keeps coming back: spaced memory, interleaved practice, unit reviews, and Beginner/Intermediate/Advanced tabs.
@@ -104,7 +123,8 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.6.0...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.0...develop
+[0.7.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.3.0...v0.4.0

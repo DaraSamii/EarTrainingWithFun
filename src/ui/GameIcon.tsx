@@ -88,6 +88,38 @@ const ART: Record<string, React.ReactNode> = {
     <path d="M4 12h40M4 20h40M4 28h40M4 36h40" strokeWidth="1.6" opacity=".45" />
     <Head x={15} y={32} /><Head x={33} y={16} />
   </>,
+  // two identical notes: the twin
+  twins: <>
+    <Head x={12} y={30} /><path d="M18.5 29V8" /><Head x={36} y={30} /><path d="M42.5 29V8" /><path d="M22 20h8M22 26h8" />
+  </>,
+  // two jumps of different size
+  compareJumps: <>
+    <path d="M4 40h18M4 40l7-8 7-14" /><path d="M26 40h18M26 40l9-28" strokeWidth="3.4" /><circle cx="35" cy="12" r="3" fill="currentColor" />
+  </>,
+  // half sun (major), half rain cloud (minor)
+  mood: <>
+    <circle cx="16" cy="18" r="8" /><path d="M16 4v3M5 9l2 2M2 18h3M27 9l-2 2" />
+    <path d="M24 30a7 7 0 0 1 13-3 6 6 0 1 1 3 11H25a5 5 0 0 1-1-8z" /><path d="M28 42l-2 4M34 42l-2 4" />
+  </>,
+  // a step and a leap
+  motion: <>
+    <path d="M4 40h12v-8h8" /><Head x={10} y={36} r={3.4} /><Head x={20} y={28} r={3.4} />
+    <path d="M26 30c4-20 12-20 16-20" strokeDasharray="3 3" /><Head x={41} y={10} r={3.4} />
+  </>,
+  // a chord with a count bubble
+  count: <>
+    <Head x={14} y={36} r={4.5} /><Head x={14} y={27} r={4.5} /><Head x={14} y={18} r={4.5} /><path d="M20 35V6" />
+    <circle cx="35" cy="16" r="10" /><text x="31" y="21" fontSize="14" fill="currentColor" stroke="none" fontFamily="var(--font-display)">3</text>
+  </>,
+  // speedometer
+  speed: <>
+    <path d="M6 36a18 18 0 1 1 36 0" /><path d="M24 36l10-12" strokeWidth="3.4" /><circle cx="24" cy="36" r="3" fill="currentColor" />
+    <path d="M10 26l3 1M24 18v3M38 26l-3 1" />
+  </>,
+  // instrument families: four grouped circles
+  families: <>
+    <circle cx="15" cy="15" r="8" /><circle cx="33" cy="15" r="8" fill="currentColor" fillOpacity=".25" /><circle cx="15" cy="33" r="8" fill="currentColor" fillOpacity=".25" /><circle cx="33" cy="33" r="8" />
+  </>,
   // sharp sign
   sharp: <>
     <path d="M18 6v38M30 4v38" /><path d="M12 19l24-6M12 33l24-6" strokeWidth="5" />
@@ -101,6 +133,7 @@ const GAME_ART: Record<GameId, string> = {
   pitch: 'updown', tuneup: 'tuner', intervals: 'interval', harmonic: 'dyad', degrees: 'home', scales: 'stairs',
   contour: 'melody', spot: 'spot', chords: 'chord', progressions: 'progression', cadences: 'cadence',
   rhythm: 'grid', meter: 'metronome', timbre: 'violin', expression: 'hairpin', notes: 'clef', intreader: 'readint', keysigs: 'sharp',
+  memory: 'twins', compare: 'compareJumps', mood: 'mood', motion: 'motion', count: 'count', tempo: 'speed', families: 'families',
 }
 const COURSE_ART: Record<CourseId, string> = {
   pitch: 'fork', intervals: 'interval', scales: 'stairs', melody: 'melody', harmony: 'chord', rhythm: 'drum', sounds: 'violin', theory: 'clef',

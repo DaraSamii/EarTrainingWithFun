@@ -79,6 +79,7 @@ export function Quiz({ start, label, world, back, onDone }: {
       if (e.metaKey || e.ctrlKey || e.altKey) return
       if (e.key === ' ') { e.preventDefault(); playQ(q, false) }
       else if (e.key === 'Escape') go(back)
+      else if ((e.key === 'ArrowRight' || e.key === 'Enter') && picked) { e.preventDefault(); next() }
       else if (!picked && /^[1-9]$/.test(e.key)) { const o = q.options[+e.key - 1]; if (o) answer(o.id) }
     }
     addEventListener('keydown', onKey)

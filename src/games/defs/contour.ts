@@ -55,6 +55,6 @@ function level(i: number): Level {
 
 export const contour: Game = {
   id: 'contour', course: 'melody', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'mountains', worldName: S.world, arcade: 'breaker', instruments: ['piano', 'flute', 'violin'],
+  world: 'mountains', worldName: S.world, arcade: 'river', instruments: ['piano', 'flute', 'violin'],
   levels: LEVELS.map((_, i) => level(i)),
 }

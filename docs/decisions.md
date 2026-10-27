@@ -121,3 +121,15 @@ Format: `ADR-NNN · Title · Status · Date` → Context / Decision / Consequenc
 
 ### ADR-023 · Beginner / Intermediate / Advanced tabs; page transitions · Accepted · 2026-10-27
 **Decision:** The Journey and every course path are split into three tabs, each with its own progress bar. Journey sections are assigned by their midpoint so each tab holds about a third of the levels (44 / 54 / 36). The tab holding the next level opens by default. Route changes use the **View Transitions API**: the old page fades up and out, the new one fades in, and the top bar and tab bar stay fixed (with a fallback to the per-page fade-in, and off under reduced motion). The Home sidebar scrolls on its own when taller than the window, and stat panels animate closed as smoothly as they open.
+
+### ADR-024 · One arcade per course, a shared round engine, more games · Accepted · 2026-10-27
+**Context:** Several courses shared the same arcade, so they felt alike (pitch and melody, scales with rhythm and sounds). The user asked for a distinct game per category, a note on how each game works, and more games.
+**Decision:** Each course now has its own arcade: Pitch → **Peak Climber**, Intervals → Blaster, Scales & Keys → Breaker, Melody → **River Run**, Harmony → **Potion Lab**, Rhythm → **Hurdle Dash**, Sounds → **Fishing Pond**, Theory → Drops. The five new arcades share one timed-round engine (`useRounds`: clock per question, wrong answer costs 1.5 s, timeout reveals and replays, per-answer memory logging) and differ only in their scene. Every arcade shows a **How to play** list on its start card and behind a "?" button in the HUD. Seven new games bring the total to **25 games / 169 levels**: Note Twins, Bigger Jump, Mood Ring, Steps & Leaps, How Many Notes?, Tempo Check and Instrument Families.
+
+### ADR-025 · Passing score, verdicts, "Next activity", keyboard everywhere · Accepted · 2026-10-27
+**Decision:**
+- A **passing score** (60/70/80/90%, default 80%) is chosen in Profile. Practice must reach it to unlock Play, Play must reach it to complete a level, and unit reviews must reach it to pass. Below it, the primary button is "try again". Stars keep their fixed brackets.
+- Results show a **verdict** that depends on accuracy relative to the pass mark: Perfect, Outstanding, Passed, So close, Keep at it. The score pill shows the pass mark.
+- After a passed Play, the primary button is **Next activity**: the next unfinished level on the path the learner came from (course or Journey).
+- **Keyboard:** → is next/continue/start, ← is back, Esc exits, on every screen. Arcades also take 1–9 and Space; arrows move between stage tabs.
+- Stage tabs use a **sliding highlight**; the Home sidebar keeps the stats and Memory card fixed and scrolls only the course list; the Bubble Reef fish face the way they swim.

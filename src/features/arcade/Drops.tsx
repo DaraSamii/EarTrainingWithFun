@@ -187,7 +187,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
 
       {g.phase === 'intro' && (
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.drops}
-          onStart={() => { g.phase = 'count'; render() }} />
+          help={en.arcadeHelp.drops} onStart={() => { g.phase = 'count'; render() }} />
       )}
       {g.phase === 'count' && <Countdown onDone={spawn} />}
     </div>

@@ -50,9 +50,10 @@ export type Level = {
 export type GameId =
   | 'pitch' | 'tuneup' | 'intervals' | 'harmonic' | 'degrees' | 'scales' | 'contour' | 'spot'
   | 'chords' | 'progressions' | 'cadences' | 'rhythm' | 'meter' | 'timbre' | 'expression' | 'notes' | 'intreader' | 'keysigs'
+  | 'memory' | 'compare' | 'mood' | 'motion' | 'count' | 'tempo' | 'families'
 export type CourseId = 'pitch' | 'intervals' | 'scales' | 'melody' | 'harmony' | 'rhythm' | 'sounds' | 'theory'
 export type WorldId = 'garden' | 'space' | 'ocean' | 'mountains' | 'notebook'
-export type Arcade = 'breaker' | 'blaster' | 'drops'
+export type Arcade = 'breaker' | 'blaster' | 'drops' | 'climber' | 'river' | 'potion' | 'hurdles' | 'fishing'
 
 export type Game = {
   id: GameId
