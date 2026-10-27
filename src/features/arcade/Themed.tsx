@@ -72,7 +72,7 @@ export function Potion({ game, level, onFinish }: Props) {
       <span className="shelf" />
       <div className={`cauldron ${g.phase === 'hit' ? 'brew' : ''} ${g.wrong >= 0 || g.phase === 'miss' ? 'smoke' : ''}`} style={{ '--brew': brew } as React.CSSProperties}>
         <span className="liquid" />
-        {[0, 1, 2, 3].map((b) => <span key={b} className={`bubble b${b}`} />)}
+        {[0, 1, 2, 3].map((b) => <span key={b} className={`brew-bubble b${b}`} />)}
         <span className="puff" key={`${g.n}-${g.phase}`} />
       </div>
       <span className="fire" style={{ '--k': g.phase === 'ask' ? g.k : 0 } as React.CSSProperties} aria-hidden="true">
