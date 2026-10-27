@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-27 · Game worlds
+
+Every level is now Learn → Practice → Play, with two arcade games, the mascot Pip, stars and badges.
+
 ### Added
 - **Learn → Practice → Play** for every level (ADR-013): a level screen gates the steps. Learn is Pip's explanation, a demonstration of each new sound with hints and reference songs, and 3 guided tries. Practice is the calm lesson loop (8 questions). Play is the arcade game. Locked steps cannot be opened, even by URL.
 - **Scale Breaker** arcade (Breakout, ADR-016): every brick sings a scale degree; naming it moves the paddle. The ball fades mid-flight from level 2 (scaffold fading), keys change every 3 bricks on level 5, and a miss replays the answer and its resolution.
@@ -40,5 +44,6 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.2.0...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.3.0...develop
+[0.3.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/DaraSamii/EarTrainingWithFun/releases/tag/v0.2.0
