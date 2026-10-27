@@ -1,22 +1,67 @@
+import { useRoute, go } from './router'
+import { useProgress } from '../progress/store'
+import { currentStreak, dayKey, todayXp } from '../progress/progress'
+import { Icon, type IconName } from '../ui/Icon'
+import { PathScreen } from '../features/path/PathScreen'
+import { GamesScreen } from '../features/games/GamesScreen'
+import { ProfileScreen } from '../features/profile/ProfileScreen'
+import { LessonScreen } from '../features/lesson/LessonScreen'
+import { GAMES, type GameId } from '../games/catalog'
 import { en } from '../i18n/en'
 
+const TABS: [string, IconName, string][] = [
+  ['/', 'path', en.nav.path],
+  ['/games', 'games', en.nav.games],
+  ['/profile', 'profile', en.nav.profile],
+]
+
 export default function App() {
+  const route = useRoute()
+  const play = route.match(/^\/play\/(\w+)\/(\d+)$/)
+  if (play && play[1] in GAMES && GAMES[play[1] as GameId].levels[+play[2]])
+    return <LessonScreen key={route} gameId={play[1] as GameId} level={+play[2]} />
+
   return (
-    <main className="hero">
-      <div className="shapes" aria-hidden="true">
-        <span className="shape pentagon" />
-        <span className="shape semicircle" />
-        <span className="shape triangle" />
-        <span className="shape circle" />
-      </div>
-      <div className="hero-content">
-        <div className="icon-mark" aria-hidden="true">♪</div>
-        <h1>{en.hero.title}</h1>
-        <p>{en.hero.subtitle}</p>
-        <button className="btn-primary" disabled>
-          {en.hero.cta} <span aria-hidden="true">→</span>
-        </button>
-      </div>
-    </main>
+    <div className="shell">
+      <header className="topbar">
+        <a className="brand" href="#/">
+          <span className="icon-mark small" aria-hidden="true"><Icon name="ear" size={20} /></span>
+          <span className="brand-name">{en.appName}</span>
+        </a>
+        <nav className="tabs" aria-label="Main">
+          {TABS.map(([path, icon, label]) => (
+            <a key={path} href={`#${path}`} className="tab" aria-current={route === path ? 'page' : undefined}>
+              <Icon name={icon} /> <span>{label}</span>
+            </a>
+          ))}
+        </nav>
+        <Stats />
+      </header>
+      <main className="content">
+        {route === '/games' ? <GamesScreen /> : route === '/profile' ? <ProfileScreen /> : <PathScreen />}
+      </main>
+    </div>
+  )
+}
+
+function Stats() {
+  const p = useProgress()
+  const today = dayKey()
+  const streak = currentStreak(p, today)
+  const goal = Math.min(1, todayXp(p, today) / p.dailyGoal)
+  return (
+    <div className="stats">
+      <span className={`stat streak ${streak ? 'on' : ''}`} title={`${streak} ${en.stats.streak}`}>
+        <Icon name="flame" size={20} /> {streak}
+      </span>
+      <span className="stat xp" title={en.stats.xp}><Icon name="bolt" size={20} /> {p.xp}</span>
+      <button className="goal-ring" onClick={() => go('/profile')}
+        aria-label={`${en.stats.goal}: ${todayXp(p, today)} / ${p.dailyGoal} ${en.stats.xp}`}>
+        <svg viewBox="0 0 36 36" width="32" height="32" aria-hidden="true">
+          <circle cx="18" cy="18" r="15" className="ring-bg" />
+          <circle cx="18" cy="18" r="15" className="ring-fg" strokeDasharray={`${goal * 94.25} 94.25`} />
+        </svg>
+      </button>
+    </div>
   )
 }

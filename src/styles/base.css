@@ -1,45 +1,73 @@
 *, *::before, *::after { box-sizing: border-box; }
 
+:root { --muted: color-mix(in srgb, var(--text) 68%, transparent); }
+
 body {
   margin: 0;
   min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
   font: 400 var(--text-body-sm)/1.4 var(--font-text);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   font-feature-settings: 'tnum';
+  -webkit-tap-highlight-color: transparent;
 }
+
+/* DESIGN.md: the whole system runs on weight 400 */
+h1, h2, h3, strong, b, button { font-weight: 400; }
+h1, h2 { font-family: var(--font-display); letter-spacing: -0.03em; line-height: 1.1; margin: 0; }
+h1 { font-size: clamp(32px, 6vw, var(--text-heading-lg)); }
+h2 { font-size: var(--text-heading-sm); letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--action-text); }
+button { font: inherit; color: inherit; }
+kbd { font-family: var(--font-mono); }
 
 :focus-visible { outline: 2px solid var(--action); outline-offset: 2px; }
 
-.hero {
-  position: relative;
-  overflow: hidden;
-  min-height: 100dvh;
-  display: grid;
-  place-items: center;
-  padding: var(--space-48) var(--space-16);
+/* ---------- Primitives ---------- */
+.btn-primary, .btn-dark, .btn-ghost, .btn-soft {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  min-height: 48px;
+  padding: var(--space-12) var(--space-24);
+  border: 0;
+  border-radius: var(--radius-buttons);
+  font-size: 18px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 120ms, box-shadow 120ms, background 120ms;
+}
+.btn-primary { background: var(--action); color: var(--action-label); box-shadow: var(--shadow-button); }
+.btn-dark { background: var(--color-ink-black); color: var(--color-paper-white); box-shadow: 0 4px 0 0 var(--action); }
+.btn-ghost { background: transparent; box-shadow: inset 0 0 0 1.5px currentColor; }
+.btn-soft { background: var(--surface-2); min-height: 44px; font-size: var(--text-body-sm); padding: var(--space-8) var(--space-16); }
+:is(.btn-primary, .btn-dark):active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+:is(.btn-primary, .btn-dark, .btn-ghost, .btn-soft):disabled { cursor: default; opacity: 0.55; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-24);
 }
 
-.hero-content {
-  position: relative;
-  max-width: 720px;
-  text-align: center;
-  display: grid;
-  justify-items: center;
-  gap: var(--space-24);
+.tag {
+  display: inline-block;
+  font: 400 var(--text-caption-mono)/1.35 var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: var(--radius-pill);
+  padding: var(--space-4) var(--space-12);
 }
-
-.hero h1 {
-  margin: 0;
-  font: 400 clamp(40px, 9vw, var(--text-display-xl))/1.05 var(--font-display);
-  letter-spacing: -0.03em;
-  white-space: pre-line;
-}
-
-.hero p { margin: 0; font-size: var(--text-body); max-width: 36ch; }
 
 .icon-mark {
+  flex: none;
   width: 48px;
   height: 48px;
   border-radius: var(--radius-pill);
@@ -47,33 +75,17 @@ body {
   color: var(--action-label);
   display: grid;
   place-items: center;
-  font-size: 24px;
 }
+.icon-mark.small { width: 36px; height: 36px; }
+.icon-mark.big { width: 80px; height: 80px; box-shadow: var(--shadow-button); }
 
-.btn-primary {
-  font: inherit;
-  font-size: var(--text-body);
-  min-height: 48px;
-  padding: var(--space-12) var(--space-24);
-  border: 0;
-  border-radius: var(--radius-buttons);
-  background: var(--action);
-  color: var(--action-label);
-  box-shadow: var(--shadow-button);
-  cursor: pointer;
-  transition: transform 120ms, box-shadow 120ms;
-}
-.btn-primary:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
-.btn-primary:disabled { cursor: default; }
-
-/* Paper-cut decorative layer (DESIGN.md "Decorative Shape System") */
-.shapes { position: absolute; inset: 0; pointer-events: none; }
-.shape { position: absolute; display: block; }
-.pentagon { width: 38vmin; height: 38vmin; background: var(--color-hi-yellow); clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%); top: -10vmin; left: -12vmin; rotate: -12deg; }
-.semicircle { width: 44vmin; height: 22vmin; background: var(--color-marker-red); border-radius: 44vmin 44vmin 0 0; bottom: -2vmin; right: -10vmin; rotate: 8deg; }
-.triangle { width: 26vmin; height: 26vmin; background: var(--color-jelly-green); clip-path: polygon(50% 0, 100% 100%, 0 100%); bottom: 6vmin; left: -6vmin; rotate: 14deg; }
-.circle { width: 24vmin; height: 24vmin; background: var(--color-powder-sky); border-radius: 50%; top: 4vmin; right: -6vmin; }
+/* Paper-cut decorative shapes (DESIGN.md "Decorative Shape System") */
+.shape { position: absolute; display: block; pointer-events: none; z-index: 0; }
+.pentagon { background: var(--color-hi-yellow); clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%); }
+.circle { background: var(--color-powder-sky); border-radius: 50%; }
+.triangle { background: var(--color-jelly-green); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.semicircle { background: var(--color-marker-red); border-radius: 999px 999px 0 0; }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
 }
