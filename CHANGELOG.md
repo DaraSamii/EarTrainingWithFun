@@ -5,6 +5,21 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added
+- **Spaced repetition** (ADR-022): every learned sound is a memory item that comes back after 1, 3, 7, 16, 35 and 75 days; misses return tomorrow.
+- **Review** sessions: everything due, interleaved across games, worth 1.5× XP, with a Memory card on Home ("N due for review" and memory strength).
+- **Unit review** node at the end of every unit in the Journey and course paths (unlocks when the unit is done, passed at 80%).
+- Practice rounds now **mix in 2 older due items** (marked "Review").
+- **Beginner / Intermediate / Advanced tabs** on Home and every course page, each with progress (ADR-023).
+- **More levels** (134 total): Tune Up (low register, 8 cents), Twin Notes (all mixed), Spot the Change (7 notes), Progression Path (iii, deceptive, major/minor mix), Cadence Call (fast), Rhythm Match (syncopated sixteenths, swing), Meter Detective (5/4, 7/8), Expression Detective (all seven), Interval Reader (bass clef), Who's Playing? (full band).
+- Steel Trap badge (3 unit reviews).
+
+### Changed
+- Page changes animate: the old page fades out while the new one fades in (View Transitions API).
+- Home sidebar scrolls on its own when taller than the window (Music Theory was cut off).
+- Stat panels close as smoothly as they open.
+
+
 ## [0.5.0] - 2026-10-27 · Full curriculum
 
 Eight courses, 18 games, 110 levels: rhythm, progressions, cadences, expression and reading join pitch, intervals, scales, melody and timbre.

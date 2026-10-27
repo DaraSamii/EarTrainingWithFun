@@ -5,6 +5,8 @@ import { duration, play } from '../../audio/engine'
 import { sfx } from '../../audio/sfx'
 import { points, LATE_POINTS } from '../../games/score'
 import type { PlayResult } from '../../progress/progress'
+import type { Answer } from '../../progress/srs'
+import { itemKey } from '../../games/catalog'
 import { go } from '../../app/router'
 import { World } from '../../ui/World'
 import { OptionFace } from '../../ui/OptionFace'
@@ -45,6 +47,7 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
     tapped: false,
     locked: false,
     results: [] as boolean[],
+    answers: [] as Answer[],
     t0: 0,
     /** fall time for the current question: longer prompts get more time */
     D: DESCENT[level],
@@ -140,7 +143,7 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
     g.paddle = k
     const ok = k === g.ans
     const first = !g.tapped
-    if (first) { g.results.push(ok); g.tapped = true }
+    if (first) { g.results.push(ok); g.answers.push({ key: itemKey(game.id, level, g.q!.answer), ok, lvl: level }); g.tapped = true }
     if (ok) {
       g.locked = true
       if (first) {
@@ -164,7 +167,7 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
   }
 
   function land() {
-    if (!g.tapped) { g.results.push(false); g.combo = 0 }
+    if (!g.tapped) { g.results.push(false); g.answers.push({ key: itemKey(game.id, level, g.q!.answer), ok: false, lvl: level }); g.combo = 0 }
     if (g.locked) {
       sfx.pop()
       next()
@@ -192,7 +195,7 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
     if (g.results.length >= BRICKS) {
       g.phase = 'over'
       render()
-      later(700, () => onFinish({ correct: g.results.filter(Boolean).length, total: BRICKS, score: g.score, maxCombo: g.maxCombo }))
+      later(700, () => onFinish({ correct: g.results.filter(Boolean).length, total: BRICKS, score: g.score, maxCombo: g.maxCombo, answers: g.answers }))
     } else launch()
   }
 
