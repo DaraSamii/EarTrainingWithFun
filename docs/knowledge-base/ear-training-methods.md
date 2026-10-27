@@ -71,6 +71,24 @@ Each method is something we can turn into one or more game mechanics (see [game-
 | Melody | Parrot Phrases (play back on piano), Three Tones / More Tones (play back patterns), Vocal Steps |
 | Harmony | Chord Drops (function), Flash Chords, Tone Trees (chord tones), Speed Chords (quality and inversion), Chord Spells, Chord Locks (function, quality and inversion), Speaker Chords (pop progressions), Flash Progressions, Flash Cadences |
 
+
+### Theta deep-dive: how the games actually play (played and read in-game, Oct 2026)
+
+| Game | Mechanic | Pressure | Clever detail worth copying |
+|---|---|---|---|
+| Tone Drops | Fruit falls from a tree and plays a scale degree; tap its number before it lands | 5 lives, score, 10-segment level bar | Answer bar shows *all* 12 chromatic degrees, with the level's active ones lit, so the full map is always visible |
+| Harmonic Drops | Pairs of water balloons fall, each pair a harmonic interval | Same as Tone Drops | A wrong answer makes the object *lurch down*: the penalty is lost time, not a life |
+| Paddle Tones | Breakout: each brick hit plays a tone; name it (solfège or 1–7) and the paddle catches the ball | Ball speed | **Scaffold fading**: early on you can see where the ball goes; later the ball disappears for longer and longer, so the ear must lead |
+| Number Blaster | Shoot the ship whose number matches the heard tone (1–7, small ships) or chord (I–VII, big ships) | Ships advance | Arabic numerals for tones, Roman numerals for chords, so the label type tells you what to listen for |
+| Dango Brothers | Tune the right dango to the left one with arrow keys, then Check | Accuracy in cents | The target repeats every 4 s automatically |
+| Pitch Compare / Speed Pitch | Which tone is higher / a chain of higher-lower-same | Life meter + clock; "fast *and* accurate" | Instruments vary at higher levels; micro-tonal steps at the top |
+| Tonal Recall | Memory pairs: match equal pitches across two instrument groups | Limited tries | Pitch memory, not naming |
+| Parrot Phrases | Hear a phrase, play it back on virtual piano or guitar | — | Trains "visualization": ear → hands |
+
+**Shell shared by every Theta game:** a themed world (tree, sakura, jungle, night city), a start screen with a 5-star rating, a level slider, a tier label (Beginner → Grandmaster), a one-line skill description for the level, and three buttons: **FAQ · Practice · Play**. Practice is "without the pressures of a clock or scoreboard" and also offers custom levels.
+
+**What we adopt (ADR-013 to ADR-016):** the Learn/Practice/Play split (we make Learn a real demonstration, which Theta lacks: its FAQ is text only), themed worlds, a start screen per level, scaffold fading, time-as-penalty instead of lives, varied arcade mechanics per skill.
+
 **Takeaway:** Theta proves that one game *mechanic* can be reused across content (the "Flash" and "Drops" families). We copy that architecture: a few mechanics × many content sets × a single learning path. We do not copy the names or the paywall.
 
 ## Sources

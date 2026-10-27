@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react'
 import { GAMES, levelId, type GameId, type Question } from '../../games/catalog'
 import { mulberry32 } from '../../music/theory'
 import { isRunning, play } from '../../audio/engine'
-import { useProgress, setProgress } from '../../progress/store'
-import { applySession, currentStreak, dayKey, PASS } from '../../progress/progress'
+import { commit } from '../../progress/store'
+import { applyPractice, dayKey, sessionXp, type BadgeId } from '../../progress/progress'
+import { sfx } from '../../audio/sfx'
+import { Results } from '../results/Results'
 import { go } from '../../app/router'
 import { Icon } from '../../ui/Icon'
 import { en } from '../../i18n/en'
 
-const SESSION = 10
+const SESSION = 8
 const MAX_REQUEUE = 5
 const GAP = { notes: [], dur: 0.5 }
 
@@ -16,6 +18,7 @@ type Props = { gameId: GameId; level: number }
 
 const playQ = (q: Question, withContext: boolean) => play([...(withContext && q.context ? q.context : []), ...q.prompt])
 
+/** Practice: the calm round between Learn and Play (ADR-013) */
 export function LessonScreen(props: Props) {
   const [run, setRun] = useState(0)
   return <Lesson key={run} {...props} retry={() => setRun((r) => r + 1)} />
@@ -23,7 +26,6 @@ export function LessonScreen(props: Props) {
 
 function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
   const game = GAMES[gameId]
-  const p = useProgress()
   const [items, setItems] = useState(() => {
     const rng = mulberry32(Date.now())
     return Array.from({ length: SESSION }, (_, n) => ({ q: game.levels[level].generate(rng), n }))
@@ -34,7 +36,7 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
   const [right, setRight] = useState(0)
   const [combo, setCombo] = useState(0)
   const [needsTap, setNeedsTap] = useState(() => !isRunning())
-  const [summary, setSummary] = useState<{ correct: number; xp: number; streak: number } | null>(null)
+  const [summary, setSummary] = useState<{ correct: number; badges: BadgeId[] } | null>(null)
 
   const { q, n } = items[i]
   const ok = picked === q.answer
@@ -49,6 +51,8 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
     setPicked(id)
     if (firstTry[n] === undefined) setFirstTry((f) => Object.assign([...f], { [n]: correct }))
     setCombo((c) => (correct ? c + 1 : 0))
+    if (correct) sfx.pop()
+    else sfx.shield()
     if (correct) setRight((r) => r + 1)
     else if (items.length < SESSION + MAX_REQUEUE) setItems((xs) => [...xs, items[i]])
     play(q.after ?? (correct ? [] : q.hear(q.answer)))
@@ -63,24 +67,24 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
       return
     }
     const correct = firstTry.filter(Boolean).length
-    const today = dayKey()
-    const after = applySession(p, levelId(gameId, level), correct, SESSION, today)
-    setProgress(after)
-    setSummary({ correct, xp: after.xp - p.xp, streak: currentStreak(after, today) })
+    const badges = commit((p) => applyPractice(p, levelId(gameId, level), correct, SESSION, dayKey()))
+    setSummary({ correct, badges })
   }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (summary || e.metaKey || e.ctrlKey || e.altKey) return
       if (e.key === ' ') { e.preventDefault(); playQ(q, false) }
-      else if (e.key === 'Escape') go('/')
+      else if (e.key === 'Escape') go(`/level/${gameId}/${level}`)
       else if (!picked && /^[1-9]$/.test(e.key)) { const o = q.options[+e.key - 1]; if (o) answer(o.id) }
     }
     addEventListener('keydown', onKey)
     return () => removeEventListener('keydown', onKey)
   })
 
-  if (summary) return <Summary {...summary} retry={retry} />
+  if (summary)
+    return <Results kind="practice" gameId={gameId} level={level} correct={summary.correct} total={SESSION}
+      xp={sessionXp(summary.correct, SESSION)} badges={summary.badges} again={retry} />
 
   const label = (id: string) => {
     const o = q.options.find((x) => x.id === id)!
@@ -88,9 +92,9 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
   }
 
   return (
-    <div className="lesson">
+    <div className={`lesson theme-${gameId}`}>
       <header className="lesson-top">
-        <button className="icon-btn" aria-label={en.lesson.exit} onClick={() => go('/')}><Icon name="close" /></button>
+        <button className="icon-btn" aria-label={en.lesson.exit} onClick={() => go(`/level/${gameId}/${level}`)}><Icon name="close" /></button>
         <div className="bar" role="progressbar" aria-valuemin={0} aria-valuemax={SESSION} aria-valuenow={right}>
           <span style={{ width: `${(Math.min(right, SESSION) / SESSION) * 100}%` }} />
         </div>
@@ -100,7 +104,7 @@ function Lesson({ gameId, level, retry }: Props & { retry(): void }) {
       </header>
 
       <section className="lesson-body">
-        <span className="tag">{game.title} · {en.path.level} {level + 1}</span>
+        <span className="tag">{en.lesson.practice} · {game.title} · {en.path.level} {level + 1}</span>
         <h1>{game.instruction}</h1>
         <div className="listen">
           <button className="replay" aria-label={`${en.lesson.replay} (Space)`} onClick={() => playQ(q, false)}>
@@ -153,30 +157,6 @@ function Feedback({ ok, q, picked, label, next }: { ok: boolean; q: Question; pi
             </button>
           )}
           <button className="btn-dark" autoFocus onClick={next}>{en.lesson.continue}</button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function Summary({ correct, xp, streak, retry }: { correct: number; xp: number; streak: number; retry(): void }) {
-  const passed = correct / SESSION >= PASS
-  return (
-    <div className="summary">
-      <span className="shape deco pentagon right" aria-hidden="true" />
-      <span className="shape deco circle left" aria-hidden="true" />
-      <div className="summary-card">
-        <span className="icon-mark big" aria-hidden="true"><Icon name={passed ? 'check' : 'ear'} size={36} /></span>
-        <h1>{passed ? en.summary.passed : en.summary.failed}</h1>
-        {!passed && <p>{en.summary.failedHint}</p>}
-        <div className="stat-grid">
-          <div className="card stat-card tone-xp"><Icon name="bolt" /><strong>+{xp}</strong><span>{en.summary.xp}</span></div>
-          <div className="card stat-card"><Icon name="check" /><strong>{Math.round((correct / SESSION) * 100)}%</strong><span>{en.summary.accuracy}</span></div>
-          <div className="card stat-card tone-streak"><Icon name="flame" /><strong>{streak}</strong><span>{en.summary.streak}</span></div>
-        </div>
-        <div className="actions">
-          <button className="btn-ghost" onClick={retry}>{en.summary.again}</button>
-          <button className="btn-primary" autoFocus onClick={() => go('/')}>{en.summary.next} <span aria-hidden="true">→</span></button>
         </div>
       </div>
     </div>
