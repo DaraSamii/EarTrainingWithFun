@@ -11,6 +11,8 @@ const LEVELS = [
   ['I V vi IV', 'I vi IV V', 'vi IV I V', 'I IV vi V'],
   ['I ii V I', 'I IV V I', 'I vi ii V'],
   ['i iv V i', 'i VI VII i', 'i iv v i', 'i VII VI V'],
+  ['I IV V vi', 'I iii IV V', 'I IV ii V', 'I V vi IV'],
+  ['I V vi IV', 'i VI VII i', 'I ii V I', 'i iv V i'],
 ]
 
 function level(i: number): Level {

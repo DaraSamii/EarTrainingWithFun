@@ -11,9 +11,12 @@ const MAJOR: Record<string, string[]> = {
 const MINOR: Record<string, string[]> = {
   authentic: ['i', 'iv', 'V', 'i'], plagal: ['i', 'v', 'iv', 'i'], half: ['i', 'iv', 'i', 'V'], deceptive: ['i', 'iv', 'V', 'VI'],
 }
-const LEVELS = [['authentic', 'half'], ['authentic', 'half', 'plagal'], ['authentic', 'half', 'plagal', 'deceptive'], ['authentic', 'half', 'plagal', 'deceptive'], ['authentic', 'half', 'plagal', 'deceptive']]
+const ALL = ['authentic', 'half', 'plagal', 'deceptive']
+const LEVELS = [['authentic', 'half'], ['authentic', 'half', 'plagal'], ALL, ALL, ALL, ALL]
 /** 0 major, 1 minor, 2 either */
-const MODE = [0, 0, 0, 1, 2]
+const MODE = [0, 0, 0, 1, 2, 2]
+/** chord length: the last level moves twice as fast */
+const SPEED = [0.7, 0.7, 0.7, 0.7, 0.7, 0.4]
 
 function level(i: number): Level {
   const set = LEVELS[i]
@@ -21,14 +24,14 @@ function level(i: number): Level {
   return {
     title: S.levels[i], skill: S.skills[i], concept: S.concepts[i], options,
     fresh: i === 3 ? set : freshOf(set, LEVELS[i - 1]),
-    demo: (id) => progression(60, (MODE[i] === 1 ? MINOR : MAJOR)[id], 0.7),
+    demo: (id) => progression(60, (MODE[i] === 1 ? MINOR : MAJOR)[id], SPEED[i]),
     hint: (id) => S.hints[id],
     generate(rng) {
       const t = randInt(rng, 55, 64)
       const minor = MODE[i] === 1 || (MODE[i] === 2 && rng() < 0.5)
       const table = minor ? MINOR : MAJOR
       const id = pick(rng, set)
-      return { options, answer: id, prompt: progression(t, table[id], 0.7), hear: (x) => progression(t, table[x], 0.7) }
+      return { options, answer: id, prompt: progression(t, table[id], SPEED[i]), hear: (x) => progression(t, table[x], SPEED[i]) }
     },
   }
 }

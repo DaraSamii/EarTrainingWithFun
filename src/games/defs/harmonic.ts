@@ -7,6 +7,7 @@ const S = en.games.harmonic
 const LEVELS: IntervalId[][] = [
   ['P5', 'P8'], ['M3', 'P5', 'P8'], ['m3', 'M3', 'P5'], ['M2', 'm3', 'M3', 'P4'],
   ['P4', 'P5', 'm6', 'M6'], ['m3', 'M3', 'P4', 'P5', 'M6', 'P8'], ['m2', 'TT', 'm7', 'M7', 'P8'],
+  ['M2', 'm3', 'M3', 'P4', 'TT', 'P5', 'm7'],
 ]
 
 function level(i: number): Level {
