@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-27 · Spaced review
+
+What you learn keeps coming back: spaced memory, interleaved practice, unit reviews, and Beginner/Intermediate/Advanced tabs.
+
 ### Added
 - **Spaced repetition** (ADR-022): every learned sound is a memory item that comes back after 1, 3, 7, 16, 35 and 75 days; misses return tomorrow.
 - **Review** sessions: everything due, interleaved across games, worth 1.5× XP, with a Memory card on Home ("N due for review" and memory strength).
@@ -100,7 +104,8 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.5.0...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.6.0...develop
+[0.6.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.2.0...v0.3.0
