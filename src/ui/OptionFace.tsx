@@ -13,11 +13,26 @@ export function Contour({ shape, w = 72, h = 34 }: { shape: number[]; w?: number
   )
 }
 
+/** A one-bar rhythm as boxes grouped by beat: filled = hit */
+export function BeatGrid({ grid }: { grid: number[] }) {
+  const per = grid.length === 12 ? 3 : grid.length / 4
+  return (
+    <span className="beat-grid" aria-hidden="true">
+      {Array.from({ length: grid.length / per }, (_, b) => (
+        <span key={b} className="beat">
+          {grid.slice(b * per, b * per + per).map((v, k) => <i key={k} className={v ? 'hit' : ''} />)}
+        </span>
+      ))}
+    </span>
+  )
+}
+
 /** What an answer button shows: a contour drawing, or a label with an optional sub-label */
 export function OptionFace({ o, compact = false }: { o: Option; compact?: boolean }) {
   return (
     <>
       {o.shape && <Contour shape={o.shape} w={compact ? 54 : 72} h={compact ? 26 : 34} />}
+      {o.grid && <BeatGrid grid={o.grid} />}
       <span className="answer-label">{o.label}</span>
       {o.sub && !compact && <span className="answer-sub">{o.sub}</span>}
     </>

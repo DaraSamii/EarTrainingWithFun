@@ -3,7 +3,7 @@ import { en } from '../../i18n/en'
 import { freshOf, type Game, type Level, type Visual } from '../types'
 
 const S = en.games.notes
-type Clef = Visual['clef']
+type Clef = Visual['clef'] | 'grand'
 // Natural notes per level: [letter index, octave]
 const POOLS: [Clef, [number, number][]][] = [
   ['treble', [[2, 4], [4, 4], [6, 4], [1, 5], [3, 5]]], // lines E G B D F
@@ -11,6 +11,9 @@ const POOLS: [Clef, [number, number][]][] = [
   ['treble', [[2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [0, 5], [1, 5], [2, 5], [3, 5]]],
   ['treble', [[0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5]]],
   ['bass', [[4, 2], [5, 2], [6, 2], [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3]]],
+  ['bass', [[2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [0, 4]]],
+  // both clefs: the clef is chosen by the note (middle C and up on treble)
+  ['grand', [[4, 2], [6, 2], [1, 3], [3, 3], [5, 3], [0, 4], [2, 4], [4, 4], [6, 4], [1, 5], [3, 5], [5, 5]]],
 ]
 
 function level(i: number): Level {
@@ -20,13 +23,13 @@ function level(i: number): Level {
   const letters = [...new Set(notes.map(letterOf))].sort((a, b) => (i < 2 ? 0 : 'CDEFGAB'.indexOf(a) - 'CDEFGAB'.indexOf(b)))
   const options = letters.map((x) => ({ id: x, label: x }))
   const first = (l: string) => notes.find((n) => letterOf(n) === l)!
-  const staff = (n: number): Visual => ({ kind: 'staff', clef, notes: [n] })
+  const staff = (n: number): Visual => ({ kind: 'staff', clef: clef === 'grand' ? (n >= 60 ? 'treble' : 'bass') : clef, notes: [n] })
   return {
     title: S.levels[i],
     skill: S.skills[i],
     concept: S.concepts[i],
     options,
-    fresh: i === 4 ? letters : freshOf(letters, i === 0 ? undefined : [...new Set(POOLS[i - 1][1].map(([l, o]) => letterOf(natural(l, o))))]),
+    fresh: i >= 4 ? letters : freshOf(letters, i === 0 ? undefined : [...new Set(POOLS[i - 1][1].map(([l, o]) => letterOf(natural(l, o))))]),
     demo: (id) => [{ notes: [first(id)], dur: 1 }],
     demoVisual: (id) => staff(first(id)),
     hint: (id) => S.hints[i][id] ?? '',
@@ -44,6 +47,6 @@ function level(i: number): Level {
 
 export const notes: Game = {
   id: 'notes', course: 'theory', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'notebook', worldName: S.world, arcade: 'drops', glyph: '𝄞', instruments: ['piano'],
+  world: 'notebook', worldName: S.world, arcade: 'drops', instruments: ['piano'],
   levels: POOLS.map((_, i) => level(i)),
 }

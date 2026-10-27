@@ -40,12 +40,12 @@
   transition: transform 120ms, box-shadow 120ms;
 }
 .step-card:disabled { cursor: default; }
-.step-num { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: var(--surface-2); font: 400 18px/1 var(--font-display); }
+.step-num { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: var(--surface-2); font: 400 20px/1 var(--font-display); }
 .step-icon { width: 48px; height: 48px; display: grid; place-items: center; border-radius: var(--radius-small); background: var(--surface-2); color: var(--action-text); }
 .step-text { display: grid; gap: 2px; }
-.step-text strong { font: 400 22px/1.1 var(--font-display); letter-spacing: -0.02em; }
-.step-text span { color: var(--muted); font-size: 14px; }
-.step-state { font: 400 11px/1 var(--font-mono); text-transform: uppercase; color: var(--muted); }
+.step-text strong { font: 400 24px/1.1 var(--font-display); letter-spacing: -0.02em; }
+.step-text span { color: var(--muted); font-size: 16px; }
+.step-state { font: 400 13px/1 var(--font-mono); text-transform: uppercase; color: var(--muted); }
 .step.is-next .step-card { border-color: var(--color-ink-black); box-shadow: 0 5px 0 0 var(--color-ink-black); background: var(--color-hi-yellow); color: var(--color-ink-black); }
 .step.is-next .step-card :is(.step-text span, .step-state) { color: var(--color-ink-black); }
 .step.is-next .step-icon { background: var(--color-paper-white); color: var(--color-electric-iris); }
@@ -53,7 +53,7 @@
 .step.is-done .step-num { background: var(--success); color: var(--on-feedback); }
 .step.is-locked { opacity: 0.55; }
 .step:not(.is-locked) .step-card:active { transform: translateY(3px); box-shadow: none; }
-.btn-primary.big { min-height: 60px; font-size: 22px; padding: var(--space-16) var(--space-32); justify-self: stretch; }
+.btn-primary.big { min-height: 60px; font-size: 24px; padding: var(--space-16) var(--space-32); justify-self: stretch; }
 .hi-score { display: flex; align-items: center; justify-content: center; gap: var(--space-8); color: var(--muted); font: 400 var(--text-caption-mono)/1 var(--font-mono); text-transform: uppercase; }
 
 /* ---------- Learn (design-patterns A10) ---------- */
@@ -67,7 +67,7 @@
 .learn-steps span.on { background: var(--color-ink-black); width: 56px; }
 .learn-body { position: relative; z-index: 1; flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 60px var(--space-16) var(--space-48); display: grid; align-content: start; justify-items: center; gap: var(--space-20, 20px); text-align: center; }
 .pip-stage { display: grid; justify-items: center; gap: var(--space-8); }
-.pip-stage .bubble { max-width: 46ch; font-size: 19px; }
+.pip-stage .bubble { max-width: 46ch; font-size: 21px; }
 .demo-cards { width: 100%; display: grid; gap: var(--space-12); grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); }
 .demo-card {
   display: grid;
@@ -88,7 +88,7 @@
 .demo-card.playing .demo-play { animation: beat 0.5s ease-in-out infinite alternate; }
 .demo-label { font: 400 26px/1.1 var(--font-display); letter-spacing: -0.02em; }
 .demo-label small { font: 400 var(--text-caption-mono)/1 var(--font-mono); }
-.demo-hint { font-size: 14px; color: var(--muted); }
+.demo-hint { font-size: 16px; color: var(--muted); }
 @keyframes beat { to { scale: 1.15; } }
 .try-count { font: 400 var(--text-caption-mono)/1 var(--font-mono); text-transform: uppercase; color: var(--muted); }
 .replay.small { width: 84px; height: 84px; }
@@ -104,7 +104,7 @@
 .badge-toast { display: flex; align-items: center; gap: var(--space-12); padding: var(--space-12) var(--space-20, 20px); border: 2px solid var(--color-ink-black); border-radius: var(--radius-pill); background: var(--color-hi-yellow); color: var(--color-ink-black); box-shadow: 0 4px 0 0 var(--color-ink-black); animation: drop-in 600ms 1.2s both cubic-bezier(.3, 1.5, .5, 1); text-align: left; }
 .badge-toast > div { display: grid; gap: 2px; justify-items: start; }
 .badge-toast .tag { background: var(--color-ink-black); color: #fff; }
-.badge-toast strong { font: 400 20px/1.1 var(--font-display); }
+.badge-toast strong { font: 400 22px/1.1 var(--font-display); }
 @keyframes drop-in { from { translate: 0 -30px; opacity: 0; scale: 0.8; } }
 .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-12); }
 
@@ -116,15 +116,15 @@
 .segments li { flex: 1; height: 10px; border-radius: var(--radius-pill); background: var(--color-frost-blue); transition: background 200ms; }
 .segments li.ok { background: var(--color-jelly-green); }
 .segments li.bad { background: var(--color-marker-red); }
-.score, .mult { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border: 2px solid var(--color-ink-black); border-radius: var(--radius-pill); background: var(--color-paper-white); color: var(--color-ink-black); font: 400 18px/1 var(--font-display); font-feature-settings: 'tnum'; box-shadow: 0 3px 0 0 var(--color-ink-black); }
+.score, .mult { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border: 2px solid var(--color-ink-black); border-radius: var(--radius-pill); background: var(--color-paper-white); color: var(--color-ink-black); font: 400 20px/1 var(--font-display); font-feature-settings: 'tnum'; box-shadow: 0 3px 0 0 var(--color-ink-black); }
 .score svg { color: var(--color-hi-yellow); stroke: var(--color-ink-black); }
 .mult { background: var(--color-hi-yellow); opacity: 0.35; }
 .mult.on { opacity: 1; animation: pop 400ms; }
 
 .stage { position: relative; z-index: 1; flex: 1; width: 100%; max-width: 620px; margin: 0 auto; }
-.stage-hint { position: absolute; left: 50%; top: 52%; translate: -50% 0; margin: 0; padding: var(--space-8) var(--space-16); border-radius: var(--radius-pill); background: rgb(255 255 255 / 0.85); color: var(--color-ink-black); font-size: 14px; white-space: nowrap; }
-.banner { position: absolute; left: 50%; top: 42%; z-index: 4; translate: -50% -50%; padding: var(--space-12) var(--space-24); border: 2px solid var(--color-ink-black); border-radius: var(--radius-pill); background: var(--color-paper-white); color: var(--color-ink-black); font: 400 22px/1.2 var(--font-display); box-shadow: 0 4px 0 0 var(--color-ink-black); white-space: nowrap; animation: drop-in 300ms cubic-bezier(.3, 1.5, .5, 1); }
-.popup { position: absolute; z-index: 4; translate: -50% -50%; pointer-events: none; font: 400 22px/1 var(--font-display); color: var(--color-ink-black); background: var(--color-hi-yellow); border: 2px solid var(--color-ink-black); border-radius: var(--radius-pill); padding: 4px 12px; white-space: nowrap; animation: float-up 900ms ease-out forwards; }
+.stage-hint { position: absolute; left: 50%; top: 52%; translate: -50% 0; margin: 0; padding: var(--space-8) var(--space-16); border-radius: var(--radius-pill); background: rgb(255 255 255 / 0.85); color: var(--color-ink-black); font-size: 16px; white-space: nowrap; }
+.banner { position: absolute; left: 50%; top: 42%; z-index: 4; translate: -50% -50%; padding: var(--space-12) var(--space-24); border: 2px solid var(--color-ink-black); border-radius: var(--radius-pill); background: var(--color-paper-white); color: var(--color-ink-black); font: 400 24px/1.2 var(--font-display); box-shadow: 0 4px 0 0 var(--color-ink-black); white-space: nowrap; animation: drop-in 300ms cubic-bezier(.3, 1.5, .5, 1); }
+.popup { position: absolute; z-index: 4; translate: -50% -50%; pointer-events: none; font: 400 24px/1 var(--font-display); color: var(--color-ink-black); background: var(--color-hi-yellow); border: 2px solid var(--color-ink-black); border-radius: var(--radius-pill); padding: 4px 12px; white-space: nowrap; animation: float-up 900ms ease-out forwards; }
 .popup.bad { background: var(--color-marker-red); }
 @keyframes float-up { from { opacity: 0; scale: 0.6; } 20% { opacity: 1; scale: 1.1; } to { opacity: 0; translate: -50% -160%; } }
 
@@ -144,9 +144,9 @@
 .zones[data-count='3'] { --k: 3; } .zones[data-count='5'] { --k: 5; } .zones[data-count='7'] { --k: 7; }
 .zone { position: relative; min-height: 76px; display: grid; place-content: center; gap: 2px; padding: var(--space-8) 2px; border: 2px solid var(--color-ink-black); border-radius: var(--radius-small); background: var(--color-paper-white); color: var(--color-ink-black); box-shadow: 0 4px 0 0 var(--color-ink-black); cursor: pointer; transition: transform 80ms, box-shadow 80ms, background 150ms; }
 .zone:active { transform: translateY(4px); box-shadow: none; }
-.zone kbd { position: absolute; top: 4px; left: 8px; font-size: 10px; opacity: 0.55; }
+.zone kbd { position: absolute; top: 4px; left: 8px; font-size: 12px; opacity: 0.55; }
 .zone-label { font: 400 28px/1 var(--font-display); }
-.zone-sub { font: 400 11px/1 var(--font-mono); text-transform: uppercase; }
+.zone-sub { font: 400 13px/1 var(--font-mono); text-transform: uppercase; }
 .zone.is-paddle { background: var(--color-frost-blue); }
 .zone.reveal { background: var(--success); animation: pop 400ms 3; }
 
@@ -158,8 +158,8 @@
 .ship.t-sky .ship-hull { background: var(--color-powder-sky); } .ship.t-green .ship-hull { background: var(--color-jelly-green); }
 .ship.t-red .ship-hull { background: var(--color-marker-red); }
 .ship.t-sky .ship-dome { background: var(--color-bubblegum-pink); }
-.ship-hull kbd { position: absolute; top: -10px; right: -6px; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--color-ink-black); color: #fff; font-size: 11px; }
-.ship-label { font: 400 clamp(13px, 3.4vw, 18px)/1.1 var(--font-display); letter-spacing: -0.01em; text-align: center; }
+.ship-hull kbd { position: absolute; top: -10px; right: -6px; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--color-ink-black); color: #fff; font-size: 13px; }
+.ship-label { font: 400 clamp(15px, 3.4vw, 18px)/1.1 var(--font-display); letter-spacing: -0.01em; text-align: center; }
 .ship:active .ship-hull { translate: 0 3px; box-shadow: 0 2px 0 0 var(--color-ink-black); }
 .ship-boom { animation: boom 500ms forwards; pointer-events: none; }
 .ship-shield .ship-hull { outline: 4px solid var(--color-powder-sky); outline-offset: 4px; animation: shake 300ms; }

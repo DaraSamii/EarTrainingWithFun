@@ -64,7 +64,7 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
   function wave() {
     const q = lv.generate(g.rng)
     g.q = q
-    g.ans = lv.options.findIndex((o) => o.id === q.answer)
+    g.ans = q.options.findIndex((o) => o.id === q.answer)
     g.shot = false
     g.ships = g.ships.map(() => 'idle')
     play(q.prompt)
@@ -119,7 +119,7 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
     if (!g.shot) { g.results.push(false); g.combo = 0 }
     g.phase = 'between'
     g.ships[g.ans] = 'escape'
-    g.banner = `${en.arcade.late} ${lv.options[g.ans].label}`
+    g.banner = `${en.arcade.late} ${g.q!.options[g.ans].label}`
     sfx.whoosh()
     play(g.q!.after ?? g.q!.hear(g.q!.answer))
     const k = g.ans
@@ -170,7 +170,7 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
         back={back} onReplay={g.q?.prompt.length ? () => play(g.q!.prompt) : undefined} />
 
       <div className="stage blaster" ref={stageRef} style={{ '--k': K } as React.CSSProperties}>
-        {lv.options.map((o, k) => {
+        {(g.q?.options ?? lv.options).map((o, k) => {
           const s = ship(k)
           return (
             <button key={`${k}-${g.spawn[k]}`} className={`ship ${SHIP_TONES[k % SHIP_TONES.length]} ship-${g.ships[k]}`}

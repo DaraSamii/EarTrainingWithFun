@@ -90,7 +90,7 @@ Input modes in scope (ADR-005): **buttons/multiple-choice**, **on-screen piano**
 | **Placement test** | About 3 minutes of adaptive items that unlock the path up to the learner's level | v1 |
 | **Daily challenge** | One fixed, seeded session per day that's the same for everyone (shareable result) | Later |
 
-## 3b. Implemented games (0.4.0)
+## 3b. Implemented games (0.5.0: 18 games, 110 levels)
 
 | Course | Game | Practice | Play (arcade) | World | Levels |
 |---|---|---|---|---|---|
@@ -102,7 +102,18 @@ Input modes in scope (ADR-005): **buttons/multiple-choice**, **on-screen piano**
 | Harmony | **Chord Colors** | K1 | Blaster | Bubble Reef | maj/min → +dim → +aug → 7ths → all, unspelled |
 | Sounds | **Who's Playing?** | K1 | Drops | Sunset Garden | piano/flute → +guitar → +trumpet, violin → strings & woodwinds → brass, reeds & mallets |
 | Music Theory | **Note Reader** (reading) | K1 + staff | Drops (staff cards) | Paper Notebook | treble lines → spaces → whole staff → ledger lines → bass clef |
-| Music Theory | **Key Signatures** (concepts) | K1 + staff | Blaster | Paper Notebook | C/G/F → 2 → 3 → 4 → 6 sharps/flats |
+| Music Theory | **Key Signatures** (concepts) | K1 + staff | Blaster | Paper Notebook | C/G/F → 2 → 3 → 4 → 6 sharps/flats → relative minors |
+| Pitch | **Tune Up** | K1 | Blaster | Paper Peaks | flat/sharp 50¢ → +in tune → 30¢ → 20¢ → 12¢ |
+| Intervals | **Twin Notes** (harmonic) | K1 | Drops | Bubble Reef | P5/P8 → thirds → 2nds–4ths → 6ths → consonant mix → dissonances |
+| Melody | **Spot the Change** | K1 (note positions) | Breaker | Sunset Garden | 3 notes big change → 6 notes, one chromatic half step |
+| Harmony | **Progression Path** | K1 (Roman numerals) | Blaster | Paper Space | I–IV–I/I–V–I → I IV V → +vi → pop four-chord → ii–V–I → minor keys |
+| Harmony | **Cadence Call** | K1 | Drops | Paper Notebook | authentic/half → +plagal → +deceptive → minor → any key |
+| Rhythm | **Rhythm Match** | K1 (beat-grid choices drawn per question) | Blaster | Sunset Garden | quarters → eighths → syncopation → sixteenths → triplets → dense |
+| Rhythm | **Meter Detective** | K1 | Drops | Paper Peaks | 3/4 vs 4/4 → +2/4 → 3/4 vs 6/8 → all, soft accents → piano oom-pah |
+| Sounds | **Expression Detective** | K1 | Breaker | Bubble Reef | louder phrase → cresc/decresc → +steady → staccato/legato → accel/rit → mixed |
+| Music Theory | **Interval Reader** | K1 + staff | Drops | Paper Notebook | 2nds/3rds → … → all to the octave → stacked (harmonic) |
+
+Existing games also grew: Higher or Lower (8 levels, to 12¢ and low registers), Interval Blaster (8: sixths, tritone & sevenths, mixed directions), Scale Breaker (8: minor keys), Scale Shapes (8: all modes, color scales), Chord Colors (8: sus, inversions, all sevenths), Contour Catcher (6), Who's Playing? (7), Note Reader (7: bass ledger, both clefs).
 
 Mechanic **K10 · Drops** (after Theta's Tone Drops): an item falls and plays (or shows) the prompt; answer before it lands. A wrong answer makes it lurch down (time penalty). Reading games show the sound only after answering, which links eye and ear.
 

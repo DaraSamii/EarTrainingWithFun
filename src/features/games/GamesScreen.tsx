@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { CourseIcon, GameIcon } from '../../ui/GameIcon'
 import { COURSES, GAMES, isUnlocked, levelId, type Game } from '../../games/catalog'
 import { useProgress } from '../../progress/store'
 import { level as stats } from '../../progress/progress'
@@ -15,7 +16,7 @@ function GameCard({ g, i }: { g: Game; i: number }) {
       <div className={`game-art hero-${g.world}`} aria-hidden="true">
         <World world={g.world} />
         <span className="tag world-tag">{g.worldName}</span>
-        <span className="game-glyph-big">{g.glyph}</span>
+        <span className="game-glyph-big"><GameIcon id={g.id} size={46} /></span>
       </div>
       <h2>{g.title}</h2>
       <p>{g.blurb}</p>
@@ -61,7 +62,7 @@ export function GamesScreen() {
       ) : COURSES.map((c) => (
         <section key={c.id} className="games-group">
           <button className={`group-head c-${c.color}`} onClick={() => go(`/course/${c.id}`)}>
-            <span className="course-dot">{GAMES[c.games[0]].glyph}</span>
+            <span className="course-dot"><CourseIcon id={c.id} size={34} /></span>
             <h2>{c.title}</h2><span>{c.blurb}</span><Icon name="chevron" size={18} />
           </button>
           <div className="card-grid">{c.games.map((g) => <GameCard key={g} g={GAMES[g]} i={i++} />)}</div>

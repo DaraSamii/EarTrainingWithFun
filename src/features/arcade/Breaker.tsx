@@ -112,7 +112,7 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
     const newKey = !!q.context && q.key !== g.key
     g.q = q
     g.key = q.key
-    g.ans = lv.options.findIndex((o) => o.id === q.answer)
+    g.ans = q.options.findIndex((o) => o.id === q.answer)
     if (newKey) {
       g.phase = 'wait'
       g.banner = g.broken.length === 1 ? en.lesson.key : en.arcade.newKey
@@ -174,7 +174,7 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
     g.phase = 'miss'
     g.combo = 0
     g.reveal = g.ans
-    const o = lv.options[g.ans]
+    const o = g.q!.options[g.ans]
     g.banner = `${en.arcade.miss} ${o.label}${o.sub && !o.shape ? ` (${o.sub})` : ''}`
     sfx.whoosh()
     play([...g.q!.hear(g.q!.answer), ...(g.q!.after ?? [])])
@@ -228,7 +228,7 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
       </div>
 
       <div className="zones" data-count={K}>
-        {lv.options.map((o, k) => (
+        {(g.q?.options ?? lv.options).map((o, k) => (
           <button key={o.id} className={`zone ${g.paddle === k ? 'is-paddle' : ''} ${g.reveal === k ? 'reveal' : ''}`}
             onPointerDown={(e) => { e.preventDefault(); tap(k) }} onClick={(e) => e.detail === 0 && tap(k)}>
             <kbd aria-hidden="true">{k + 1}</kbd>
