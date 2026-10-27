@@ -6,7 +6,10 @@ import { PathScreen } from '../features/path/PathScreen'
 import { GamesScreen } from '../features/games/GamesScreen'
 import { ProfileScreen } from '../features/profile/ProfileScreen'
 import { LessonScreen } from '../features/lesson/LessonScreen'
-import { GAMES, type GameId } from '../games/catalog'
+import { LevelScreen } from '../features/level/LevelScreen'
+import { LearnScreen } from '../features/learn/LearnScreen'
+import { PlayScreen } from '../features/arcade/PlayScreen'
+import { GAMES, isUnlocked, levelId, stepOpen, type GameId, type Step3 } from '../games/catalog'
 import { en } from '../i18n/en'
 
 const TABS: [string, IconName, string][] = [
@@ -17,9 +20,19 @@ const TABS: [string, IconName, string][] = [
 
 export default function App() {
   const route = useRoute()
-  const play = route.match(/^\/play\/(\w+)\/(\d+)$/)
-  if (play && play[1] in GAMES && GAMES[play[1] as GameId].levels[+play[2]])
-    return <LessonScreen key={route} gameId={play[1] as GameId} level={+play[2]} />
+  const p = useProgress()
+  const m = route.match(/^\/(level|learn|practice|play)\/(\w+)\/(\d+)$/)
+  if (m && m[2] in GAMES && GAMES[m[2] as GameId].levels[+m[3]]) {
+    const [, screen, g, l] = m as unknown as [string, 'level' | Step3, GameId, string]
+    const id = levelId(g, +l)
+    // guard: no step can be opened before its prerequisites (ADR-013)
+    const open = screen === 'level' || (isUnlocked(p, id) && stepOpen(p, id, screen))
+    const props = { key: route, gameId: g, level: +l }
+    if (!open || screen === 'level') return <LevelScreen {...props} />
+    if (screen === 'learn') return <LearnScreen {...props} />
+    if (screen === 'practice') return <LessonScreen {...props} />
+    return <PlayScreen {...props} />
+  }
 
   return (
     <div className="shell">
