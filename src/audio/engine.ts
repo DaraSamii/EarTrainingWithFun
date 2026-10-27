@@ -1,4 +1,4 @@
-import type { Inst, Step } from '../music/theory'
+import type { Inst, Perc, Step } from '../music/theory'
 
 // Samples: nbrosowsky/tonejs-instruments, CC-BY 3.0 (credited in Profile → About). Loaded from jsDelivr,
 // pinned to a commit so the files never change under us (ADR-018).
@@ -69,14 +69,14 @@ export function loadInstruments(insts: Inst[]) {
 
 const freq = (midi: number) => 440 * 2 ** ((midi - 69) / 12)
 
-function sampled(c: AudioContext, bank: Map<number, AudioBuffer>, inst: Inst, midi: number, t: number, dur: number, vel: number) {
+function sampled(c: AudioContext, bank: Map<number, AudioBuffer>, inst: Inst, midi: number, t: number, dur: number, vel: number, short = false) {
   let best = 0
   let dist = Infinity
   for (const m of bank.keys()) if (Math.abs(m - midi) < dist) { dist = Math.abs(m - midi); best = m }
   const src = c.createBufferSource()
   src.buffer = bank.get(best)!
   src.playbackRate.value = 2 ** ((midi - best) / 12)
-  const rel = RELEASE[inst] ?? 0.25
+  const rel = short ? 0.06 : RELEASE[inst] ?? 0.25
   const env = c.createGain()
   env.gain.setValueAtTime(vel, t)
   env.gain.setValueAtTime(vel, t + dur)
@@ -112,6 +112,55 @@ function synth(c: AudioContext, midi: number, t: number, dur: number, vel: numbe
   }
 }
 
+let noise: AudioBuffer | null = null
+
+/** Synthesized drum kit: clear, consistent, needs no samples */
+function drum(c: AudioContext, kind: Perc, t: number, vel: number) {
+  if (!noise) {
+    noise = c.createBuffer(1, c.sampleRate, c.sampleRate)
+    const d = noise.getChannelData(0)
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1
+  }
+  const env = c.createGain()
+  env.connect(out)
+  if (kind === 'kick') {
+    const o = c.createOscillator()
+    o.frequency.setValueAtTime(150, t)
+    o.frequency.exponentialRampToValueAtTime(45, t + 0.15)
+    env.gain.setValueAtTime(vel, t)
+    env.gain.exponentialRampToValueAtTime(0.001, t + 0.35)
+    o.connect(env)
+    o.start(t)
+    o.stop(t + 0.4)
+    active.push(o)
+    return
+  }
+  if (kind === 'click' || kind === 'accent') {
+    // woodblock: short sine blip
+    const o = c.createOscillator()
+    o.frequency.value = kind === 'accent' ? 1760 : 1180
+    env.gain.setValueAtTime(vel * (kind === 'accent' ? 0.9 : 0.6), t)
+    env.gain.exponentialRampToValueAtTime(0.001, t + 0.06)
+    o.connect(env)
+    o.start(t)
+    o.stop(t + 0.08)
+    active.push(o)
+    return
+  }
+  const src = c.createBufferSource()
+  src.buffer = noise
+  const f = c.createBiquadFilter()
+  f.type = kind === 'hat' ? 'highpass' : 'bandpass'
+  f.frequency.value = kind === 'hat' ? 7000 : 1800
+  const dur = kind === 'hat' ? 0.05 : 0.18
+  env.gain.setValueAtTime(vel * (kind === 'hat' ? 0.4 : 0.8), t)
+  env.gain.exponentialRampToValueAtTime(0.001, t + dur)
+  src.connect(f).connect(env)
+  src.start(t)
+  src.stop(t + dur + 0.02)
+  active.push(src)
+}
+
 export function stop() {
   active.forEach((o) => { try { o.stop() } catch { /* already stopped */ } })
   active = []
@@ -125,8 +174,10 @@ export function play(steps: Step[]) {
   for (const s of steps) {
     const inst = s.inst ?? 'piano'
     const bank = banks.get(inst)
-    const vel = 0.8 / Math.sqrt(s.notes.length || 1)
-    s.notes.forEach((n) => (bank ? sampled(c, bank, inst, n, t, s.dur, vel) : synth(c, n, t, s.dur, vel * 0.75)))
+    const vel = ((s.vel ?? 1) * 0.8) / Math.sqrt(s.notes.length || 1)
+    const ring = s.len ?? s.dur
+    s.notes.forEach((n) => (bank ? sampled(c, bank, inst, n, t, ring, vel, s.len !== undefined) : synth(c, n, t, ring, vel * 0.75)))
+    s.perc?.forEach((k) => drum(c, k, t, s.vel ?? 1))
     t += s.dur
   }
 }
