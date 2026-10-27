@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import { initialProgress, withBadges, type BadgeId, type Progress } from './progress'
-import { PATH_IDS } from '../games/catalog'
+import { JOURNEY, levelId } from '../games/catalog'
 
 // shortcut: progress lives in localStorage only; move to Firestore with anonymous→Google auth in 0.4.0 (ADR-002)
 const KEY = 'etwf.progress.v1'
@@ -27,7 +27,7 @@ export function setProgress(next: Progress) {
 
 /** Apply a change, award any newly earned badges, and return them (for the results screen) */
 export function commit(change: (p: Progress) => Progress): BadgeId[] {
-  const [next, fresh] = withBadges(change(state), PATH_IDS)
+  const [next, fresh] = withBadges(change(state), JOURNEY[0].nodes.map(([g, l]) => levelId(g, l)))
   setProgress(next)
   return fresh
 }
