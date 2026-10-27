@@ -59,6 +59,18 @@ Replay (free) → replay context (free) → reference mnemonic (e.g. the song fo
 - Haptics (where supported): light on answer, success pattern on correct.
 - `prefers-reduced-motion` disables the path pulse, confetti and the streak-flame animation.
 
+### A9. Level screen (gate) (ADR-013)
+Tapping a path node opens the **level screen**, never the game. It shows the game's world banner with Pip, the level name and its one-line skill, earned stars, and three step cards **Learn → Practice → Play**, each locked/next/done. The primary button always points to the next required step.
+
+### A10. Learn (demonstration)
+Pip on the left with a speech bubble; content on the right/below. Steps: *say* (one idea, ≤ 2 sentences) → *demo* (cards for each new sound; each plays in turn with a highlight and a one-line hint or reference song; tap to replay) → *try* (3 guided questions; a wrong answer plays both sounds and asks again) → *ready* (CTA to Practice).
+
+### A11. Arcade shell (Play)
+Full-screen world. HUD: exit · progress segments · score · combo multiplier (×1.5, ×2, ×3). A "3 · 2 · 1 · Go!" countdown. Score pop-ups at the hit point ("+180 Fast!"). Misses show the correct answer and replay the sound (teaching moment), then the round continues. The results screen counts up the score, pops in stars one by one, fires confetti at ≥ 2 stars, and shows XP and newly earned badges.
+
+### A12. Mascot (Pip)
+A paper-cut bird with headphones (DESIGN.md shapes: circle body, triangle beak, semicircle wing). Moods: idle (bobbing), talk, happy (jump), think, oops. Pip appears on the home greeting, the level screen, Learn, and results. Never more than one Pip per screen.
+
 ## Part B · Software patterns
 
 ### B1. Folder structure: feature-sliced
