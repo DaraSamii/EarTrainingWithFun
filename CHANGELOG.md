@@ -5,6 +5,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+### Added
+- **Rhythm course** with Rhythm Match (beat-grid answers) and Meter Detective (2/4, 3/4, 4/4, 6/8), plus a synthesized drum kit.
+- **9 new games**: Tune Up, Twin Notes, Spot the Change, Progression Path, Cadence Call, Rhythm Match, Meter Detective, Expression Detective, Interval Reader. 18 games and 110 levels in total; every course now has 2–3 games.
+- More levels for existing games: minor keys (Scale Breaker), all modes and color scales (Scale Shapes), sus chords, inversions and all sevenths (Chord Colors), sixths, sevenths and mixed directions (Interval Blaster), quarter-step and low-register pitch, bass ledger lines and mixed clefs, relative minor keys.
+- Journey grouped into 10 named sections; harder games join later. Units are named by what they train.
+- Dynamics, staccato and drum hits in the audio engine; stacked notes on the staff; Roman-numeral chord voicing.
+- Coverage map of skills vs courses (ADR-020).
+
+### Changed
+- New hand-drawn SVG icons for courses and games (the treble clef and violin are kept) (ADR-021).
+- Larger type throughout (body 18px, captions 13–14px, bigger answer labels).
+
+
 ## [0.4.0] - 2026-10-27 · Courses & real instruments
 
 Seven courses, a Journey through all of them, 7 new games, real sampled instruments, and a design pass from user feedback.
