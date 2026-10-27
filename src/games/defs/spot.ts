@@ -4,7 +4,7 @@ import type { Game, Level } from '../types'
 
 const S = en.games.spot
 /** melody length, size of the change (scale steps; 0 = one chromatic half step) */
-const LEVELS = [{ len: 3, step: 4 }, { len: 4, step: 3 }, { len: 4, step: 2 }, { len: 5, step: 1 }, { len: 6, step: 1 }, { len: 6, step: 0 }]
+const LEVELS = [{ len: 3, step: 4 }, { len: 4, step: 3 }, { len: 4, step: 2 }, { len: 5, step: 1 }, { len: 6, step: 1 }, { len: 6, step: 0 }, { len: 7, step: 1 }, { len: 7, step: 0 }]
 const SCALE = Array.from({ length: 22 }, (_, i) => 48 + Math.floor(i / 7) * 12 + MAJOR[i % 7])
 
 function melody(rng: Rng, len: number) {
@@ -30,7 +30,7 @@ function level(i: number): Level {
     title: S.levels[i], skill: S.skills[i], concept: S.concepts[i], options,
     fresh: i === 0 ? options.map((o) => o.id) : [],
     demo: (id) => {
-      const idx = [10, 11, 12, 11, 10, 9].slice(0, len)
+      const idx = [10, 11, 12, 11, 10, 9, 10].slice(0, len)
       const fixed = (() => 0.9) as Rng
       return [...tune(idx.map((d) => SCALE[d])), { notes: [], dur: 0.6 }, ...tune(changed(fixed, idx, +id))]
     },

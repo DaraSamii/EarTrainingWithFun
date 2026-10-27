@@ -5,6 +5,8 @@ import { duration, play } from '../../audio/engine'
 import { sfx } from '../../audio/sfx'
 import { points, LATE_POINTS } from '../../games/score'
 import type { PlayResult } from '../../progress/progress'
+import type { Answer } from '../../progress/srs'
+import { itemKey } from '../../games/catalog'
 import { go } from '../../app/router'
 import { World } from '../../ui/World'
 import { OptionFace } from '../../ui/OptionFace'
@@ -43,6 +45,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
     wrong: -1,
     state: '' as '' | 'pop' | 'splat' | 'lurch',
     results: [] as boolean[],
+    answers: [] as Answer[],
     score: 0,
     combo: 0,
     maxCombo: 0,
@@ -81,7 +84,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
     if (g.phase !== 'fall') return
     const ok = k === g.ans
     const first = !g.tried
-    if (first) { g.results.push(ok); g.tried = true }
+    if (first) { g.results.push(ok); g.answers.push({ key: itemKey(game.id, level, g.q!.answer), ok, lvl: level }); g.tried = true }
     if (ok) {
       g.phase = 'between'
       g.state = 'pop'
@@ -109,7 +112,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
   }
 
   function land() {
-    if (!g.tried) { g.results.push(false); g.combo = 0 }
+    if (!g.tried) { g.results.push(false); g.answers.push({ key: itemKey(game.id, level, g.q!.answer), ok: false, lvl: level }); g.combo = 0 }
     g.phase = 'between'
     g.state = 'splat'
     g.reveal = g.ans
@@ -124,7 +127,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
     if (g.results.length >= ITEMS) {
       g.phase = 'over'
       render()
-      later(600, () => onFinish({ correct: g.results.filter(Boolean).length, total: ITEMS, score: g.score, maxCombo: g.maxCombo }))
+      later(600, () => onFinish({ correct: g.results.filter(Boolean).length, total: ITEMS, score: g.score, maxCombo: g.maxCombo, answers: g.answers }))
     } else spawn()
   }
 

@@ -11,6 +11,7 @@ import { LessonScreen } from '../features/lesson/LessonScreen'
 import { LevelScreen } from '../features/level/LevelScreen'
 import { LearnScreen } from '../features/learn/LearnScreen'
 import { PlayScreen } from '../features/arcade/PlayScreen'
+import { ReviewScreen } from '../features/review/ReviewScreen'
 import { GAMES, isUnlocked, levelId, stepOpen, type GameId, type Step3 } from '../games/catalog'
 import { en } from '../i18n/en'
 
@@ -35,6 +36,8 @@ export default function App() {
     if (screen === 'practice') return <LessonScreen {...props} />
     return <PlayScreen {...props} />
   }
+  const review = route.match(/^\/review\/([\w-]+)$/)
+  if (review) return <ReviewScreen key={route} scope={review[1]} />
   const course = route.match(/^\/course\/(\w+)$/)
   if (course) return <div className="shell page-enter" key={route}><CourseScreen id={course[1]} /></div>
 

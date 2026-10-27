@@ -3,20 +3,21 @@ import { en } from '../../i18n/en'
 import { freshOf, type Game, type Level } from '../types'
 
 const S = en.games.meter
-/** beats per bar and whether beats split in three (compound) */
-const METERS: Record<string, { beats: number; compound?: boolean }> = { '2/4': { beats: 2 }, '3/4': { beats: 3 }, '4/4': { beats: 4 }, '6/8': { beats: 2, compound: true } }
-const LEVELS = [['3/4', '4/4'], ['2/4', '3/4', '4/4'], ['3/4', '6/8'], ['2/4', '3/4', '4/4', '6/8'], ['2/4', '3/4', '4/4', '6/8']]
+/** each beat's number of eighth-note pulses: simple meters split beats in 2, 6/8 in 3, 7/8 is 2+2+3 */
+const METERS: Record<string, number[]> = {
+  '2/4': [2, 2], '3/4': [2, 2, 2], '4/4': [2, 2, 2, 2], '6/8': [3, 3], '5/4': [2, 2, 2, 2, 2], '7/8': [2, 2, 3],
+}
+const LEVELS = [['3/4', '4/4'], ['2/4', '3/4', '4/4'], ['3/4', '6/8'], ['2/4', '3/4', '4/4', '6/8'], ['2/4', '3/4', '4/4', '6/8'], ['4/4', '5/4'], ['5/4', '6/8', '7/8']]
 /** drums with strong accents → softer accents → a piano "oom-pah" with no drums */
-const STYLE = ['drums', 'drums', 'drums', 'soft', 'piano'] as const
+const STYLE = ['drums', 'drums', 'drums', 'soft', 'piano', 'drums', 'soft'] as const
 
 function bars(id: string, style: (typeof STYLE)[number], t: number, tempo: number): Step[] {
-  const { beats, compound } = METERS[id]
-  const sub = compound ? 3 : 2
-  const cell = (compound ? 0.6 : 0.55) * tempo / sub
+  const groups = METERS[id]
+  const cell = 0.27 * tempo
   const out: Step[] = []
   for (let bar = 0; bar < 3; bar++)
-    for (let b = 0; b < beats; b++)
-      for (let k = 0; k < sub; k++) {
+    for (let b = 0; b < groups.length; b++)
+      for (let k = 0; k < groups[b]; k++) {
         const down = b === 0 && k === 0
         const onBeat = k === 0
         if (style === 'piano') {

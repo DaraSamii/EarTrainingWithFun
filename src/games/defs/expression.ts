@@ -3,8 +3,11 @@ import { en } from '../../i18n/en'
 import { freshOf, type Game, type Level } from '../types'
 
 const S = en.games.expression
-const LEVELS = [['first', 'second'], ['cresc', 'decresc'], ['cresc', 'decresc', 'steady'], ['staccato', 'legato'], ['accel', 'rit', 'steady'], ['cresc', 'decresc', 'staccato', 'legato']]
-const INSTS: Inst[][] = [['piano'], ['piano'], ['piano', 'violin'], ['violin', 'flute'], ['piano'], ['piano', 'violin', 'flute']]
+const LEVELS = [
+  ['first', 'second'], ['cresc', 'decresc'], ['cresc', 'decresc', 'steady'], ['staccato', 'legato'], ['accel', 'rit', 'steady'],
+  ['cresc', 'decresc', 'staccato', 'legato'], ['cresc', 'decresc', 'staccato', 'legato', 'accel', 'rit', 'steady'],
+]
+const INSTS: Inst[][] = [['piano'], ['piano'], ['piano', 'violin'], ['violin', 'flute'], ['piano'], ['piano', 'violin', 'flute'], ['piano', 'violin', 'flute', 'clarinet']]
 const N = 8
 
 /** The same 8-note tune shaped by one expression */
@@ -42,6 +45,6 @@ function level(i: number): Level {
 
 export const expression: Game = {
   id: 'expression', course: 'sounds', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'ocean', worldName: S.world, arcade: 'breaker', instruments: ['piano', 'violin', 'flute'],
+  world: 'ocean', worldName: S.world, arcade: 'breaker', instruments: ['piano', 'violin', 'flute', 'clarinet'],
   levels: LEVELS.map((_, i) => level(i)),
 }

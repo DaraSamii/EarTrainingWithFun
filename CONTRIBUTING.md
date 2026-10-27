@@ -52,8 +52,9 @@ git switch develop && git merge --no-ff main && git push   # back-merge
 | 0.3.0 | ✅ Game worlds: Learn → Practice → Play, mascot Pip, Scale Breaker + Interval Blaster arcades, stars and badges |
 | 0.4.0 | ✅ Courses + Journey, 7 new games across 6 courses, sampled instruments, stat panels, light default, patterns |
 | 0.5.0 | ✅ Full curriculum: Rhythm course, 18 games / 110 levels, sectioned Journey, SVG icons, bigger type |
-| 0.6.0 | Firebase: anonymous + Google sign-in, Firestore progress, settings |
-| 0.7.0 | Play-back inputs: Echo on the on-screen piano, Tap Back rhythm; spaced-repetition review |
+| 0.6.0 | ✅ Spaced repetition: memory items, interleaved practice, unit reviews, review hub; Beginner/Intermediate/Advanced tabs; 134 levels |
+| 0.7.0 | Firebase: anonymous + Google sign-in, Firestore progress, settings |
+| 0.8.0 | Play-back inputs: Echo on the on-screen piano, Tap Back rhythm |
 | 0.7.0 | PWA offline, performance and accessibility pass against design criteria |
 | 1.0.0 | Sections A–C complete, placement test, v1 games |
 

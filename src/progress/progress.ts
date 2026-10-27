@@ -1,3 +1,5 @@
+import { remember, type Answer, type Memory } from './srs'
+
 export type LevelStats = {
   best: number
   done: boolean
@@ -19,11 +21,15 @@ export type Progress = {
   badges: string[]
   /** XP earned per local day (last ~5 weeks) for the streak calendar and goal chart */
   xpDays: Record<string, number>
+  /** spaced-repetition memory per item (ADR-022) */
+  memory: Record<string, Memory>
+  /** unit reviews: best accuracy, done at ≥ 80% */
+  reviews: Record<string, { best: number; done: boolean }>
   levels: Record<string, LevelStats>
 }
 
 export const initialProgress: Progress = {
-  xp: 0, dailyGoal: 20, today: null, todayXp: 0, streak: 0, lastGoalDay: null, bestCombo: 0, badges: [], xpDays: {}, levels: {},
+  xp: 0, dailyGoal: 20, today: null, todayXp: 0, streak: 0, lastGoalDay: null, bestCombo: 0, badges: [], xpDays: {}, memory: {}, reviews: {}, levels: {},
 }
 
 export const PASS = 0.8
@@ -92,10 +98,23 @@ export const LEARN_XP = 5
 export const applyLearn = (p: Progress, id: string, today: string) =>
   level(p, id).learned ? p : patch(addXp(p, LEARN_XP, today), id, () => ({ learned: true }))
 
-export const applyPractice = (p: Progress, id: string, correct: number, total: number, today: string) =>
-  patch(addXp(p, sessionXp(correct, total), today), id, (l) => ({ practiced: true, best: Math.max(l.best, correct / total) }))
+const withMemory = (p: Progress, answers: Answer[], today: string): Progress =>
+  answers.length ? { ...p, memory: remember(p.memory ?? {}, answers, today) } : p
 
-export type PlayResult = { correct: number; total: number; score: number; maxCombo: number }
+export const applyPractice = (p: Progress, id: string, correct: number, total: number, today: string, answers: Answer[] = []) =>
+  withMemory(patch(addXp(p, sessionXp(correct, total), today), id, (l) => ({ practiced: true, best: Math.max(l.best, correct / total) })), answers, today)
+
+/** Reviews pay 1.5× XP: coming back is the part that makes it stick (knowledge base §3) */
+export const reviewXp = (correct: number, total: number) => Math.round(sessionXp(correct, total) * 1.5)
+
+export function applyReview(p: Progress, unit: string | null, correct: number, total: number, today: string, answers: Answer[]): Progress {
+  const next = withMemory(addXp(p, reviewXp(correct, total), today), answers, today)
+  if (!unit) return next
+  const prev = p.reviews?.[unit] ?? { best: 0, done: false }
+  return { ...next, reviews: { ...p.reviews, [unit]: { best: Math.max(prev.best, correct / total), done: prev.done || correct / total >= PASS } } }
+}
+
+export type PlayResult = { correct: number; total: number; score: number; maxCombo: number; answers?: Answer[] }
 
 export const playXp = (r: PlayResult) => sessionXp(r.correct, r.total) + 5 * starsFor(r.correct / r.total)
 
@@ -108,12 +127,12 @@ export function applyPlay(p: Progress, id: string, r: PlayResult, today: string)
     hiScore: Math.max(l.hiScore ?? 0, r.score),
     done: l.done || stars >= 2,
   }))
-  return { ...next, bestCombo: Math.max(p.bestCombo, r.maxCombo) }
+  return withMemory({ ...next, bestCombo: Math.max(p.bestCombo, r.maxCombo) }, r.answers ?? [], today)
 }
 
 // ---------- Badges (derived once, then kept forever) ----------
 
-export const BADGES = ['firstLearn', 'firstPlay', 'triple', 'combo10', 'streak3', 'stars10', 'explorer', 'sectionA'] as const
+export const BADGES = ['firstLearn', 'firstPlay', 'triple', 'combo10', 'streak3', 'stars10', 'explorer', 'reviewer', 'sectionA'] as const
 export type BadgeId = (typeof BADGES)[number]
 
 export const totalStars = (p: Progress) => Object.values(p.levels).reduce((s, l) => s + (l.stars ?? 0), 0)
@@ -128,6 +147,7 @@ export function earnedBadges(p: Progress, allLevelIds: string[]): BadgeId[] {
     streak3: p.streak >= 3,
     stars10: totalStars(p) >= 10,
     explorer: new Set(Object.keys(p.levels).filter((id) => p.levels[id].learned).map((id) => id.split(':')[0])).size >= 5,
+    reviewer: Object.values(p.reviews ?? {}).filter((r) => r.done).length >= 3,
     sectionA: allLevelIds.every((id) => level(p, id).done),
   }
   return BADGES.filter((b) => ok[b])

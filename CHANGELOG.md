@@ -5,6 +5,25 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-27 · Spaced review
+
+What you learn keeps coming back: spaced memory, interleaved practice, unit reviews, and Beginner/Intermediate/Advanced tabs.
+
+### Added
+- **Spaced repetition** (ADR-022): every learned sound is a memory item that comes back after 1, 3, 7, 16, 35 and 75 days; misses return tomorrow.
+- **Review** sessions: everything due, interleaved across games, worth 1.5× XP, with a Memory card on Home ("N due for review" and memory strength).
+- **Unit review** node at the end of every unit in the Journey and course paths (unlocks when the unit is done, passed at 80%).
+- Practice rounds now **mix in 2 older due items** (marked "Review").
+- **Beginner / Intermediate / Advanced tabs** on Home and every course page, each with progress (ADR-023).
+- **More levels** (134 total): Tune Up (low register, 8 cents), Twin Notes (all mixed), Spot the Change (7 notes), Progression Path (iii, deceptive, major/minor mix), Cadence Call (fast), Rhythm Match (syncopated sixteenths, swing), Meter Detective (5/4, 7/8), Expression Detective (all seven), Interval Reader (bass clef), Who's Playing? (full band).
+- Steel Trap badge (3 unit reviews).
+
+### Changed
+- Page changes animate: the old page fades out while the new one fades in (View Transitions API).
+- Home sidebar scrolls on its own when taller than the window (Music Theory was cut off).
+- Stat panels close as smoothly as they open.
+
+
 ## [0.5.0] - 2026-10-27 · Full curriculum
 
 Eight courses, 18 games, 110 levels: rhythm, progressions, cadences, expression and reading join pitch, intervals, scales, melody and timbre.
@@ -85,7 +104,8 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.5.0...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.6.0...develop
+[0.6.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.2.0...v0.3.0

@@ -9,6 +9,7 @@ const LOOK: Record<BadgeId, [IconName, string]> = {
   streak3: ['flame', 'var(--color-marker-red)'],
   stars10: ['star', 'var(--color-powder-sky)'],
   explorer: ['games', 'var(--color-jelly-green)'],
+  reviewer: ['target', 'var(--color-bubblegum-pink)'],
   sectionA: ['check', 'var(--color-hi-yellow)'],
 }
 

@@ -1,4 +1,4 @@
-import { GAMES, currentNode, isUnlocked, levelId, type Unit } from '../../games/catalog'
+import { GAMES, currentNode, isUnlocked, levelId, reviewOpen, type Unit } from '../../games/catalog'
 import { GameIcon } from '../../ui/GameIcon'
 import { useProgress } from '../../progress/store'
 import { level as stats } from '../../progress/progress'
@@ -59,10 +59,27 @@ export function PathView({ units, from }: { units: Unit[]; from: string }) {
                   </li>
                 )
               })}
+              <ReviewNode unit={unit} offset={OFFSETS[n++ % 8]} />
             </ol>
           </section>
         )
       })}
     </div>
+  )
+}
+
+/** The unit's review: unlocked when every level in it is done, passed at 80% (ADR-022) */
+function ReviewNode({ unit, offset }: { unit: Unit; offset: number }) {
+  const p = useProgress()
+  const open = reviewOpen(p, unit)
+  const done = !!p.reviews?.[unit.key]?.done
+  return (
+    <li style={{ translate: `${offset}px 0` }}>
+      <button className={`node review-node ${done ? 'done' : open ? 'ready' : 'locked'}`} disabled={!open}
+        aria-label={`${en.review.node}: ${open ? en.review.nodeHint : en.review.locked}`} onClick={() => go(`/review/${unit.key}`)}>
+        <Icon name={open || done ? 'star' : 'lock'} size={30} />
+      </button>
+      <span className="node-caption"><b>{en.review.node}</b>{en.review.nodeHint}</span>
+    </li>
   )
 }

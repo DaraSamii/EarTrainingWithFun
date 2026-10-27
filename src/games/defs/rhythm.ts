@@ -12,6 +12,8 @@ const LEVELS: Spec[] = [
   { cells: 16, per: 4, allowed: (c) => c % 2 === 0 || c % 4 === 3, min: 5, max: 8, cell: 0.19 },
   { cells: 12, per: 3, allowed: () => true, min: 4, max: 8, cell: 0.22 },
   { cells: 16, per: 4, allowed: () => true, min: 6, max: 10, cell: 0.19 },
+  { cells: 16, per: 4, allowed: () => true, min: 5, max: 8, cell: 0.19, sync: true },
+  { cells: 12, per: 3, allowed: (c) => c % 3 !== 1, min: 5, max: 8, cell: 0.22 },
 ]
 
 const key = (g: number[]) => g.join('')

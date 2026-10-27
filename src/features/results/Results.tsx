@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import type { GameId } from '../../games/catalog'
+import type { WorldId } from '../../games/types'
 import type { BadgeId } from '../../progress/progress'
 import { sfx } from '../../audio/sfx'
 import { go } from '../../app/router'
@@ -8,7 +10,6 @@ import { Stars } from '../../ui/Stars'
 import { Confetti } from '../../ui/Confetti'
 import { Badge } from '../../ui/Badge'
 import { ExitBar } from '../../ui/ExitBar'
-import { GAMES, type GameId } from '../../games/catalog'
 import { en } from '../../i18n/en'
 
 function useCountUp(target: number, ms = 900) {
@@ -28,9 +29,12 @@ function useCountUp(target: number, ms = 900) {
 }
 
 type Props = {
-  kind: 'practice' | 'play'
-  gameId: GameId
-  level: number
+  kind: 'practice' | 'play' | 'review'
+  gameId?: GameId
+  level?: number
+  world: WorldId
+  /** where Continue / Back lead */
+  back: string
   correct: number
   total: number
   xp: number
@@ -42,19 +46,21 @@ type Props = {
   again(): void
 }
 
-export function Results({ kind, gameId, level, correct, total, xp, score = 0, maxCombo = 0, stars = 0, newBest, badges, again }: Props) {
+export function Results({ kind, gameId, level, world, back, correct, total, xp, score = 0, maxCombo = 0, stars = 0, newBest, badges, again }: Props) {
   const shown = useCountUp(score)
   const shownXp = useCountUp(xp, 700)
   const acc = Math.round((correct / total) * 100)
-  const celebrate = kind === 'practice' || stars >= 2
+  const celebrate = kind === 'practice' || (kind === 'review' ? acc >= 80 : stars >= 2)
   useEffect(() => { if (celebrate) sfx.cheer() }, [celebrate])
 
-  const title = kind === 'practice' ? en.results.practiceDone : en.results.title[stars]
-  const line = kind === 'practice' ? en.results.playUnlocked : stars >= 2 ? en.results.levelDone : en.results.needStars
+  const title = kind === 'practice' ? en.results.practiceDone : kind === 'review' ? en.review.done : en.results.title[stars]
+  const line = kind === 'practice' ? en.results.playUnlocked
+    : kind === 'review' ? (acc >= 80 ? en.review.strong : en.review.again)
+    : stars >= 2 ? en.results.levelDone : en.results.needStars
 
   return (
-    <div className={`results world-bg-${GAMES[gameId].world}`}>
-      <div className="results-exit"><ExitBar back={`/level/${gameId}/${level}`} /></div>
+    <div className={`results world-bg-${world}`}>
+      <div className="results-exit"><ExitBar back={back} /></div>
       {celebrate && <Confetti />}
       <span className="shape deco pentagon right" aria-hidden="true" />
       <span className="shape deco circle left" aria-hidden="true" />
@@ -76,6 +82,9 @@ export function Results({ kind, gameId, level, correct, total, xp, score = 0, ma
           {kind === 'play' && maxCombo > 1 && (
             <div className="card stat-card tone-streak"><Icon name="flame" /><strong>{maxCombo}</strong><span>{en.results.combo}</span></div>
           )}
+          {kind === 'review' && (
+            <div className="card stat-card tone-streak"><Icon name="book" /><strong>{total}</strong><span>{en.review.refreshed}</span></div>
+          )}
         </div>
         {badges.map((b) => (
           <div key={b} className="badge-toast" role="status">
@@ -84,13 +93,15 @@ export function Results({ kind, gameId, level, correct, total, xp, score = 0, ma
           </div>
         ))}
         <div className="actions">
-          <button className="btn-ghost" onClick={again}>{kind === 'practice' ? en.results.againPractice : en.results.again}</button>
-          {kind === 'practice' ? (
+          <button className="btn-ghost" onClick={again}>
+            {kind === 'practice' ? en.results.againPractice : kind === 'review' ? en.review.more : en.results.again}
+          </button>
+          {kind === 'practice' && gameId ? (
             <button className="btn-primary" autoFocus onClick={() => go(`/play/${gameId}/${level}`)}>
               {en.level.go.play} <Icon name="gamepad" size={20} />
             </button>
           ) : (
-            <button className="btn-primary" autoFocus onClick={() => go(`/level/${gameId}/${level}`)}>
+            <button className="btn-primary" autoFocus onClick={() => go(back)}>
               {en.results.toLevel} <Icon name="arrow" size={20} />
             </button>
           )}

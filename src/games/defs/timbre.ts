@@ -11,6 +11,7 @@ const LEVELS: Inst[][] = [
   ['trumpet', 'horn', 'trombone', 'saxophone', 'clarinet', 'xylophone'],
   ['harp', 'guitar', 'piano', 'xylophone'],
   ['cello', 'trombone', 'horn', 'clarinet', 'saxophone', 'violin'],
+  ['piano', 'guitar', 'harp', 'violin', 'flute', 'trumpet', 'saxophone'],
 ]
 /** Comfortable middle range of each instrument (MIDI) */
 const RANGE: Record<Inst, [number, number]> = {
