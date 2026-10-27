@@ -117,6 +117,19 @@ Existing games also grew: Higher or Lower (8 levels, to 12¢ and low registers),
 
 Mechanic **K10 · Drops** (after Theta's Tone Drops): an item falls and plays (or shows) the prompt; answer before it lands. A wrong answer makes it lurch down (time penalty). Reading games show the sound only after answering, which links eye and ear.
 
+## 3c. 0.7.0: one arcade per course, seven more games
+
+| Course | Arcade (ADR-024) | Games |
+|---|---|---|
+| Pitch | Peak Climber: one ledge per right answer, timer ring on the next ledge | Higher or Lower, **Note Twins** (pitch memory), Tune Up |
+| Intervals | Blaster | Interval Blaster, **Bigger Jump** (compare sizes), Twin Notes |
+| Scales & Keys | Breaker | Scale Breaker, **Mood Ring** (major or minor key), Scale Shapes |
+| Melody | River Run: steer a paper boat into the right gate | Contour Catcher, **Steps & Leaps** (melodic motion), Spot the Change |
+| Harmony | Potion Lab: pour the right bottle before the fire dies | Chord Colors, **How Many Notes?**, Progression Path, Cadence Call |
+| Rhythm | Hurdle Dash: the right answer makes Pip jump | Rhythm Match, **Tempo Check**, Meter Detective |
+| Sounds | Fishing Pond: hook the fish carrying the answer | Who's Playing?, **Instrument Families**, Expression Detective |
+| Music Theory | Drops (falling staff cards) | Note Reader, Interval Reader, Key Signatures |
+
 ## 4. Rules every game must follow
 
 1. **Replay is free.** The learner can replay the prompt any number of times without penalty. We record replays for analytics and to adjust difficulty, but they never cost points.
