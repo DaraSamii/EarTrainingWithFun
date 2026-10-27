@@ -47,8 +47,8 @@ git switch develop && git merge --no-ff main && git push   # back-merge
 
 | Version | Milestone |
 |---|---|
-| 0.1.0 | Knowledge base, design criteria, project skeleton deployed |
-| 0.2.0 | Design system components (light/dark), app shell, routing, i18n |
+| 0.1.0 | Knowledge base, design criteria, project skeleton (folded into 0.2.0, not tagged separately) |
+| 0.2.0 | ✅ First playable demo: app shell, home path, Degree Detective + Interval Ladder L1–5 |
 | 0.3.0 | "First sounds": audio engine + Degree Detective, Interval Ladder, Higher or Lower |
 | 0.4.0 | Firebase: anonymous + Google sign-in, Firestore progress, settings |
 | 0.5.0 | Path, XP, streaks, daily goal, achievements |
