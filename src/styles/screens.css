@@ -348,9 +348,10 @@ button.card:hover, .course-card:hover, .game-card:hover { transform: translateY(
 .shelf { position: absolute; left: 10%; right: 10%; top: 18%; height: 10px; border-radius: 6px; background: #b07a46; border: 2px solid var(--color-ink-black); }
 .cauldron { position: absolute; left: 50%; top: 58%; translate: -50% -50%; width: 200px; height: 150px; border-radius: 30px 30px 90px 90px; background: #2b2b3a; border: 4px solid var(--color-ink-black); box-shadow: 0 8px 0 0 var(--color-ink-black); }
 .liquid { position: absolute; left: 10px; right: 10px; top: 14px; height: 28px; border-radius: 50%; background: var(--brew); transition: background 400ms; border: 2px solid var(--color-ink-black); }
-.bubble { position: absolute; top: 14px; width: 14px; height: 14px; border-radius: 50%; background: var(--brew); border: 2px solid var(--color-ink-black); animation: bubble 1.6s ease-in infinite; }
-.bubble.b0 { left: 40px; } .bubble.b1 { left: 90px; animation-delay: -.5s; } .bubble.b2 { left: 130px; animation-delay: -1s; } .bubble.b3 { left: 70px; animation-delay: -1.3s; }
-@keyframes bubble { to { translate: 0 -70px; scale: .4; opacity: 0; } }
+/* scoped: `.bubble` is Pip's speech bubble (the 0.7.0 clash broke every speech bubble) */
+.cauldron .brew-bubble { position: absolute; top: 14px; width: 14px; height: 14px; border-radius: 50%; background: var(--brew); border: 2px solid var(--color-ink-black); animation: brew-rise 1.6s ease-in infinite; }
+.cauldron .b0 { left: 40px; } .cauldron .b1 { left: 90px; animation-delay: -.5s; } .cauldron .b2 { left: 130px; animation-delay: -1s; } .cauldron .b3 { left: 70px; animation-delay: -1.3s; }
+@keyframes brew-rise { to { translate: 0 -70px; scale: .4; opacity: 0; } }
 .puff { position: absolute; left: 50%; top: -20px; width: 10px; height: 10px; border-radius: 50%; translate: -50% 0; }
 .cauldron.brew .puff { animation: puff 900ms ease-out forwards; background: var(--brew); }
 .cauldron.smoke .puff { animation: puff 900ms ease-out forwards; background: #555; }
