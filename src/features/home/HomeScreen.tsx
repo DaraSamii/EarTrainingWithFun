@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { StageTabs } from '../path/StageTabs'
+import { dueKeys, strength } from '../../progress/srs'
+import { currentStage, type Stage } from '../../games/catalog'
 import { CourseIcon } from '../../ui/GameIcon'
 import { COURSES, GAMES, JOURNEY, courseMax, courseStars, currentNode } from '../../games/catalog'
 import { setProgress, useProgress } from '../../progress/store'
-import { GOALS, currentStreak, dayKey, setGoal, todayXp, totalStars, week, type Progress } from '../../progress/progress'
+import { GOALS, currentStreak, dayKey, level as stats, setGoal, todayXp, totalStars, week, type Progress } from '../../progress/progress'
 import { go } from '../../app/router'
 import { Icon } from '../../ui/Icon'
 import { Pip, Bubble } from '../../ui/Pip'
@@ -16,12 +19,20 @@ export function HomeScreen() {
   const p = useProgress()
   const today = dayKey()
   const [open, setOpen] = useState<Panel>(null)
+  // keep the last panel mounted while it animates closed (no abrupt disappearance)
+  const [shown, setShown] = useState<Panel>(null)
+  const [stage, setStage] = useState<Stage>(() => currentStage(JOURNEY, (id) => stats(p, id).done))
+  const due = dueKeys(p.memory ?? {}, today).length
+  const mem = strength(p.memory ?? {})
   const [hello] = useState(() => en.home.hello[Math.floor(Math.random() * en.home.hello.length)])
   const streak = currentStreak(p, today)
   const xp = todayXp(p, today)
   const goal = Math.min(1, xp / p.dailyGoal)
   const cur = currentNode(p, JOURNEY)
-  const toggle = (k: Panel) => setOpen((o) => (o === k ? null : k))
+  const toggle = (k: Panel) => {
+    if (k && open !== k) setShown(k)
+    setOpen((o) => (o === k ? null : k))
+  }
 
   return (
     <div className="home">
@@ -52,7 +63,8 @@ export function HomeScreen() {
           <h1>{en.journey.title}</h1>
           <p>{en.journey.blurb}</p>
         </header>
-        <PathView units={JOURNEY} from="/" />
+        <StageTabs units={JOURNEY} stage={stage} onChange={setStage} />
+        <PathView key={stage} units={JOURNEY.filter((u) => u.stage === stage)} from="/" />
       </div>
 
       <aside className="home-side">
@@ -76,13 +88,32 @@ export function HomeScreen() {
             <span>{en.home.starsTitle}</span>
           </button>
         </div>
-        <div className={`stat-panel ${open ? 'open' : ''}`}>
+        <div className={`stat-panel ${open ? 'open' : ''}`} onTransitionEnd={(e) => { if (!open && e.target === e.currentTarget) setShown(null) }}>
           <div className="stat-panel-inner">
-            {open === 'streak' && <StreakPanel p={p} today={today} streak={streak} />}
-            {open === 'goal' && <GoalPanel p={p} today={today} />}
-            {open === 'stars' && <StarsPanel p={p} />}
+            {shown === 'streak' && <StreakPanel p={p} today={today} streak={streak} />}
+            {shown === 'goal' && <GoalPanel p={p} today={today} />}
+            {shown === 'stars' && <StarsPanel p={p} />}
           </div>
         </div>
+
+        <section className={`card memory-card ${due ? 'has-due' : ''}`}>
+          <div className="memory-head">
+            <span className="memory-icon"><Icon name="target" size={26} /></span>
+            <div>
+              <h2>{en.review.cardTitle}</h2>
+              <p>{due ? <><strong>{due}</strong> {en.review.cardDue}</> : en.review.cardNone}</p>
+            </div>
+          </div>
+          {mem.total > 0 && (
+            <span className="meter memory-meter" title={`${mem.strong}/${mem.total} ${en.review.cardStrong}`}>
+              <i style={{ width: `${(mem.strong / mem.total) * 100}%` }} />
+            </span>
+          )}
+          <p className="memory-why">{en.review.cardWhy}</p>
+          <button className="btn-primary" disabled={!due && !mem.total} onClick={() => go('/review/due')}>
+            <Icon name="target" size={18} /> {en.review.cardStart}{due ? ` (${due})` : ''}
+          </button>
+        </section>
 
         <section className="card side-courses">
           <h2>{en.coursesScreen.title}</h2>

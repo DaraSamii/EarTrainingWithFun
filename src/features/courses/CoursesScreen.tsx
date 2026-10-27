@@ -5,6 +5,10 @@ import { go } from '../../app/router'
 import { Icon } from '../../ui/Icon'
 import { World } from '../../ui/World'
 import { PathView } from '../path/PathView'
+import { StageTabs } from '../path/StageTabs'
+import { useState } from 'react'
+import { level as stats } from '../../progress/progress'
+import { currentStage, type Stage } from '../../games/catalog'
 import { ExitBar } from '../../ui/ExitBar'
 import { en } from '../../i18n/en'
 
@@ -37,6 +41,8 @@ export function CoursesScreen() {
 export function CourseScreen({ id }: { id: string }) {
   const c = COURSES.find((x) => x.id === id) ?? COURSES[0]
   const p = useProgress()
+  const units = coursePath(c)
+  const [stage, setStage] = useState<Stage>(() => currentStage(units, (lid) => stats(p, lid).done))
   return (
     <div className="course-page">
       <header className={`course-hero hero-${GAMES[c.games[0]].world}`}>
@@ -58,7 +64,8 @@ export function CourseScreen({ id }: { id: string }) {
             </div>
           ))}
         </div>
-        <PathView units={coursePath(c)} from={`/course/${c.id}`} />
+        <StageTabs units={units} stage={stage} onChange={setStage} />
+        <PathView key={stage} units={units.filter((u) => u.stage === stage)} from={`/course/${c.id}`} />
       </div>
     </div>
   )
