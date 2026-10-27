@@ -14,6 +14,10 @@ export function World({ world }: { world: WorldId }) {
       {world === 'ocean' && <>{N(3, 'w-wave')}{N(7, 'w-bubble')}<span className="w-fish f1" /><span className="w-fish f2" /><span className="w-weed" /></>}
       {world === 'mountains' && <><span className="w-sun peak-sun" />{N(3, 'w-peak')}{N(3, 'w-bird')}{N(2, 'w-cloud')}</>}
       {world === 'notebook' && <><span className="w-margin" />{N(3, 'w-sticky')}<span className="w-pencil" />{N(4, 'w-doodle')}</>}
+      {world === 'river' && <>{N(2, 'w-cloud')}<span className="w-bank b1" /><span className="w-bank b2" /><span className="w-stream" />{N(3, 'w-pine')}<span className="w-paperboat" /></>}
+      {world === 'lab' && <>{N(3, 'w-shelf')}{N(7, 'w-flask')}<span className="w-window" /><span className="w-bigflask" /></>}
+      {world === 'track' && <><span className="w-stands" />{N(12, 'w-fan')}<span className="w-lanes" /><span className="w-finish" /><span className="w-sun track-sun" /></>}
+      {world === 'pond' && <><span className="w-water" />{N(4, 'w-pad')}{N(3, 'w-reed')}<span className="w-koi k1" /><span className="w-koi k2" />{N(2, 'w-ripple')}</>}
     </div>
   )
 }

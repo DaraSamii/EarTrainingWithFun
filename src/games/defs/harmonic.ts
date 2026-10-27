@@ -35,6 +35,6 @@ function level(i: number): Level {
 
 export const harmonic: Game = {
   id: 'harmonic', course: 'intervals', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'ocean', worldName: S.world, arcade: 'blaster', journeyOffset: 1, instruments: ['piano'],
+  world: 'space', worldName: S.world, arcade: 'blaster', journeyOffset: 1, instruments: ['piano'],
   levels: LEVELS.map((_, i) => level(i)),
 }

@@ -38,6 +38,6 @@ function level(i: number): Level {
 
 export const cadences: Game = {
   id: 'cadences', course: 'harmony', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'notebook', worldName: S.world, arcade: 'potion', journeyOffset: 2, instruments: ['piano'],
+  world: 'lab', worldName: S.world, arcade: 'potion', journeyOffset: 2, instruments: ['piano'],
   levels: LEVELS.map((_, i) => level(i)),
 }
