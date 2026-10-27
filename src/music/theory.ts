@@ -22,8 +22,16 @@ export type Inst =
   | 'piano' | 'flute' | 'guitar' | 'trumpet' | 'violin' | 'cello'
   | 'clarinet' | 'saxophone' | 'xylophone' | 'horn' | 'trombone' | 'harp'
 
-/** Something to play: notes sounding together for `dur` seconds (fractional MIDI = microtones). Empty notes = rest. */
-export type Step = { notes: number[]; dur: number; inst?: Inst }
+/** Unpitched percussion for rhythm games */
+export type Perc = 'kick' | 'snare' | 'hat' | 'click' | 'accent'
+
+/**
+ * Something to play: notes sounding together for `dur` seconds (fractional MIDI = microtones). Empty notes = rest.
+ * `vel` scales loudness (dynamics games), `len` shortens how long notes ring (staccato), `perc` adds drum hits.
+ */
+export type Step = { notes: number[]; dur: number; inst?: Inst; vel?: number; len?: number; perc?: Perc[] }
+
+export const MINOR = [0, 2, 3, 5, 7, 8, 10]
 
 export const shuffle = <T,>(rng: Rng, xs: readonly T[]): T[] => {
   const a = [...xs]
@@ -63,3 +71,6 @@ export const KEYS: Record<number, [string, number]> = {
 /** Where the accidentals of a key signature sit on a treble staff (MIDI of the natural line/space) */
 export const SIG_SHARPS = [77, 72, 79, 74, 69, 76, 71]
 export const SIG_FLATS = [71, 76, 69, 74, 67, 72, 65]
+
+/** MIDI of a natural note from its diatonic position (inverse of `diatonic` for white keys) */
+export const fromDiatonic = (d: number) => (Math.floor(d / 7) + 1) * 12 + WHITE[((d % 7) + 7) % 7]

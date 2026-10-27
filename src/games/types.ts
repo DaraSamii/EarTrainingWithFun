@@ -1,11 +1,20 @@
 import type { Inst, Rng, Step } from '../music/theory'
 
-export type Option = { id: string; label: string; sub?: string; /** melodic contour drawn instead of text */ shape?: number[] }
+export type Option = {
+  id: string
+  label: string
+  sub?: string
+  /** melodic contour drawn above the label */
+  shape?: number[]
+  /** rhythm drawn as a beat grid: 0 rest, 1 hit, 2 accented hit */
+  grid?: number[]
+}
 
 /** Something shown instead of (or before) a sound: notes or a key signature on a staff */
-export type Visual = { kind: 'staff'; clef: 'treble' | 'bass'; notes: number[]; keySig?: number }
+export type Visual = { kind: 'staff'; clef: 'treble' | 'bass'; notes: number[]; keySig?: number; /** notes sound together: draw them stacked */ stack?: boolean }
 
 export type Question = {
+  /** Usually the level's options; some games (rhythm) draw fresh choices per question */
   options: Option[]
   answer: string
   /** Sound of the question (may be empty for reading games) */
@@ -38,8 +47,10 @@ export type Level = {
   keyEvery?: number
 }
 
-export type GameId = 'pitch' | 'intervals' | 'degrees' | 'scales' | 'contour' | 'chords' | 'timbre' | 'notes' | 'keysigs'
-export type CourseId = 'pitch' | 'intervals' | 'scales' | 'melody' | 'harmony' | 'sounds' | 'theory'
+export type GameId =
+  | 'pitch' | 'tuneup' | 'intervals' | 'harmonic' | 'degrees' | 'scales' | 'contour' | 'spot'
+  | 'chords' | 'progressions' | 'cadences' | 'rhythm' | 'meter' | 'timbre' | 'expression' | 'notes' | 'intreader' | 'keysigs'
+export type CourseId = 'pitch' | 'intervals' | 'scales' | 'melody' | 'harmony' | 'rhythm' | 'sounds' | 'theory'
 export type WorldId = 'garden' | 'space' | 'ocean' | 'mountains' | 'notebook'
 export type Arcade = 'breaker' | 'blaster' | 'drops'
 
@@ -52,8 +63,8 @@ export type Game = {
   world: WorldId
   worldName: string
   arcade: Arcade
-  /** Short text/glyph for path nodes and cards */
-  glyph: string
+  /** Levels start this many Journey sections later (harder games join the Journey later) */
+  journeyOffset?: number
   instruments: Inst[]
   levels: Level[]
 }

@@ -62,7 +62,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
   function spawn() {
     const q = lv.generate(g.rng)
     g.q = q
-    g.ans = lv.options.findIndex((o) => o.id === q.answer)
+    g.ans = q.options.findIndex((o) => o.id === q.answer)
     g.x = 18 + g.rng() * 64
     g.k = 0
     // reading items need no listening time; sounds get their prompt length on top
@@ -113,7 +113,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
     g.phase = 'between'
     g.state = 'splat'
     g.reveal = g.ans
-    g.banner = `${en.arcade.miss} ${lv.options[g.ans].label}`
+    g.banner = `${en.arcade.miss} ${g.q!.options[g.ans].label}`
     sfx.whoosh()
     play(g.q!.after ?? g.q!.hear(g.q!.answer))
     later(2000, () => { g.reveal = -1; g.banner = ''; next() })
@@ -173,7 +173,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
       </div>
 
       <div className="zones" data-count={K}>
-        {lv.options.map((o, k) => (
+        {(g.q?.options ?? lv.options).map((o, k) => (
           <button key={o.id} className={`zone ${g.reveal === k ? 'reveal' : ''} ${g.wrong === k ? 'is-wrong' : ''}`}
             onPointerDown={(e) => { e.preventDefault(); answer(k) }} onClick={(e) => e.detail === 0 && answer(k)}>
             <kbd aria-hidden="true">{k + 1}</kbd>

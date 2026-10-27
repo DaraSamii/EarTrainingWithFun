@@ -37,7 +37,7 @@ kbd { font-family: var(--font-mono); }
   padding: var(--space-12) var(--space-24);
   border: 0;
   border-radius: var(--radius-buttons);
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   text-decoration: none;
   transition: transform 120ms, box-shadow 120ms, background 120ms;

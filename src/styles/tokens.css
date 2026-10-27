@@ -30,10 +30,10 @@
   --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-text: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Martian Mono', ui-monospace, monospace;
-  --text-caption-mono: 12px;
-  --text-body-sm: 16px;
-  --text-body: 20px;
-  --text-heading-sm: 24px;
+  --text-caption-mono: 13px;
+  --text-body-sm: 18px;
+  --text-body: 21px;
+  --text-heading-sm: 26px;
   --text-heading-lg: 42px;
   --text-display: 52px;
   --text-display-xl: 72px;

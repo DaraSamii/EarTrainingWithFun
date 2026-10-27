@@ -10,24 +10,37 @@ import { chords } from './defs/chords'
 import { timbre } from './defs/timbre'
 import { notes } from './defs/notes'
 import { keysigs } from './defs/keysigs'
+import { tuneup } from './defs/tuneup'
+import { harmonic } from './defs/harmonic'
+import { spot } from './defs/spot'
+import { progressions } from './defs/progressions'
+import { cadences } from './defs/cadences'
+import { rhythm } from './defs/rhythm'
+import { meter } from './defs/meter'
+import { expression } from './defs/expression'
+import { intreader } from './defs/intreader'
 
 export type { CourseId, Game, GameId, Level, Option, Question, Visual } from './types'
 export { resolution } from './defs/degrees'
 
-export const GAMES: Record<GameId, Game> = { pitch, intervals, degrees, scales, contour, chords, timbre, notes, keysigs }
+export const GAMES: Record<GameId, Game> = {
+  pitch, tuneup, intervals, harmonic, degrees, scales, contour, spot, chords, progressions, cadences,
+  rhythm, meter, timbre, expression, notes, intreader, keysigs,
+}
 
 export type Course = { id: CourseId; title: string; blurb: string; color: string; games: GameId[] }
 
 /** Courses group games by skill (ADR-017) */
 export const COURSES: Course[] = (
   [
-    ['pitch', 'red', ['pitch']],
-    ['intervals', 'iris', ['intervals']],
+    ['pitch', 'red', ['pitch', 'tuneup']],
+    ['intervals', 'iris', ['intervals', 'harmonic']],
     ['scales', 'yellow', ['degrees', 'scales']],
-    ['melody', 'green', ['contour']],
-    ['harmony', 'pink', ['chords']],
-    ['sounds', 'sky', ['timbre']],
-    ['theory', 'ink', ['notes', 'keysigs']],
+    ['melody', 'green', ['contour', 'spot']],
+    ['harmony', 'pink', ['chords', 'progressions', 'cadences']],
+    ['rhythm', 'orange', ['rhythm', 'meter']],
+    ['sounds', 'sky', ['timbre', 'expression']],
+    ['theory', 'ink', ['notes', 'intreader', 'keysigs']],
   ] as [CourseId, string, GameId[]][]
 ).map(([id, color, games]) => ({ id, color, games, ...en.courses[id] }))
 
@@ -36,22 +49,38 @@ export const courseOf = (g: GameId) => COURSES.find((c) => c.id === GAMES[g].cou
 export const levelId = (game: GameId, level: number) => `${game}:${level}`
 
 export type Node = [GameId, number]
-export type Unit = { title: string; nodes: Node[] }
+/** `section` starts a new section heading above this unit */
+export type Unit = { tag: string; title: string; nodes: Node[]; section?: string }
 
 const chunk = <T,>(xs: T[], n: number) => Array.from({ length: Math.ceil(xs.length / n) }, (_, i) => xs.slice(i * n, i * n + n))
 
-/** Interleave: every game's level 1, then every level 2, … in the given order */
-const tiers = (games: GameId[]): Node[] =>
-  [0, 1, 2, 3, 4].flatMap((l) => games.filter((g) => GAMES[g].levels[l]).map((g) => [g, l] as Node))
+const MAX_LEVELS = Math.max(...Object.values(GAMES).map((g) => g.levels.length))
+
+/** Nodes of one tier: level `l - offset` of every game, in the given order */
+const tier = (games: GameId[], t: number, useOffset: boolean): Node[] =>
+  games.map((g) => [g, t - (useOffset ? GAMES[g].journeyOffset ?? 0 : 0)] as Node).filter(([g, l]) => l >= 0 && GAMES[g].levels[l])
 
 /** The Journey: one roadmap through every course, for learners who just want to press play (ADR-017) */
-const JOURNEY_ORDER: GameId[] = ['pitch', 'degrees', 'intervals', 'chords', 'notes', 'timbre', 'contour', 'scales', 'keysigs']
-export const JOURNEY: Unit[] = chunk(tiers(JOURNEY_ORDER), 5).map((nodes, i) => ({ title: en.journey.units[i] ?? `${en.path.unit} ${i + 1}`, nodes }))
+const JOURNEY_ORDER: GameId[] = [
+  'pitch', 'degrees', 'intervals', 'rhythm', 'chords', 'notes', 'timbre', 'contour', 'expression',
+  'scales', 'harmonic', 'meter', 'spot', 'intreader', 'keysigs', 'tuneup', 'progressions', 'cadences',
+]
+const SECTIONS = Math.max(...JOURNEY_ORDER.map((g) => GAMES[g].levels.length + (GAMES[g].journeyOffset ?? 0)))
+export const JOURNEY: Unit[] = Array.from({ length: SECTIONS }, (_, t) =>
+  chunk(tier(JOURNEY_ORDER, t, true), 5).map((nodes, k) => ({
+    tag: `${en.path.unit} ${t + 1}.${k + 1}`,
+    // name a unit by what it trains
+    title: [...new Set(nodes.map(([g]) => courseOf(g).title))].join(' · '),
+    nodes,
+    section: k === 0 ? `${en.path.sectionWord} ${t + 1} · ${en.journey.sections[t] ?? ''}` : undefined,
+  })),
+).flat()
 
+/** A course path: one unit per level tier, holding that level of every game in the course */
 export function coursePath(c: Course): Unit[] {
-  const nodes = tiers(c.games)
-  const size = c.games.length === 1 ? 5 : 4
-  return chunk(nodes, size).map((ns, i) => ({ title: `${en.path.unit} ${i + 1}`, nodes: ns }))
+  return Array.from({ length: MAX_LEVELS }, (_, l) => tier(c.games, l, false))
+    .filter((nodes) => nodes.length)
+    .flatMap((nodes, l) => chunk(nodes, 4).map((ns) => ({ tag: `${en.path.unit} ${l + 1}`, title: ns.map(([g, lv]) => GAMES[g].levels[lv].title).join(' · '), nodes: ns })))
 }
 
 export const ALL_IDS = (Object.keys(GAMES) as GameId[]).flatMap((g) => GAMES[g].levels.map((_, l) => levelId(g, l)))

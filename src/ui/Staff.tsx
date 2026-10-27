@@ -26,14 +26,16 @@ export function Staff({ v, width = 200 }: { v: Visual; width?: number }) {
       ))}
       {v.notes.map((n, i) => {
         const ny = y(n)
+        // stacked notes share a column; a 2nd would overlap, so its upper note steps aside
+        const x = v.stack ? noteX + (i && diatonic(n) - diatonic(v.notes[i - 1]) === 1 ? 15 : 0) : noteX + i * 30
         const d = diatonic(n) - bottom
         // ledger lines for notes below or above the staff
         const ledgers = d < -1 ? Array.from({ length: Math.floor(-d / 2) }, (_, k) => TOP + 4 * GAP + (k + 1) * GAP)
           : d > 9 ? Array.from({ length: Math.floor((d - 8) / 2) }, (_, k) => TOP - (k + 1) * GAP) : []
         return (
           <g key={i} className="note">
-            {ledgers.map((ly) => <line key={ly} className="ledger" x1={noteX + i * 30 - 13} x2={noteX + i * 30 + 13} y1={ly} y2={ly} />)}
-            <ellipse cx={noteX + i * 30} cy={ny} rx="7.5" ry="5" transform={`rotate(-20 ${noteX + i * 30} ${ny})`} />
+            {ledgers.map((ly) => <line key={ly} className="ledger" x1={x - 13} x2={x + 13} y1={ly} y2={ly} />)}
+            <ellipse cx={x} cy={ny} rx="7.5" ry="5" transform={`rotate(-20 ${x} ${ny})`} />
           </g>
         )
       })}

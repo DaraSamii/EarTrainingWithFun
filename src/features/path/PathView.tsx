@@ -1,4 +1,5 @@
 import { GAMES, currentNode, isUnlocked, levelId, type Unit } from '../../games/catalog'
+import { GameIcon } from '../../ui/GameIcon'
 import { useProgress } from '../../progress/store'
 import { level as stats } from '../../progress/progress'
 import { go } from '../../app/router'
@@ -23,9 +24,10 @@ export function PathView({ units, from }: { units: Unit[]; from: string }) {
         const doneCount = ids.filter((id) => stats(p, id).done).length
         return (
           <section key={u} className="unit">
+            {unit.section && <h3 className="section-head"><span>{unit.section}</span></h3>}
             <div className={`unit-banner tone-${TONES[u % TONES.length]}`}>
               <div>
-                <span className="tag">{en.path.unit} {u + 1}</span>
+                <span className="tag">{unit.tag}</span>
                 <h2>{unit.title}</h2>
               </div>
               <span className="unit-progress">{doneCount}/{ids.length}</span>
@@ -50,7 +52,7 @@ export function PathView({ units, from }: { units: Unit[]; from: string }) {
                     <button className={`node world-node-${game.world} ${s.done ? 'done' : ''} ${isCurrent ? 'current' : ''} ${locked ? 'locked' : ''}`}
                       disabled={locked} aria-label={`${game.title} · ${en.path.level} ${l + 1}: ${game.levels[l].title}`}
                       onClick={() => go(`/level/${g}/${l}?from=${encodeURIComponent(from)}`)}>
-                      {s.done ? <Icon name="check" size={32} /> : locked ? <Icon name="lock" size={26} /> : <span className="node-glyph">{game.glyph}</span>}
+                      {s.done ? <Icon name="check" size={32} /> : locked ? <Icon name="lock" size={26} /> : <span className="node-glyph"><GameIcon id={g} size={40} /></span>}
                     </button>
                     <Stars n={s.stars ?? 0} size={16} />
                     <span className="node-caption"><b>{game.title}</b>{game.levels[l].title}</span>
