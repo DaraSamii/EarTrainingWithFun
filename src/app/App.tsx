@@ -12,6 +12,9 @@ import { LevelScreen } from '../features/level/LevelScreen'
 import { LearnScreen } from '../features/learn/LearnScreen'
 import { PlayScreen } from '../features/arcade/PlayScreen'
 import { ReviewScreen } from '../features/review/ReviewScreen'
+import { NotebookScreen } from '../features/notebook/NotebookScreen'
+import { WelcomeScreen } from '../features/welcome/WelcomeScreen'
+import { welcomed } from './settings'
 import { GAMES, isUnlocked, levelId, stepOpen, type GameId, type Step3 } from '../games/catalog'
 import { en } from '../i18n/en'
 
@@ -19,6 +22,7 @@ const TABS: [string, IconName, string][] = [
   ['/', 'home', en.nav.path],
   ['/courses', 'map', en.nav.courses],
   ['/games', 'games', en.nav.games],
+  ['/notebook', 'book', en.nav.notebook],
   ['/profile', 'profile', en.nav.profile],
 ]
 
@@ -36,6 +40,9 @@ export default function App() {
     if (screen === 'practice') return <LessonScreen {...props} />
     return <PlayScreen {...props} />
   }
+  // first visit: show what the app can do before anything else
+  if (route === '/welcome' || (route === '/' && !welcomed() && p.xp === 0 && !Object.keys(p.levels).length))
+    return <div className="shell page-enter" key="welcome"><WelcomeScreen /></div>
   const review = route.match(/^\/review\/([\w-]+)$/)
   if (review) return <ReviewScreen key={route} scope={review[1]} />
   const course = route.match(/^\/course\/(\w+)$/)
@@ -60,7 +67,8 @@ export default function App() {
         <ThemeToggle />
       </header>
       <main className="content page-enter" key={tab}>
-        {tab === '/courses' ? <CoursesScreen /> : tab === '/games' ? <GamesScreen /> : tab === '/profile' ? <ProfileScreen /> : <HomeScreen />}
+        {tab === '/courses' ? <CoursesScreen /> : tab === '/games' ? <GamesScreen /> : tab === '/notebook' ? <NotebookScreen />
+          : tab === '/profile' ? <ProfileScreen /> : <HomeScreen />}
       </main>
     </div>
   )
