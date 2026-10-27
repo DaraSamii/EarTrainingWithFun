@@ -48,3 +48,8 @@ Format: `ADR-NNN · Title · Status · Date` → Context / Decision / Consequenc
 
 ### ADR-011 · Repository: public GitHub repo `DaraSamii/EarTrainingWithFun` · Accepted · 2026-10-27
 **Decision:** A public repo is required for GitHub Pages on the free plan. Deployed from `main` through GitHub Actions.
+
+### ADR-012 · Demo shortcuts: hash routing, localStorage, synth voice · Accepted · 2026-10-27
+**Context:** The first playable demo (0.2.0) should ship before Firebase and the sample library exist.
+**Decision:** (a) Hash routes (`#/games`, `#/play/degrees/0`) instead of clean URLs; this amends ADR-008 and needs no `404.html` trick. (b) Progress is stored in `localStorage` until Firestore lands in 0.4.0 (ADR-002). (c) A Web Audio synth voice stands in for sampled instruments until 0.3.0 (ADR-004). Each shortcut carries a `shortcut:` comment in code.
+**Consequences:** Progress is per device until sign-in ships. Switching to clean URLs later means a redirect from `#/…` paths.
