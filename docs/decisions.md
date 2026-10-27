@@ -68,3 +68,21 @@ Format: `ADR-NNN · Title · Status · Date` → Context / Decision / Consequenc
 
 ### ADR-016 · A different arcade mechanic per game · Accepted · 2026-10-27
 **Decision:** Scale degrees → **Scale Breaker** (Breakout, after Theta's Paddle Tones): each broken brick plays a degree, and naming it moves the paddle to catch the ball. From level 2 the ball fades out mid-flight so the ear, not the eye, decides. Intervals → **Interval Blaster** (shooter, after Theta's Number Blaster): each wave plays an interval; shoot the ship carrying its name before the wave timer runs out. The game ids `degrees` and `intervals` are kept so saved progress carries over.
+
+### ADR-017 · Courses, the Journey, and per-game unlocking · Accepted · 2026-10-27
+**Context:** Learners asked for skill-specific paths (pitch, intervals, scales, melody, harmony, sounds, theory) and also one "just press play" roadmap (user feedback on 0.3.0).
+**Decision:** Seven **courses** group the games by skill; each course page shows its own path. Home shows the **Journey**: one path that interleaves every game's level 1, then every level 2, and so on. The Games tab lists games by course or all together. A level unlocks once the previous level *of the same game* is complete, so the same level can appear in a course path and in the Journey without conflicting. Supersedes the single-path unlock rule from 0.2.0.
+**Consequences:** Paths are generated from data (`tiers()`), so adding a game automatically adds it to its course and to the Journey.
+
+### ADR-018 · Sampled instruments from a pinned CDN · Accepted · 2026-10-27
+**Decision:** Play real instruments using nbrosowsky/tonejs-instruments (samples CC BY 3.0, credited in Profile → About), loaded at runtime from jsDelivr, **pinned to commit 622c2f1**. A small Web Audio sampler picks the nearest sample and repitches it (which also gives microtones for Higher or Lower). The synth plays until samples are decoded (criteria U3). Instruments are preloaded on the level screen.
+**Consequences:** About 3 MB for piano on first use, less for other instruments; still depends on the CDN until the PWA milestone self-hosts and caches the samples. This supersedes the synth-only shortcut in ADR-012(c).
+
+### ADR-019 · Feedback round on 0.3.0: navigation, practice flow, theme, backgrounds · Accepted · 2026-10-27
+**Decision:**
+(a) Every full-screen page has an **exit bar**: Home plus back to its parent (level → its origin via `?from=`, steps → level).
+(b) Practice feedback and **Continue sit directly under the answers** (inline card); the bottom sheet is removed.
+(c) **Light mode is the default**, with a sun/moon toggle in the top bar (System stays in Profile).
+(d) **No plain backgrounds:** a paper-confetti + dot-grid pattern everywhere; game pages use their world's tint.
+(e) The scrolling ticker is replaced by static tag pills, so no text is ever hidden.
+(f) Home stat cards **expand into detail panels** (streak week calendar, daily-goal picker + 7-day XP chart, stars by course), after Duolingo.

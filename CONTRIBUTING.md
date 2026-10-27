@@ -50,10 +50,9 @@ git switch develop && git merge --no-ff main && git push   # back-merge
 | 0.1.0 | Knowledge base, design criteria, project skeleton (folded into 0.2.0, not tagged separately) |
 | 0.2.0 | ✅ First playable demo: app shell, home path, Degree Detective + Interval Ladder L1–5 |
 | 0.3.0 | ✅ Game worlds: Learn → Practice → Play, mascot Pip, Scale Breaker + Interval Blaster arcades, stars and badges |
-| 0.3.x | Sampled instruments (piano, guitar, strings) |
-| 0.4.0 | Firebase: anonymous + Google sign-in, Firestore progress, settings |
-| 0.5.0 | Path, XP, streaks, daily goal, achievements |
-| 0.6.0 | Echo, Chord Colors, Tap Back; spaced-repetition Practice mode |
+| 0.4.0 | ✅ Courses + Journey, 7 new games across 6 courses, sampled instruments, stat panels, light default, patterns |
+| 0.5.0 | Firebase: anonymous + Google sign-in, Firestore progress, settings |
+| 0.6.0 | Second game per course (Echo on piano, Progression Path, Tap Back rhythm, Spot the Change); spaced-repetition review |
 | 0.7.0 | PWA offline, performance and accessibility pass against design criteria |
 | 1.0.0 | Sections A–C complete, placement test, v1 games |
 
