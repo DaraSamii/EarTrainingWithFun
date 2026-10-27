@@ -4,6 +4,7 @@ import { multiplier } from '../../games/score'
 import { sfx } from '../../audio/sfx'
 import { Icon } from '../../ui/Icon'
 import { Pip, Bubble } from '../../ui/Pip'
+import { ExitBar } from '../../ui/ExitBar'
 import { en } from '../../i18n/en'
 
 export type Popup = { id: number; x: number; y: number; text: string; kind: 'good' | 'bad' }
@@ -12,13 +13,13 @@ export function Popups({ items }: { items: Popup[] }) {
   return <>{items.map((p) => <span key={p.id} className={`popup ${p.kind}`} style={{ left: `${p.x}%`, top: `${p.y}%` }}>{p.text}</span>)}</>
 }
 
-export function Hud({ total, results, score, combo, onExit, onReplay }: {
-  total: number; results: boolean[]; score: number; combo: number; onExit(): void; onReplay(): void
+export function Hud({ total, results, score, combo, back, onReplay }: {
+  total: number; results: boolean[]; score: number; combo: number; back: string; onReplay?(): void
 }) {
   const m = multiplier(combo)
   return (
     <header className="hud">
-      <button className="icon-btn on-world" aria-label={en.lesson.exit} onClick={onExit}><Icon name="close" /></button>
+      <ExitBar back={back} onWorld />
       <ol className="segments" aria-label={`${results.length} / ${total}`}>
         {Array.from({ length: total }, (_, i) => (
           <li key={i} className={i < results.length ? (results[i] ? 'ok' : 'bad') : ''} />
@@ -26,7 +27,7 @@ export function Hud({ total, results, score, combo, onExit, onReplay }: {
       </ol>
       <span className={`mult ${m > 1 ? 'on' : ''}`} key={m}>×{m}</span>
       <span className="score" aria-label={en.arcade.score}><Icon name="star" size={16} /> {score}</span>
-      <button className="icon-btn on-world" aria-label={`${en.arcade.replay} (Space)`} onClick={onReplay}><Icon name="volume" /></button>
+      {onReplay && <button className="icon-btn on-world" aria-label={`${en.arcade.replay} (Space)`} onClick={onReplay}><Icon name="volume" /></button>}
     </header>
   )
 }

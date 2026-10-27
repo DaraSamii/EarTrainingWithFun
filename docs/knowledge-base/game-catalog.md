@@ -90,6 +90,22 @@ Input modes in scope (ADR-005): **buttons/multiple-choice**, **on-screen piano**
 | **Placement test** | About 3 minutes of adaptive items that unlock the path up to the learner's level | v1 |
 | **Daily challenge** | One fixed, seeded session per day that's the same for everyone (shareable result) | Later |
 
+## 3b. Implemented games (0.4.0)
+
+| Course | Game | Practice | Play (arcade) | World | Levels |
+|---|---|---|---|---|---|
+| Pitch | **Higher or Lower** | K1 | Drops | Paper Peaks | 4 → 2 → 1 semitone → 50¢ → 25¢; flute/violin/clarinet from L4 |
+| Intervals | **Interval Blaster** | K1 | Blaster | Paper Space | P5/P8 → +M3 → +P4 → 2nds & 3rds → descending |
+| Scales & Keys | **Scale Breaker** (degrees) | K1 | Breaker | Sunset Garden | 1-3-5 → 1-2-3 → 1–5 → 1–7 → any key |
+| Scales & Keys | **Scale Shapes** | K1 | Blaster | Bubble Reef | major/minor → +pentatonic → +harmonic minor → +melodic minor → dorian/mixolydian |
+| Melody | **Contour Catcher** | K1 (contour drawings) | Breaker | Paper Peaks | 3-note rising/falling → arches & valleys → 4 notes + zigzag → leaps → 5 notes |
+| Harmony | **Chord Colors** | K1 | Blaster | Bubble Reef | maj/min → +dim → +aug → 7ths → all, unspelled |
+| Sounds | **Who's Playing?** | K1 | Drops | Sunset Garden | piano/flute → +guitar → +trumpet, violin → strings & woodwinds → brass, reeds & mallets |
+| Music Theory | **Note Reader** (reading) | K1 + staff | Drops (staff cards) | Paper Notebook | treble lines → spaces → whole staff → ledger lines → bass clef |
+| Music Theory | **Key Signatures** (concepts) | K1 + staff | Blaster | Paper Notebook | C/G/F → 2 → 3 → 4 → 6 sharps/flats |
+
+Mechanic **K10 · Drops** (after Theta's Tone Drops): an item falls and plays (or shows) the prompt; answer before it lands. A wrong answer makes it lurch down (time penalty). Reading games show the sound only after answering, which links eye and ear.
+
 ## 4. Rules every game must follow
 
 1. **Replay is free.** The learner can replay the prompt any number of times without penalty. We record replays for analytics and to adjust difficulty, but they never cost points.

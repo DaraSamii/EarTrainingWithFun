@@ -1,8 +1,10 @@
-import { useRoute, go } from './router'
+import { useRoute } from './router'
 import { useProgress } from '../progress/store'
 import { currentStreak, dayKey, todayXp } from '../progress/progress'
 import { Icon, type IconName } from '../ui/Icon'
-import { PathScreen } from '../features/path/PathScreen'
+import { ThemeToggle } from '../ui/ThemeToggle'
+import { HomeScreen } from '../features/home/HomeScreen'
+import { CourseScreen, CoursesScreen } from '../features/courses/CoursesScreen'
 import { GamesScreen } from '../features/games/GamesScreen'
 import { ProfileScreen } from '../features/profile/ProfileScreen'
 import { LessonScreen } from '../features/lesson/LessonScreen'
@@ -13,7 +15,8 @@ import { GAMES, isUnlocked, levelId, stepOpen, type GameId, type Step3 } from '.
 import { en } from '../i18n/en'
 
 const TABS: [string, IconName, string][] = [
-  ['/', 'path', en.nav.path],
+  ['/', 'home', en.nav.path],
+  ['/courses', 'map', en.nav.courses],
   ['/games', 'games', en.nav.games],
   ['/profile', 'profile', en.nav.profile],
 ]
@@ -24,16 +27,18 @@ export default function App() {
   const m = route.match(/^\/(level|learn|practice|play)\/(\w+)\/(\d+)$/)
   if (m && m[2] in GAMES && GAMES[m[2] as GameId].levels[+m[3]]) {
     const [, screen, g, l] = m as unknown as [string, 'level' | Step3, GameId, string]
-    const id = levelId(g, +l)
     // guard: no step can be opened before its prerequisites (ADR-013)
-    const open = screen === 'level' || (isUnlocked(p, id) && stepOpen(p, id, screen))
+    const open = screen === 'level' || (isUnlocked(p, g, +l) && stepOpen(p, levelId(g, +l), screen))
     const props = { key: route, gameId: g, level: +l }
     if (!open || screen === 'level') return <LevelScreen {...props} />
     if (screen === 'learn') return <LearnScreen {...props} />
     if (screen === 'practice') return <LessonScreen {...props} />
     return <PlayScreen {...props} />
   }
+  const course = route.match(/^\/course\/(\w+)$/)
+  if (course) return <div className="shell page-enter" key={route}><CourseScreen id={course[1]} /></div>
 
+  const tab = TABS.find(([path]) => path === route)?.[0] ?? '/'
   return (
     <div className="shell">
       <header className="topbar">
@@ -43,15 +48,16 @@ export default function App() {
         </a>
         <nav className="tabs" aria-label="Main">
           {TABS.map(([path, icon, label]) => (
-            <a key={path} href={`#${path}`} className="tab" aria-current={route === path ? 'page' : undefined}>
+            <a key={path} href={`#${path}`} className="tab" aria-current={tab === path ? 'page' : undefined}>
               <Icon name={icon} /> <span>{label}</span>
             </a>
           ))}
         </nav>
         <Stats />
+        <ThemeToggle />
       </header>
-      <main className="content">
-        {route === '/games' ? <GamesScreen /> : route === '/profile' ? <ProfileScreen /> : <PathScreen />}
+      <main className="content page-enter" key={tab}>
+        {tab === '/courses' ? <CoursesScreen /> : tab === '/games' ? <GamesScreen /> : tab === '/profile' ? <ProfileScreen /> : <HomeScreen />}
       </main>
     </div>
   )
@@ -61,20 +67,16 @@ function Stats() {
   const p = useProgress()
   const today = dayKey()
   const streak = currentStreak(p, today)
-  const goal = Math.min(1, todayXp(p, today) / p.dailyGoal)
   return (
-    <div className="stats">
-      <span className={`stat streak ${streak ? 'on' : ''}`} title={`${streak} ${en.stats.streak}`}>
-        <Icon name="flame" size={20} /> {streak}
-      </span>
-      <span className="stat xp" title={en.stats.xp}><Icon name="bolt" size={20} /> {p.xp}</span>
-      <button className="goal-ring" onClick={() => go('/profile')}
-        aria-label={`${en.stats.goal}: ${todayXp(p, today)} / ${p.dailyGoal} ${en.stats.xp}`}>
-        <svg viewBox="0 0 36 36" width="32" height="32" aria-hidden="true">
+    <a className="stats" href="#/" aria-label={`${streak} ${en.stats.streak}, ${p.xp} ${en.stats.xp}`}>
+      <span className={`stat streak ${streak ? 'on' : ''}`}><Icon name="flame" size={20} /> {streak}</span>
+      <span className="stat xp"><Icon name="bolt" size={20} /> {p.xp}</span>
+      <span className="stat goal-mini" aria-hidden="true">
+        <svg viewBox="0 0 36 36" width="28" height="28">
           <circle cx="18" cy="18" r="15" className="ring-bg" />
-          <circle cx="18" cy="18" r="15" className="ring-fg" strokeDasharray={`${goal * 94.25} 94.25`} />
+          <circle cx="18" cy="18" r="15" className="ring-fg" strokeDasharray={`${Math.min(1, todayXp(p, today) / p.dailyGoal) * 94.25} 94.25`} />
         </svg>
-      </button>
-    </div>
+      </span>
+    </a>
   )
 }

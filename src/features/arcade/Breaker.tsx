@@ -1,12 +1,13 @@
 import { useEffect, useReducer, useRef } from 'react'
-import { GAMES, type Question } from '../../games/catalog'
-import { mulberry32, type Step } from '../../music/theory'
-import { play } from '../../audio/engine'
+import type { Game, Question } from '../../games/catalog'
+import { mulberry32 } from '../../music/theory'
+import { duration, play } from '../../audio/engine'
 import { sfx } from '../../audio/sfx'
 import { points, LATE_POINTS } from '../../games/score'
 import type { PlayResult } from '../../progress/progress'
 import { go } from '../../app/router'
 import { World } from '../../ui/World'
+import { OptionFace } from '../../ui/OptionFace'
 import { Countdown, Hud, Popups, StartOverlay, type Popup } from './shared'
 import { useGame, useLater } from './hooks'
 import { en } from '../../i18n/en'
@@ -19,20 +20,17 @@ const VISIBLE = [1.5, 0.75, 0.55, 0.4, 0.3]
 const PADDLE_Y = 82
 const BRICK_POS = Array.from({ length: BRICKS }, (_, i) => ({ x: 10 + (i % 5) * 20, y: 10 + Math.floor(i / 5) * 11 }))
 const TONES = ['t-yellow', 't-pink', 't-sky', 't-green', 't-red']
-/** In "any key" levels the key changes every few bricks */
-const KEY_EVERY = 3
 
 type Tween = { fx: number; fy: number; tx: number; ty: number; t0: number; dur: number; ease(k: number): number; done(): void }
 const easeOut = (k: number) => 1 - (1 - k) ** 2
 const linear = (k: number) => k
-const durMs = (s: Step[]) => s.reduce((a, x) => a + x.dur, 0) * 1000
 
-/** Breakout for scale degrees, after Theta's Paddle Tones */
-export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: PlayResult): void }) {
-  const lv = GAMES.degrees.levels[level]
+/** Breakout for any pick-one game, after Theta's Paddle Tones (ADR-016) */
+export function Breaker({ game, level, onFinish }: { game: Game; level: number; onFinish(r: PlayResult): void }) {
+  const lv = game.levels[level]
+  const back = `/level/${game.id}/${level}`
   const K = lv.options.length
   const zoneX = (k: number) => ((k + 0.5) / K) * 100
-  const D = DESCENT[level]
   const [, render] = useReducer((x: number) => x + 1, 0)
   const later = useLater()
   const ballRef = useRef<HTMLSpanElement>(null)
@@ -48,6 +46,8 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
     locked: false,
     results: [] as boolean[],
     t0: 0,
+    /** fall time for the current question: longer prompts get more time */
+    D: DESCENT[level],
     score: 0,
     combo: 0,
     maxCombo: 0,
@@ -74,7 +74,7 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
         if (k >= 1) { g.tween = null; tw.done() }
       }
       if (g.phase === 'down' && !g.locked) {
-        const frac = (t - g.t0) / (D * 1000)
+        const frac = (t - g.t0) / (g.D * 1000)
         const vis = VISIBLE[level]
         g.ball.o = frac < vis - 0.2 ? 1 : Math.max(0, (vis - frac) / 0.2)
       } else g.ball.o = 1
@@ -88,7 +88,7 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
     }
     raf = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(raf)
-  }, [g, D, level])
+  }, [g, level])
 
   function popup(x: number, y: number, text: string, kind: Popup['kind'] = 'good') {
     const id = ++g.pid
@@ -107,9 +107,9 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
   function hit(b: number) {
     g.broken.push(b)
     sfx.hit()
-    const keepKey = level === 4 ? (g.broken.length - 1) % KEY_EVERY !== 0 : true
+    const keepKey = lv.keyEvery ? (g.broken.length - 1) % lv.keyEvery !== 0 : true
     const q = lv.generate(g.rng, keepKey ? g.key : undefined)
-    const newKey = q.key !== g.key
+    const newKey = !!q.context && q.key !== g.key
     g.q = q
     g.key = q.key
     g.ans = lv.options.findIndex((o) => o.id === q.answer)
@@ -117,7 +117,7 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
       g.phase = 'wait'
       g.banner = g.broken.length === 1 ? en.lesson.key : en.arcade.newKey
       play([...(q.context ?? []), ...q.prompt])
-      later(durMs(q.context ?? []), () => { g.banner = ''; descend() })
+      later(duration(q.context ?? []) * 1000, () => { g.banner = ''; descend() })
     } else {
       play(q.prompt)
       descend()
@@ -130,7 +130,8 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
     g.t0 = performance.now()
     g.tapped = false
     g.locked = false
-    tweenTo(zoneX(g.ans), PADDLE_Y - 3, D, linear, land)
+    g.D = DESCENT[level] + duration(g.q!.prompt) * 0.7
+    tweenTo(zoneX(g.ans), PADDLE_Y - 3, g.D, linear, land)
     render()
   }
 
@@ -145,7 +146,7 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
       if (first) {
         g.combo++
         g.maxCombo = Math.max(g.maxCombo, g.combo)
-        const left = 1 - (performance.now() - g.t0) / (D * 1000)
+        const left = 1 - (performance.now() - g.t0) / (g.D * 1000)
         const pts = points(left, g.combo)
         g.score += pts
         popup(zoneX(k), PADDLE_Y - 14, `+${pts} ${left > 0.5 ? en.arcade.fast : en.arcade.good}`)
@@ -174,7 +175,7 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
     g.combo = 0
     g.reveal = g.ans
     const o = lv.options[g.ans]
-    g.banner = `${en.arcade.miss} ${o.label} (${o.sub})`
+    g.banner = `${en.arcade.miss} ${o.label}${o.sub && !o.shape ? ` (${o.sub})` : ''}`
     sfx.whoosh()
     play([...g.q!.hear(g.q!.answer), ...(g.q!.after ?? [])])
     tweenTo(g.ball.x, 108, 0.35, linear, () => {})
@@ -199,7 +200,7 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return
       if (e.key === ' ') { e.preventDefault(); if (g.q) play(g.q.prompt) }
-      else if (e.key === 'Escape') go(`/level/degrees/${level}`)
+      else if (e.key === 'Escape') go(back)
       else if (/^[1-9]$/.test(e.key) && +e.key <= K) tap(+e.key - 1)
       else if (e.key === 'ArrowLeft') tap(Math.max(0, g.paddle - 1))
       else if (e.key === 'ArrowRight') tap(Math.min(K - 1, g.paddle + 1))
@@ -209,10 +210,10 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
   })
 
   return (
-    <div className="arcade theme-degrees">
-      <World game="degrees" />
+    <div className={`arcade world-bg-${game.world}`}>
+      <World world={game.world} />
       <Hud total={BRICKS} results={g.results} score={g.score} combo={g.combo}
-        onExit={() => go(`/level/degrees/${level}`)} onReplay={() => g.q && play(g.q.prompt)} />
+        back={back} onReplay={() => g.q && play(g.q.prompt)} />
 
       <div className="stage breaker">
         {BRICK_POS.map((b, i) => (
@@ -231,14 +232,13 @@ export function ScaleBreaker({ level, onFinish }: { level: number; onFinish(r: P
           <button key={o.id} className={`zone ${g.paddle === k ? 'is-paddle' : ''} ${g.reveal === k ? 'reveal' : ''}`}
             onPointerDown={(e) => { e.preventDefault(); tap(k) }} onClick={(e) => e.detail === 0 && tap(k)}>
             <kbd aria-hidden="true">{k + 1}</kbd>
-            <span className="zone-label">{o.label}</span>
-            <span className="zone-sub">{o.sub}</span>
+            <OptionFace o={o} compact={K > 4} />
           </button>
         ))}
       </div>
 
       {g.phase === 'intro' && (
-        <StartOverlay title={`${GAMES.degrees.title} · ${en.path.level} ${level + 1}`} text={en.arcade.tapZone}
+        <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.tapZone}
           onStart={() => { g.phase = 'count'; render() }} />
       )}
       {g.phase === 'count' && <Countdown onDone={launch} />}

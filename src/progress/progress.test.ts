@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import {
-  addXp, applyLearn, applyPlay, applyPractice, currentStreak, initialProgress, level, playXp, sessionXp, starsFor, withBadges,
+  addXp, setGoal, week, applyLearn, applyPlay, applyPractice, currentStreak, initialProgress, level, playXp, sessionXp, starsFor, withBadges,
 } from './progress'
 
 test('xp: 10 per session, 1 per correct, 5 for perfect; play adds 5 per star', () => {
@@ -56,4 +56,17 @@ test('badges are awarded once and kept', () => {
   expect(withBadges(p2, ['a', 'b'])[1]).toEqual([])
   p = applyPlay(p2, 'b', { correct: 9, total: 10, score: 1, maxCombo: 1 }, '2026-10-30')
   expect(withBadges(p, ['a', 'b'])[1]).toEqual(['sectionA'])
+})
+
+test('xp history per day feeds the week view and trims old days', () => {
+  let p = addXp(initialProgress, 12, '2026-09-01')
+  p = addXp(p, 8, '2026-10-26') // Monday
+  p = addXp(p, 5, '2026-10-28')
+  p = addXp(p, 5, '2026-10-28')
+  expect(p.xpDays['2026-09-01']).toBeUndefined()
+  const w = week(p, '2026-10-28')
+  expect(w.map((d) => d.day)).toEqual(['2026-10-26', '2026-10-27', '2026-10-28', '2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01'])
+  expect(w.map((d) => d.xp)).toEqual([8, 0, 10, 0, 0, 0, 0])
+  expect(w.map((d) => d.future)).toEqual([false, false, false, true, true, true, true])
+  expect(setGoal(p, 50).dailyGoal).toBe(50)
 })
