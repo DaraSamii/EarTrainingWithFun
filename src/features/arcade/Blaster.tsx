@@ -1,12 +1,14 @@
 import { useEffect, useReducer, useRef } from 'react'
-import { GAMES, type Question } from '../../games/catalog'
+import type { Game, Question } from '../../games/catalog'
 import { mulberry32 } from '../../music/theory'
-import { play } from '../../audio/engine'
+import { duration, play } from '../../audio/engine'
 import { sfx } from '../../audio/sfx'
 import { points, LATE_POINTS } from '../../games/score'
 import type { PlayResult } from '../../progress/progress'
 import { go } from '../../app/router'
 import { World } from '../../ui/World'
+import { OptionFace } from '../../ui/OptionFace'
+import { Staff } from '../../ui/Staff'
 import { Countdown, Hud, Popups, StartOverlay, type Popup } from './shared'
 import { useGame, useLater } from './hooks'
 import { en } from '../../i18n/en'
@@ -16,15 +18,15 @@ const WAVES = 12
 const TIME = [7, 6.5, 6, 5.5, 5.5]
 /** A wrong shot costs time, never a life (ADR-014) */
 const WRONG_PENALTY = 1.5
-const FIRST_NOTE = 0.7
 const CANNON = { x: 50, y: 90 }
 const SHIP_TONES = ['t-pink', 't-yellow', 't-sky', 't-green', 't-red']
 
 type ShipState = 'idle' | 'boom' | 'shield' | 'escape'
 
-/** Shooter for intervals, after Theta's Number Blaster */
-export function IntervalBlaster({ level, onFinish }: { level: number; onFinish(r: PlayResult): void }) {
-  const lv = GAMES.intervals.levels[level]
+/** Shooter for any pick-one game, after Theta's Number Blaster (ADR-016) */
+export function Blaster({ game, level, onFinish }: { game: Game; level: number; onFinish(r: PlayResult): void }) {
+  const lv = game.levels[level]
+  const back = `/level/${game.id}/${level}`
   const K = lv.options.length
   const T = TIME[level]
   const ship = (k: number) => ({ x: ((k + 0.5) / K) * 100, y: 24 + (k % 2) * 12 })
@@ -66,8 +68,8 @@ export function IntervalBlaster({ level, onFinish }: { level: number; onFinish(r
     g.shot = false
     g.ships = g.ships.map(() => 'idle')
     play(q.prompt)
-    // the clock starts when the second note sounds
-    g.start = performance.now() + FIRST_NOTE * 1000
+    // the clock starts once most of the prompt has sounded
+    g.start = performance.now() + duration(q.prompt) * 600
     g.deadline = g.start + T * 1000
     g.phase = 'wave'
     render()
@@ -99,6 +101,7 @@ export function IntervalBlaster({ level, onFinish }: { level: number; onFinish(r
         popup(s.x, s.y - 8, `+${pts} ${left > 0.5 ? en.arcade.fast : en.arcade.good}`)
       } else popup(s.x, s.y - 8, `+${pts}`)
       g.score += pts
+      if (g.q!.after) play(g.q!.after)
       later(1000, () => respawn(k))
     } else {
       g.combo = 0
@@ -118,7 +121,7 @@ export function IntervalBlaster({ level, onFinish }: { level: number; onFinish(r
     g.ships[g.ans] = 'escape'
     g.banner = `${en.arcade.late} ${lv.options[g.ans].label}`
     sfx.whoosh()
-    play(g.q!.hear(g.q!.answer))
+    play(g.q!.after ?? g.q!.hear(g.q!.answer))
     const k = g.ans
     later(2000, () => { g.banner = ''; respawn(k) })
     render()
@@ -153,7 +156,7 @@ export function IntervalBlaster({ level, onFinish }: { level: number; onFinish(r
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return
       if (e.key === ' ') { e.preventDefault(); if (g.q) play(g.q.prompt) }
-      else if (e.key === 'Escape') go(`/level/intervals/${level}`)
+      else if (e.key === 'Escape') go(back)
       else if (/^[1-9]$/.test(e.key) && +e.key <= K) shoot(+e.key - 1)
     }
     addEventListener('keydown', onKey)
@@ -161,10 +164,10 @@ export function IntervalBlaster({ level, onFinish }: { level: number; onFinish(r
   })
 
   return (
-    <div className="arcade theme-intervals">
-      <World game="intervals" />
+    <div className={`arcade world-bg-${game.world}`}>
+      <World world={game.world} />
       <Hud total={WAVES} results={g.results} score={g.score} combo={g.combo}
-        onExit={() => go(`/level/intervals/${level}`)} onReplay={() => g.q && play(g.q.prompt)} />
+        back={back} onReplay={g.q?.prompt.length ? () => play(g.q!.prompt) : undefined} />
 
       <div className="stage blaster" ref={stageRef} style={{ '--k': K } as React.CSSProperties}>
         {lv.options.map((o, k) => {
@@ -177,7 +180,7 @@ export function IntervalBlaster({ level, onFinish }: { level: number; onFinish(r
               <span className="ship-dome" />
               <span className="ship-hull">
                 <kbd aria-hidden="true">{k + 1}</kbd>
-                <span className="ship-label">{o.label}</span>
+                <span className="ship-label"><OptionFace o={o} compact /></span>
               </span>
             </button>
           )
@@ -187,7 +190,8 @@ export function IntervalBlaster({ level, onFinish }: { level: number; onFinish(r
           <span key={g.laser.id} className="laser"
             style={{ left: `${CANNON.x}%`, top: `${CANNON.y}%`, height: g.laser.len, rotate: `${g.laser.angle}deg` }} />
         )}
-        {g.phase === 'wave' && <span className="signal" style={{ left: '50%', top: '62%' }} />}
+        {g.phase === 'wave' && !g.q?.visual && <span className="signal" style={{ left: '50%', top: '62%' }} />}
+        {g.q?.visual && g.phase !== 'intro' && <div className="stage-visual" key={g.results.length}><Staff v={g.q.visual} width={200} /></div>}
         <Popups items={g.popups} />
         {g.banner && <div className="banner" role="status">{g.banner}</div>}
       </div>
@@ -195,7 +199,7 @@ export function IntervalBlaster({ level, onFinish }: { level: number; onFinish(r
       <div className="timer"><span ref={barRef} /></div>
 
       {g.phase === 'intro' && (
-        <StartOverlay title={`${GAMES.intervals.title} · ${en.path.level} ${level + 1}`} text={en.arcade.shoot}
+        <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.shoot}
           onStart={() => { g.phase = 'count'; render() }} />
       )}
       {g.phase === 'count' && <Countdown onDone={wave} />}
