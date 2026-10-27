@@ -133,3 +133,9 @@ Format: `ADR-NNN · Title · Status · Date` → Context / Decision / Consequenc
 - After a passed Play, the primary button is **Next activity**: the next unfinished level on the path the learner came from (course or Journey).
 - **Keyboard:** → is next/continue/start, ← is back, Esc exits, on every screen. Arcades also take 1–9 and Space; arrows move between stage tabs.
 - Stage tabs use a **sliding highlight**; the Home sidebar keeps the stats and Memory card fixed and scrolls only the course list; the Bubble Reef fish face the way they swim.
+
+### ADR-026 · Lesson cards in Learn; one world per course · Accepted · 2026-10-27
+**Context:** "In the learn part I prefer to see more explanation", and "each course background should be different and unique".
+**Decision:**
+- Every game has a short **guide** (`i18n/guides.en.ts`): what it is, three listening tips, a common mistake, and where you hear it in real music. Learn now opens with **paged lesson cards** (The idea · What is it? · How to listen · Watch out · In real music) before the sound demos. First levels show every card; later levels show the level's idea plus one rotating tip and one more card. Pages move with Back/Next and ←/→.
+- Each course has its **own paper world**, shared by all its games and matching its arcade: Pitch → Paper Peaks, Intervals → Paper Space, Scales & Keys → Sunset Garden, Melody → **Paper River**, Harmony → **Potion Lab**, Rhythm → **Paper Stadium**, Sounds → **Lily Pond**, Theory → Paper Notebook.

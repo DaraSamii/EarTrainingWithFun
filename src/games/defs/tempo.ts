@@ -35,6 +35,6 @@ function level(i: number): Level {
 
 export const tempo: Game = {
   id: 'tempo', course: 'rhythm', title: S.title, blurb: S.blurb, instruction: S.instruction,
-  world: 'mountains', worldName: S.world, arcade: 'hurdles', instruments: [],
+  world: 'track', worldName: S.world, arcade: 'hurdles', instruments: [],
   levels: CHANGE.map((_, i) => level(i)),
 }

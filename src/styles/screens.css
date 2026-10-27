@@ -123,6 +123,7 @@ button.card:hover, .course-card:hover, .game-card:hover { transform: translateY(
 .world-node-ocean { background: var(--color-powder-sky); }
 .world-node-mountains { background: var(--color-bubblegum-pink); }
 .world-node-notebook { background: var(--color-paper-white); }
+.world-node-river { background: #9fe0f2; } .world-node-lab { background: #d6c2ff; } .world-node-track { background: #ffb877; } .world-node-pond { background: #9be08a; }
 .node-glyph { font-family: 'Noto Music', var(--font-display); }
 .node-caption { display: grid; justify-items: center; }
 .node-caption b { font-weight: 400; color: var(--text); font-family: var(--font-text); font-size: 15px; }
@@ -401,3 +402,18 @@ button.card:hover, .course-card:hover, .game-card:hover { transform: translateY(
 .fish.splash .fish-body { animation: shake 300ms; background: var(--error); }
 .fish.reveal .fish-body { outline: 4px dashed var(--color-paper-white); outline-offset: 4px; }
 @keyframes caught { to { translate: 45cqw -200%; rotate: -30deg; opacity: 0; } }
+
+/* ---------- Learn lesson cards (0.8) ---------- */
+.lesson-card { width: 100%; max-width: 620px; display: grid; gap: var(--space-12); padding: var(--space-24); border: 3px solid var(--color-ink-black); border-radius: var(--radius-cards); background: var(--surface); box-shadow: 0 6px 0 0 var(--shadow-ink); text-align: left; animation: card-in 380ms cubic-bezier(.2, .9, .3, 1.2) both; }
+.lesson-card header { display: flex; align-items: center; gap: var(--space-12); }
+.lesson-card h2 { flex: 1; font-size: 26px; }
+.lesson-card p { font-size: 20px; line-height: 1.5; }
+.lesson-card-icon { width: 48px; height: 48px; flex: none; display: grid; place-items: center; border-radius: 14px; border: 2px solid var(--color-ink-black); color: var(--color-ink-black); background: var(--color-hi-yellow); }
+.card-what .lesson-card-icon { background: var(--color-powder-sky); } .card-listen .lesson-card-icon { background: #9be08a; }
+.card-watch .lesson-card-icon { background: var(--color-bubblegum-pink); } .card-real .lesson-card-icon { background: #d6c2ff; }
+.lesson-card-count { font: 400 14px/1 var(--font-mono); color: var(--muted); }
+.card-dots { display: flex; gap: 8px; justify-content: center; }
+.card-dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--surface-2); border: 2px solid var(--border); transition: width 300ms, background 300ms; }
+.card-dots i.seen { background: var(--muted); border-color: var(--muted); }
+.card-dots i.on { width: 28px; border-radius: 6px; background: var(--action); border-color: var(--color-ink-black); }
+.lesson-card ul { margin: 0; padding-left: 22px; display: grid; gap: 8px; font-size: 19px; line-height: 1.45; }

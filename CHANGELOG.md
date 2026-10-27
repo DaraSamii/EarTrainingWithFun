@@ -5,6 +5,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-10-27 · Explain more, every course its own world
+
+### Added
+- **Lesson cards in Learn** (ADR-026): every game has a guide (what it is, how to listen, a common mistake, where you hear it in real music) shown as paged cards before the sound demos, with Back/Next and arrow keys.
+- **A unique world for every course**: new Paper River (Melody), Potion Lab (Harmony), Paper Stadium (Rhythm) and Lily Pond (Sounds) scenes; all games in a course share its world.
+
+
 ## [0.7.1] - 2026-10-27 · Hotfix
 
 ### Fixed
@@ -128,7 +135,8 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.1...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.8.0...develop
+[0.8.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.1...v0.8.0
 [0.7.1]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.5.0...v0.6.0
