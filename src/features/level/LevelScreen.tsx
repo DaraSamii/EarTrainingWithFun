@@ -3,7 +3,8 @@ import { GAMES, isUnlocked, levelId, nextStep, stepOpen, type GameId, type Step3
 import { loadInstruments } from '../../audio/engine'
 import { useProgress } from '../../progress/store'
 import { level as stats } from '../../progress/progress'
-import { fromParam, go } from '../../app/router'
+import { fromParam, go, rememberFrom } from '../../app/router'
+import { useKeys } from '../../app/keys'
 import { ExitBar } from '../../ui/ExitBar'
 import { Icon, type IconName } from '../../ui/Icon'
 import { Pip, Bubble } from '../../ui/Pip'
@@ -23,6 +24,8 @@ export function LevelScreen({ gameId, level }: { gameId: GameId; level: number }
   const unlocked = isUnlocked(p, gameId, level)
   // warm up the samples this game needs while the learner reads the level card
   useEffect(() => { void loadInstruments(game.instruments) }, [game])
+  useEffect(() => { rememberFrom(fromParam()) }, [])
+  useKeys({ next: unlocked ? () => go(`/${next}/${gameId}/${level}`) : undefined, back: () => go(fromParam()), exit: () => go(fromParam()) })
   const next = nextStep(p, id)
   const done = (st: Step3) => (st === 'learn' ? s.learned : st === 'practice' ? s.practiced : (s.stars ?? 0) > 0)
 
@@ -70,6 +73,7 @@ export function LevelScreen({ gameId, level }: { gameId: GameId; level: number }
             {en.level.go[next]} <Icon name="arrow" size={20} />
           </button>
         )}
+        <p className="key-hint">{en.keys.level}</p>
         {!!s.hiScore && <p className="hi-score"><Icon name="bolt" size={16} /> {en.level.hiScore}: {s.hiScore}</p>}
       </div>
     </div>

@@ -106,7 +106,7 @@
 .w-bubble4 { left: 78%; bottom: 40%; animation-delay: -4s; } .w-bubble5 { left: 90%; bottom: 12%; width: 3cqmin; animation-delay: -7s; }
 .w-bubble6 { left: 34%; bottom: 55%; width: 4cqmin; animation-delay: -2s; }
 @keyframes rise { to { translate: 0 -120cqh; } }
-.w-fish { width: 14cqmin; aspect-ratio: 2; background: var(--color-marker-red); clip-path: polygon(0 50%, 25% 15%, 70% 15%, 100% 0, 88% 50%, 100% 100%, 70% 85%, 25% 85%); animation: swim 18s linear infinite; }
+.w-fish { width: 14cqmin; aspect-ratio: 2; background: var(--color-marker-red); clip-path: polygon(100% 50%, 75% 15%, 30% 15%, 0 0, 12% 50%, 0 100%, 30% 85%, 75% 85%); /* nose points the way it swims (right) */ animation: swim 18s linear infinite; }
 .w-fish.f1 { top: 30%; left: -20%; } .w-fish.f2 { top: 52%; left: -20%; background: var(--color-bubblegum-pink); width: 10cqmin; animation-delay: -9s; animation-duration: 24s; }
 @keyframes swim { to { left: 110%; } }
 .w-weed { left: 6%; bottom: 0; width: 6cqmin; height: 40cqh; border-radius: 999px 999px 0 0; background: var(--color-jelly-green); transform-origin: bottom; animation: sway 3s ease-in-out infinite alternate; }

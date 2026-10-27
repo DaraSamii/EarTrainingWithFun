@@ -6,6 +6,7 @@ import { commit, getProgress } from '../../progress/store'
 import { applyPractice, dayKey, sessionXp, type BadgeId } from '../../progress/progress'
 import { Results } from '../results/Results'
 import { Quiz, type QuizResult } from './Quiz'
+import { passMark } from '../../app/settings'
 import { en } from '../../i18n/en'
 
 type Props = { gameId: GameId; level: number }
@@ -28,7 +29,7 @@ export function LessonScreen({ gameId, level }: Props) {
       label={`${en.lesson.practice} · ${game.title} · ${en.path.level} ${level + 1}`}
       onDone={(r) => {
         // only this level's questions count toward its practice score; all answers feed memory
-        const badges = commit((p) => applyPractice(p, levelId(gameId, level), r.correct, r.total, dayKey(), r.answers))
+        const badges = commit((p) => applyPractice(p, levelId(gameId, level), r.correct, r.total, dayKey(), r.answers, passMark()))
         setRes({ ...r, badges })
       }} />
   )

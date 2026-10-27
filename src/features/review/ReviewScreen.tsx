@@ -9,6 +9,8 @@ import { Quiz, type QuizResult } from '../lesson/Quiz'
 import { Pip, Bubble } from '../../ui/Pip'
 import { ExitBar } from '../../ui/ExitBar'
 import { go } from '../../app/router'
+import { passMark } from '../../app/settings'
+import { useKeys } from '../../app/keys'
 import { en } from '../../i18n/en'
 
 /** Spaced review: everything due (`due`) or one unit's mix (`j3-2`, `c-pitch-2-1`) (ADR-022) */
@@ -21,6 +23,7 @@ export function ReviewScreen({ scope }: { scope: string }) {
   const [res, setRes] = useState<(QuizResult & { badges: BadgeId[] }) | null>(null)
   const label = unit ? `${en.review.unit} · ${unit.tag}` : en.review.title
 
+  useKeys({ exit: () => go('/'), next: start.length ? undefined : () => go('/') })
   if (!start.length)
     return (
       <div className="results world-bg-garden">
@@ -39,7 +42,7 @@ export function ReviewScreen({ scope }: { scope: string }) {
   return (
     <Quiz key={run} start={start} world="garden" back={back} label={label}
       onDone={(r) => {
-        const badges = commit((p) => applyReview(p, unit?.key ?? null, r.correct, r.total, dayKey(), r.answers))
+        const badges = commit((p) => applyReview(p, unit?.key ?? null, r.correct, r.total, dayKey(), r.answers, passMark()))
         setRes({ ...r, badges })
       }} />
   )

@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { level as stats } from '../../progress/progress'
 import { currentStage, type Stage } from '../../games/catalog'
 import { ExitBar } from '../../ui/ExitBar'
+import { useKeys } from '../../app/keys'
 import { en } from '../../i18n/en'
 
 export function CoursesScreen() {
@@ -42,6 +43,7 @@ export function CourseScreen({ id }: { id: string }) {
   const c = COURSES.find((x) => x.id === id) ?? COURSES[0]
   const p = useProgress()
   const units = coursePath(c)
+  useKeys({ exit: () => go('/courses'), back: () => go('/courses') })
   const [stage, setStage] = useState<Stage>(() => currentStage(units, (lid) => stats(p, lid).done))
   return (
     <div className="course-page">

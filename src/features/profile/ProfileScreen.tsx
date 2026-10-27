@@ -6,11 +6,12 @@ import { Pip } from '../../ui/Pip'
 import { Badge } from '../../ui/Badge'
 import { en } from '../../i18n/en'
 import { savedTheme, saveTheme, type Theme } from '../../app/theme'
-import { setSfx, useSfx } from '../../app/settings'
+import { PASS_CHOICES, setPassMark, setSfx, usePassMark, useSfx } from '../../app/settings'
 
 export function ProfileScreen() {
   const p = useProgress()
   const sfxOn = useSfx()
+  const pass = usePassMark()
   const [theme, setTheme] = useState(savedTheme)
   const [armed, setArmed] = useState(false)
   const done = Object.values(p.levels).filter((l) => l.done).length
@@ -64,6 +65,14 @@ export function ProfileScreen() {
           <div className="segmented" role="radiogroup" aria-label={en.profile.sfx}>
             {[true, false].map((on) => (
               <button key={String(on)} role="radio" aria-checked={sfxOn === on} onClick={() => setSfx(on)}>{on ? en.profile.on : en.profile.off}</button>
+            ))}
+          </div>
+        </div>
+        <div className="setting">
+          <span>{en.profile.pass}<small className="setting-hint">{en.profile.passHint}</small></span>
+          <div className="segmented" role="radiogroup" aria-label={en.profile.pass}>
+            {PASS_CHOICES.map((v) => (
+              <button key={v} role="radio" aria-checked={pass === v} onClick={() => setPassMark(v)}>{Math.round(v * 100)}%</button>
             ))}
           </div>
         </div>
