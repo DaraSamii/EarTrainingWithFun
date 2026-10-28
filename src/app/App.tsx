@@ -12,6 +12,9 @@ import { LevelScreen } from '../features/level/LevelScreen'
 import { LearnScreen } from '../features/learn/LearnScreen'
 import { PlayScreen } from '../features/arcade/PlayScreen'
 import { ReviewScreen } from '../features/review/ReviewScreen'
+import { NotebookScreen } from '../features/notebook/NotebookScreen'
+import { WelcomeScreen } from '../features/welcome/WelcomeScreen'
+import { welcomed } from './settings'
 import { GAMES, isUnlocked, levelId, stepOpen, type GameId, type Step3 } from '../games/catalog'
 import { en } from '../i18n/en'
 
@@ -19,6 +22,7 @@ const TABS: [string, IconName, string][] = [
   ['/', 'home', en.nav.path],
   ['/courses', 'map', en.nav.courses],
   ['/games', 'games', en.nav.games],
+  ['/notebook', 'book', en.nav.notebook],
   ['/profile', 'profile', en.nav.profile],
 ]
 
@@ -36,6 +40,9 @@ export default function App() {
     if (screen === 'practice') return <LessonScreen {...props} />
     return <PlayScreen {...props} />
   }
+  // first visit: show what the app can do before anything else
+  if (route === '/welcome' || (route === '/' && !welcomed() && p.xp === 0 && !Object.keys(p.levels).length))
+    return <div className="shell page-enter" key="welcome"><WelcomeScreen /></div>
   const review = route.match(/^\/review\/([\w-]+)$/)
   if (review) return <ReviewScreen key={route} scope={review[1]} />
   const course = route.match(/^\/course\/(\w+)$/)
@@ -60,7 +67,8 @@ export default function App() {
         <ThemeToggle />
       </header>
       <main className="content page-enter" key={tab}>
-        {tab === '/courses' ? <CoursesScreen /> : tab === '/games' ? <GamesScreen /> : tab === '/profile' ? <ProfileScreen /> : <HomeScreen />}
+        {tab === '/courses' ? <CoursesScreen /> : tab === '/games' ? <GamesScreen /> : tab === '/notebook' ? <NotebookScreen />
+          : tab === '/profile' ? <ProfileScreen /> : <HomeScreen />}
       </main>
     </div>
   )
@@ -71,9 +79,10 @@ function Stats() {
   const today = dayKey()
   const streak = currentStreak(p, today)
   return (
-    <a className="stats" href="#/" aria-label={`${streak} ${en.stats.streak}, ${p.xp} ${en.stats.xp}`}>
-      <span className={`stat streak ${streak ? 'on' : ''}`}><Icon name="flame" size={20} /> {streak}</span>
-      <span className="stat xp"><Icon name="bolt" size={20} /> {p.xp}</span>
+    <a className="stats" href="#/">
+      {/* visible numbers plus hidden words, so the accessible name contains what is shown (axe: label-content-name-mismatch) */}
+      <span className={`stat streak ${streak ? 'on' : ''}`}><Icon name="flame" size={20} /> {streak}<span className="sr-only"> {en.stats.streak},</span></span>
+      <span className="stat xp"><Icon name="bolt" size={20} /> {p.xp}<span className="sr-only"> {en.stats.xp}</span></span>
       <span className="stat goal-mini" aria-hidden="true">
         <svg viewBox="0 0 36 36" width="28" height="28">
           <circle cx="18" cy="18" r="15" className="ring-bg" />

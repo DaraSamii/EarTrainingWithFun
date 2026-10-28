@@ -5,6 +5,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-28 · Motion, science and a test suite
+
+Everything animates in and out, explanations act out their words and explain the physics and math, a Notebook to reread, a Welcome page, and four layers of tests.
+
+### Added
+- **Animations on every entrance and exit** (ADR-027): page fades, crossfades for the next question, lesson card and tab, and exit animations for overlays, banners, help panels, the countdown and "Tap to listen".
+- **Textured words** (ADR-028): "higher" climbs, "lower" sinks, "bigger" grows, "softer" fades, "staccato" hops, "tense" jitters, "bright" glows, in lessons, hints and Pip's bubbles.
+- **The science and the math** for all 25 games (why it feels that way, plus ratios, cents, beats, decibels, BPM…), as new lesson cards with animated **frequency-ratio waves**.
+- **Notebook** page: every explanation grouped by course and game, with contents and search.
+- **Welcome** page: what the app can do; shown on a first visit, and "Let's start" opens the first level. Also linked from Profile.
+- **Four-layer test suite** (ADR-029): 213 logic and component tests, plus 18 real-browser tests (journeys, all arcades, review, notebook, axe accessibility, phone layout, reduced motion) running in CI.
+
+### Fixed
+- Full-screen overlays ("Tap to listen", the arcade start card) could sit behind the page, so taps landed on the answers underneath.
+- The top-bar streak/XP link's accessible name now contains its visible text.
+- Two icons no longer contain SVG text (screen-reader name mismatch).
+
+
 ## [0.8.0] - 2026-10-27 · Explain more, every course its own world
 
 ### Added
@@ -135,7 +153,8 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.8.0...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.9.0...develop
+[0.9.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.1...v0.8.0
 [0.7.1]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.6.0...v0.7.0

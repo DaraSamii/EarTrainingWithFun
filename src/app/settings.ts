@@ -33,3 +33,7 @@ export function setPassMark(v: number) {
 }
 
 export const usePassMark = () => useSyncExternalStore(sub, passMark)
+
+/** Whether the Welcome page has been seen (it shows on a first visit) */
+export const WELCOMED = 'etwf.welcomed'
+export const welcomed = () => { try { return !!localStorage.getItem(WELCOMED) } catch { return true } }

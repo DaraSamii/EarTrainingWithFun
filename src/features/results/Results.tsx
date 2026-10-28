@@ -5,6 +5,7 @@ import { verdict } from '../../progress/progress'
 import { lastFrom } from '../../app/router'
 import { usePassMark } from '../../app/settings'
 import { useKeys } from '../../app/keys'
+import { Rich } from '../../ui/Rich'
 import type { WorldId } from '../../games/types'
 import type { BadgeId } from '../../progress/progress'
 import { sfx } from '../../audio/sfx'
@@ -93,7 +94,7 @@ export function Results({ kind, gameId, level, world, back, correct, total, xp, 
       <div className="results-card">
         <div className="pip-stage">
           <Pip mood={celebrate ? 'happy' : 'think'} size={120} />
-          <Bubble side="bottom"><p>{line}</p></Bubble>
+          <Bubble side="bottom"><p><Rich text={line} /></p></Bubble>
         </div>
         <h1>{title}</h1>
         <span className={`score-pill ${passed ? 'pass' : 'fail'}`}>{acc}% · {passed ? en.verdicts.passLabel : en.verdicts.failLabel} ({Math.round(pass * 100)}%)</span>

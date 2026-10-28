@@ -12,6 +12,7 @@ import { World } from '../../ui/World'
 import { OptionFace } from '../../ui/OptionFace'
 import { Countdown, Hud, Popups, StartOverlay, type Popup } from './shared'
 import { useGame, useLater } from './hooks'
+import { Presence } from '../../ui/Presence'
 import { en } from '../../i18n/en'
 
 const BRICKS = 10
@@ -226,7 +227,7 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
         <span ref={ballRef} className="ball" />
         <span className="paddle" style={{ left: `${zoneX(g.paddle)}%`, top: `${PADDLE_Y}%`, width: `${Math.min(26, 80 / K)}%` }} />
         <Popups items={g.popups} />
-        {g.banner && <div className="banner" role="status">{g.banner}</div>}
+        <Presence show={!!g.banner} className="banner-wrap"><div className="banner" role="status">{g.banner}</div></Presence>
         {g.phase === 'down' && !g.tapped && g.results.length === 0 && <p className="stage-hint">{en.arcade.tapZone}</p>}
       </div>
 
@@ -240,10 +241,10 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
         ))}
       </div>
 
-      {g.phase === 'intro' && (
+      <Presence show={g.phase === 'intro'} className="layer-top">
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.tapZone}
           help={en.arcadeHelp.breaker} onStart={() => { g.phase = 'count'; render() }} />
-      )}
+      </Presence>
       {g.phase === 'count' && <Countdown onDone={launch} />}
     </div>
   )
