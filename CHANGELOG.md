@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-28 · Motion, science and a test suite
+
+Everything animates in and out, explanations act out their words and explain the physics and math, a Notebook to reread, a Welcome page, and four layers of tests.
+
 ### Added
 - **Animations on every entrance and exit** (ADR-027): page fades, crossfades for the next question, lesson card and tab, and exit animations for overlays, banners, help panels, the countdown and "Tap to listen".
 - **Textured words** (ADR-028): "higher" climbs, "lower" sinks, "bigger" grows, "softer" fades, "staccato" hops, "tense" jitters, "bright" glows, in lessons, hints and Pip's bubbles.
@@ -149,7 +153,8 @@ First public release: knowledge base, design system and a playable demo with two
 - Games library and Profile screen with stats, theme switch (system/light/dark) and progress reset.
 - Synth audio engine scheduled on the audio clock; unit tests for generators and progress rules.
 
-[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.8.0...develop
+[Unreleased]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.9.0...develop
+[0.9.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.1...v0.8.0
 [0.7.1]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/DaraSamii/EarTrainingWithFun/compare/v0.6.0...v0.7.0
