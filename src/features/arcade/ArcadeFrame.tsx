@@ -43,7 +43,7 @@ export function ArcadeFrame({ r, game, level, scene, zones = true, zoneClass = '
         </div>
       )}
 
-      <Presence show={g.phase === 'intro'}>
+      <Presence show={g.phase === 'intro'} className="layer-top">
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={game.instruction} help={helpLines} onStart={r.start} />
       </Presence>
       {g.phase === 'count' && <Countdown onDone={r.ask} />}

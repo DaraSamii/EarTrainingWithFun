@@ -241,7 +241,7 @@ export function Breaker({ game, level, onFinish }: { game: Game; level: number; 
         ))}
       </div>
 
-      <Presence show={g.phase === 'intro'}>
+      <Presence show={g.phase === 'intro'} className="layer-top">
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.tapZone}
           help={en.arcadeHelp.breaker} onStart={() => { g.phase = 'count'; render() }} />
       </Presence>

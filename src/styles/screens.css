@@ -419,8 +419,11 @@ button.card:hover, .course-card:hover, .game-card:hover { transform: translateY(
 .lesson-card ul { margin: 0; padding-left: 22px; display: grid; gap: 8px; font-size: 19px; line-height: 1.45; }
 
 /* ---------- 0.9: enter AND exit animations everywhere ---------- */
-/* opacity only: a transform on the wrapper would trap fixed-position children (overlays) */
-.presence.p-in { animation: p-in 240ms ease-out both; }
+/* opacity only: a transform on the wrapper would trap fixed-position children (overlays).
+   `backwards`, not `both`: a lingering opacity makes a stacking context that hid overlays behind the page (found by e2e) */
+.presence.p-in { animation: p-in 240ms ease-out backwards; }
+/* wrappers of full-screen overlays sit above the page */
+.presence.layer-top { position: relative; z-index: 50; }
 .presence.p-out { animation: p-out 200ms ease-in both; pointer-events: none; }
 @keyframes p-in { from { opacity: 0; } }
 @keyframes p-out { to { opacity: 0; } }

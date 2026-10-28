@@ -202,7 +202,7 @@ export function Blaster({ game, level, onFinish }: { game: Game; level: number; 
 
       <div className="timer"><span ref={barRef} /></div>
 
-      <Presence show={g.phase === 'intro'}>
+      <Presence show={g.phase === 'intro'} className="layer-top">
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.shoot}
           help={en.arcadeHelp.blaster} onStart={() => { g.phase = 'count'; render() }} />
       </Presence>

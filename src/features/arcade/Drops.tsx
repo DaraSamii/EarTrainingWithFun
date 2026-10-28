@@ -186,7 +186,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
         ))}
       </div>
 
-      <Presence show={g.phase === 'intro'}>
+      <Presence show={g.phase === 'intro'} className="layer-top">
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.drops}
           help={en.arcadeHelp.drops} onStart={() => { g.phase = 'count'; render() }} />
       </Presence>

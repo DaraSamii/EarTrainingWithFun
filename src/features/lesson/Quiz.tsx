@@ -151,7 +151,7 @@ export function Quiz({ start, label, world, back, onDone }: {
         )}
       </section>
 
-      <Presence show={needsTap}>
+      <Presence show={needsTap} className="layer-top">
         <button className="tap-overlay" onClick={() => { setNeedsTap(false); playQ(q, true) }}>
           <span className="replay" aria-hidden="true"><Icon name="play" size={44} /></span>
           {en.lesson.tapToStart}
