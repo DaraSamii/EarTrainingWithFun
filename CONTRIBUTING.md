@@ -55,10 +55,21 @@ git switch develop && git merge --no-ff main && git push   # back-merge
 | 0.6.0 | ✅ Spaced repetition: memory items, interleaved practice, unit reviews, review hub; Beginner/Intermediate/Advanced tabs; 134 levels |
 | 0.7.0 | ✅ One arcade per course (5 new), 7 new games (25 / 169 levels), passing score, verdicts, Next activity, keyboard everywhere |
 | 0.8.0 | ✅ Lesson cards in Learn (a guide for every game), a unique world per course |
-| 0.9.0 | Firebase: anonymous + Google sign-in, Firestore progress, settings |
-| 0.10.0 | Play-back inputs: Echo on the on-screen piano, Tap Back rhythm |
+| 0.9.0 | ✅ Motion everywhere, textured words, science and math, Notebook, Welcome page, four-layer test suite |
+| 0.10.0 | Firebase: anonymous + Google sign-in, Firestore progress, settings |
+| 0.11.0 | Play-back inputs: Echo on the on-screen piano, Tap Back rhythm |
 | 0.7.0 | PWA offline, performance and accessibility pass against design criteria |
 | 1.0.0 | Sections A–C complete, placement test, v1 games |
+
+## Tests
+
+```sh
+npm test                 # logic + component tests (Vitest, node + jsdom)
+npm run test:e2e         # real-browser tests (Playwright, needs Chrome)
+PW_EXECUTABLE=/usr/bin/brave-browser npm run test:e2e   # any Chromium browser works locally
+```
+
+See ADR-029 for what each layer covers.
 
 ## Definition of Done
 

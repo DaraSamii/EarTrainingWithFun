@@ -131,7 +131,7 @@ Games are data: `{ id, mechanic, skill, levels: LevelSpec[] }` in `games/catalog
 ### B6. Routing
 - React Router with clean URLs; the build copies `index.html` → `404.html` so GitHub Pages serves deep links.
 
-### B7. Testing pyramid
+### B7. Testing pyramid (current: ADR-029)
 | Layer | Tool | What |
 |---|---|---|
 | Unit | Vitest | `music/`, `srs/`, `progress/` rules (streak edge cases across time zones), every `grade()` |
