@@ -81,7 +81,8 @@ const ART: Record<string, React.ReactNode> = {
   // crescendo hairpin, soft to loud
   hairpin: <>
     <path d="M12 24L42 12M12 24l30 12" />
-    <text x="2" y="30" fontSize="16" fontStyle="italic" fontWeight="700" fill="currentColor" stroke="none" fontFamily="Georgia, serif">p</text>
+    {/* a hand-drawn "p" (soft): drawn as a path so it never counts as visible text */}
+    <path d="M4 22v14M4 26.5a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0" strokeWidth="2.6" />
   </>,
   // staff with two notes: read the interval
   readint: <>
@@ -109,7 +110,7 @@ const ART: Record<string, React.ReactNode> = {
   // a chord with a count bubble
   count: <>
     <Head x={14} y={36} r={4.5} /><Head x={14} y={27} r={4.5} /><Head x={14} y={18} r={4.5} /><path d="M20 35V6" />
-    <circle cx="35" cy="16" r="10" /><text x="31" y="21" fontSize="14" fill="currentColor" stroke="none" fontFamily="var(--font-display)">3</text>
+    <circle cx="35" cy="16" r="10" /><circle cx="31" cy="16" r="1.6" fill="currentColor" /><circle cx="35" cy="16" r="1.6" fill="currentColor" /><circle cx="39" cy="16" r="1.6" fill="currentColor" />
   </>,
   // speedometer
   speed: <>

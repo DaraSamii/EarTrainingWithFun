@@ -79,9 +79,10 @@ function Stats() {
   const today = dayKey()
   const streak = currentStreak(p, today)
   return (
-    <a className="stats" href="#/" aria-label={`${streak} ${en.stats.streak}, ${p.xp} ${en.stats.xp}`}>
-      <span className={`stat streak ${streak ? 'on' : ''}`}><Icon name="flame" size={20} /> {streak}</span>
-      <span className="stat xp"><Icon name="bolt" size={20} /> {p.xp}</span>
+    <a className="stats" href="#/">
+      {/* visible numbers plus hidden words, so the accessible name contains what is shown (axe: label-content-name-mismatch) */}
+      <span className={`stat streak ${streak ? 'on' : ''}`}><Icon name="flame" size={20} /> {streak}<span className="sr-only"> {en.stats.streak},</span></span>
+      <span className="stat xp"><Icon name="bolt" size={20} /> {p.xp}<span className="sr-only"> {en.stats.xp}</span></span>
       <span className="stat goal-mini" aria-hidden="true">
         <svg viewBox="0 0 36 36" width="28" height="28">
           <circle cx="18" cy="18" r="15" className="ring-bg" />
