@@ -3,6 +3,8 @@ import { StageTabs } from '../path/StageTabs'
 import { dueKeys, strength } from '../../progress/srs'
 import { currentStage, type Stage } from '../../games/catalog'
 import { CourseIcon } from '../../ui/GameIcon'
+import { animate } from '../../app/motion'
+import { Rich } from '../../ui/Rich'
 import { COURSES, GAMES, JOURNEY, courseMax, courseStars, currentNode } from '../../games/catalog'
 import { setProgress, useProgress } from '../../progress/store'
 import { GOALS, currentStreak, dayKey, level as stats, setGoal, todayXp, totalStars, week, type Progress } from '../../progress/progress'
@@ -40,7 +42,7 @@ export function HomeScreen() {
         <section className="greeting">
           <div className="greeting-pip">
             <Pip mood="idle" size={96} />
-            <Bubble><p>{hello}</p></Bubble>
+            <Bubble><p><Rich text={hello} /></p></Bubble>
           </div>
           <ul className="taglines" aria-label={en.path.ticker}>
             {en.path.ticker.split(' • ').map((t) => <li key={t}>{t}</li>)}
@@ -63,7 +65,7 @@ export function HomeScreen() {
           <h1>{en.journey.title}</h1>
           <p>{en.journey.blurb}</p>
         </header>
-        <StageTabs units={JOURNEY} stage={stage} onChange={setStage} />
+        <StageTabs units={JOURNEY} stage={stage} onChange={(s) => animate(() => setStage(s))} />
         <PathView key={stage} units={JOURNEY.filter((u) => u.stage === stage)} from="/" />
       </div>
 

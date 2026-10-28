@@ -139,3 +139,19 @@ Format: `ADR-NNN · Title · Status · Date` → Context / Decision / Consequenc
 **Decision:**
 - Every game has a short **guide** (`i18n/guides.en.ts`): what it is, three listening tips, a common mistake, and where you hear it in real music. Learn now opens with **paged lesson cards** (The idea · What is it? · How to listen · Watch out · In real music) before the sound demos. First levels show every card; later levels show the level's idea plus one rotating tip and one more card. Pages move with Back/Next and ←/→.
 - Each course has its **own paper world**, shared by all its games and matching its arcade: Pitch → Paper Peaks, Intervals → Paper Space, Scales & Keys → Sunset Garden, Melody → **Paper River**, Harmony → **Potion Lab**, Rhythm → **Paper Stadium**, Sounds → **Lily Pond**, Theory → Paper Notebook.
+
+### ADR-027 · Motion: every entrance and exit animates · Accepted · 2026-10-27
+**Decision:** Three mechanisms, chosen per case. **Route changes** use the View Transitions API (fade-out of the old page, fade-in of the new). **In-page swaps** (next question, next lesson card, stage tabs, games view) call `animate()`, a soft crossfade transition (`data-vt="soft"`). **Elements that come and go** (help panel, banners, start overlays, "Tap to listen", countdown) are wrapped in `<Presence>`, which keeps them mounted while an exit animation plays. Presence animates opacity only, with `backwards` fill, so it never traps fixed overlays or creates stacking contexts. A bug like that was found by e2e and fixed: overlays sat behind the page. Under reduced motion everything appears and disappears instantly.
+
+### ADR-028 · Textured words, the science and math, the Notebook, the Welcome page · Accepted · 2026-10-27
+**Decision:** `<Rich>` turns sound words into small visual acts (higher climbs, lower sinks, bigger grows, softer fades, staccato hops, tense jitters, bright glows), letter by letter where it helps, always with the plain word for screen readers. Every game gains a **science** entry (why it feels that way, and the math: ratios, cents, beats, decibels, BPM…), shown as "Why it feels this way" and "The math" lesson cards, with **frequency-ratio waves** (e.g. 3:2) where a ratio explains the sound. A **Notebook** page collects every explanation by course and game, with contents and search. A **Welcome** page presents the app on a first visit; "Let's start" opens the first level.
+
+### ADR-029 · Testing strategy: four layers · Accepted · 2026-10-27
+| Layer | Tool | Covers |
+|---|---|---|
+| Logic | Vitest (node) | generators for every level of every game, music math, SRS scheduling, progress rules, review building |
+| Components | Vitest + jsdom + Testing Library | textured words, Presence exits, icons, staff, ratio waves, stage tabs; full flows: welcome → level, Learn (cards → demos → tries), Practice pass/fail, Review, Profile, keyboard, theme, panels |
+| End to end | Playwright (real Chrome) | complete journey with the keyboard, an arcade to its results, all 8 arcades start and exit, review, Notebook search |
+| Quality | Playwright + axe | no critical/serious accessibility violations on 8 pages; no horizontal scroll at phone width; reduced motion; exit animations; overlays on top |
+
+The audio engine is mocked in jsdom; tests read what the app "played" to answer correctly or wrongly on purpose. CI runs logic and component tests in one job and e2e in another, using the runner's preinstalled Chrome. The first e2e run found three real bugs: overlays stacked under the page, an accessible-name mismatch on the top-bar stats, and SVG text inside two icons.

@@ -1,9 +1,10 @@
 // Every UI string lives here (ADR-010).
 import { games } from './games.en'
 import { guides } from './guides.en'
+import { science } from './science.en'
 export const en = {
   appName: 'EarTrainingWithFun',
-  nav: { path: 'Home', courses: 'Courses', games: 'Games', profile: 'Profile', home: 'Home', back: 'Back' },
+  nav: { path: 'Home', courses: 'Courses', games: 'Games', notebook: 'Notebook', profile: 'Profile', home: 'Home', back: 'Back', about: 'About the app' },
   theme: { light: 'Switch to light mode', dark: 'Switch to dark mode' },
   stats: { streak: 'day streak', xp: 'XP', goal: 'Daily goal' },
   solfege: ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Ti'],
@@ -14,6 +15,7 @@ export const en = {
   },
   games,
   guides,
+  science,
   courses: {
     pitch: { title: 'Pitch', blurb: 'High, low, and everything in between' },
     intervals: { title: 'Intervals', blurb: 'The distance between two notes' },
@@ -32,6 +34,38 @@ export const en = {
     allDone: 'You finished the Journey!',
   },
   stages: ['Beginner', 'Intermediate', 'Advanced'],
+  notebook: {
+    title: 'Notebook',
+    blurb: 'Every explanation in one place: ideas, listening tips, the science and math, level by level. Search or jump to a topic.',
+    contents: 'Contents',
+    search: 'Search the notebook (e.g. octave, minor, beat)',
+    levels: 'Level by level',
+    none: 'Nothing matches that search.',
+  },
+  welcome: {
+    title: 'Train your ears. Play your way there.',
+    lede: 'Short daily games that make your ears sharper: hear notes climb higher or sink lower, chords turn bright or dark, rhythms speed up or slow down.',
+    pip: "Hi, I'm Pip! I'll show you every sound before you play.",
+    start: "Let's start",
+    explore: 'Explore courses',
+    courses: 'courses', games: 'games', levels: 'levels', instruments: 'real instruments',
+    howTitle: 'How every level works',
+    learn: 'Learn', learnText: 'Pip explains the idea, the science and the math, then plays every new sound for you.',
+    practice: 'Practice', practiceText: 'A calm round with no clock. Missed questions come back until you get them.',
+    play: 'Play', playText: 'An arcade game made for that skill, with score, combos and stars.',
+    coursesTitle: 'Eight courses, eight different games',
+    arcades: {
+      breaker: 'Brick Breaker', blaster: 'Ship Blaster', drops: 'Falling Notes', climber: 'Peak Climber',
+      river: 'River Run', potion: 'Potion Lab', hurdles: 'Hurdle Dash', fishing: 'Fishing Pond',
+    } as Record<string, string>,
+    memoryTitle: 'Built to stick',
+    memoryText: 'Every sound you learn comes back right before you would forget it. Spaced reviews make your ears sharper for good.',
+    day: 'day', days: 'days',
+    notebookTitle: 'A notebook to reread', notebookText: 'Every explanation, the science and the math, grouped by course.',
+    keysTitle: 'Keyboard friendly', keysText: '→ next, ← back, Esc exit, 1–9 to answer, Space to replay.',
+    soundTitle: 'Real instruments', soundText: 'Piano, violin, flute, brass and more, so you train on the sounds of real music.',
+    finalTitle: 'Ready? Your first level takes two minutes.',
+  },
   verdicts: {
     perfect: ['Perfect!', 'Every single one. Your ears are on fire!'],
     great: ['Outstanding!', 'Excellent listening.'],
@@ -118,7 +152,8 @@ export const en = {
   },
   learn: {
     title: 'Learn',
-    cards: { idea: 'The idea', what: 'What is it?', listen: 'How to listen', watch: 'Watch out', real: 'In real music' },
+    cards: { idea: 'The idea', what: 'What is it?', listen: 'How to listen', watch: 'Watch out', real: 'In real music', why: 'Why it feels this way', math: 'The math' },
+    ratio: 'Frequency ratio',
     explain: 'Let me explain.',
     prev: 'Back',
     next: 'Next',

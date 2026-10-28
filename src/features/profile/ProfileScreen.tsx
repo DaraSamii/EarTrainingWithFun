@@ -76,6 +76,7 @@ export function ProfileScreen() {
             ))}
           </div>
         </div>
+        <a className="btn-ghost" href="#/welcome"><Icon name="ear" size={18} /> {en.nav.about}</a>
         <p className="credits"><strong>{en.profile.about}</strong> {en.profile.credits}</p>
         <button className="btn-ghost danger" onClick={() => (armed ? (setProgress(initialProgress), setArmed(false)) : setArmed(true))}>
           {armed ? en.profile.resetConfirm : en.profile.reset}

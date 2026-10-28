@@ -5,6 +5,7 @@ import { useProgress } from '../../progress/store'
 import { level as stats } from '../../progress/progress'
 import { fromParam, go, rememberFrom } from '../../app/router'
 import { useKeys } from '../../app/keys'
+import { Rich } from '../../ui/Rich'
 import { ExitBar } from '../../ui/ExitBar'
 import { Icon, type IconName } from '../../ui/Icon'
 import { Pip, Bubble } from '../../ui/Pip'
@@ -45,7 +46,7 @@ export function LevelScreen({ gameId, level }: { gameId: GameId; level: number }
       <div className="level-body">
         <div className="pip-row">
           <Pip mood={unlocked ? 'talk' : 'think'} size={88} />
-          <Bubble>{unlocked ? en.level.stepHints[next] : en.level.needs}</Bubble>
+          <Bubble><Rich text={unlocked ? en.level.stepHints[next] : en.level.needs} /></Bubble>
         </div>
 
         <ol className="steps">

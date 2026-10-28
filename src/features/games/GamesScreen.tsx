@@ -8,6 +8,7 @@ import { Icon } from '../../ui/Icon'
 import { Stars } from '../../ui/Stars'
 import { World } from '../../ui/World'
 import { en } from '../../i18n/en'
+import { animate } from '../../app/motion'
 
 function GameCard({ g, i }: { g: Game; i: number }) {
   const p = useProgress()
@@ -51,7 +52,7 @@ export function GamesScreen() {
         </div>
         <div className="segmented" role="radiogroup" aria-label={en.gamesScreen.title}>
           {(['course', 'all'] as const).map((m) => (
-            <button key={m} role="radio" aria-checked={mode === m} onClick={() => setMode(m)}>
+            <button key={m} role="radio" aria-checked={mode === m} onClick={() => animate(() => setMode(m))}>
               {m === 'course' ? en.gamesScreen.byCourse : en.gamesScreen.all}
             </button>
           ))}

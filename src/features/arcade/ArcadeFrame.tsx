@@ -5,6 +5,7 @@ import { World } from '../../ui/World'
 import { OptionFace } from '../../ui/OptionFace'
 import { Staff } from '../../ui/Staff'
 import { Countdown, Hud, Popups, StartOverlay } from './shared'
+import { Presence } from '../../ui/Presence'
 import type { Rounds } from './useRounds'
 import { en } from '../../i18n/en'
 
@@ -20,13 +21,13 @@ export function ArcadeFrame({ r, game, level, scene, zones = true, zoneClass = '
       <World world={game.world} />
       <Hud total={r.total} results={g.results} score={g.score} combo={g.combo} back={r.back}
         onReplay={g.q?.prompt.length ? () => play(g.q!.prompt) : undefined} onHelp={() => setHelp((h) => !h)} />
-      {help && <div className="help-pop" role="note"><ul>{helpLines.map((h) => <li key={h}>{h}</li>)}</ul></div>}
+      <Presence show={help} className="help-pop"><ul role="note">{helpLines.map((h) => <li key={h}>{h}</li>)}</ul></Presence>
 
       <div className="stage themed">
         {scene}
         {g.q?.visual && g.phase !== 'intro' && <div className="stage-visual" key={g.n}><Staff v={g.q.visual} width={200} /></div>}
         <Popups items={g.popups} />
-        {g.banner && <div className="banner" role="status">{g.banner}</div>}
+        <Presence show={!!g.banner} className="banner-wrap"><div className="banner" role="status">{g.banner}</div></Presence>
       </div>
 
       {zones && (
@@ -42,9 +43,9 @@ export function ArcadeFrame({ r, game, level, scene, zones = true, zoneClass = '
         </div>
       )}
 
-      {g.phase === 'intro' && (
+      <Presence show={g.phase === 'intro'} className="layer-top">
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={game.instruction} help={helpLines} onStart={r.start} />
-      )}
+      </Presence>
       {g.phase === 'count' && <Countdown onDone={r.ask} />}
     </div>
   )

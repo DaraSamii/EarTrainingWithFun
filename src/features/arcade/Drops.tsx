@@ -13,6 +13,7 @@ import { OptionFace } from '../../ui/OptionFace'
 import { Staff } from '../../ui/Staff'
 import { Countdown, Hud, Popups, StartOverlay, type Popup } from './shared'
 import { useGame, useLater } from './hooks'
+import { Presence } from '../../ui/Presence'
 import { en } from '../../i18n/en'
 
 const ITEMS = 12
@@ -172,7 +173,7 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
         )}
         <span className="ground" />
         <Popups items={g.popups} />
-        {g.banner && <div className="banner" role="status">{g.banner}</div>}
+        <Presence show={!!g.banner} className="banner-wrap"><div className="banner" role="status">{g.banner}</div></Presence>
       </div>
 
       <div className="zones" data-count={K}>
@@ -185,10 +186,10 @@ export function Drops({ game, level, onFinish }: { game: Game; level: number; on
         ))}
       </div>
 
-      {g.phase === 'intro' && (
+      <Presence show={g.phase === 'intro'} className="layer-top">
         <StartOverlay title={`${game.title} · ${en.path.level} ${level + 1}`} text={en.arcade.drops}
           help={en.arcadeHelp.drops} onStart={() => { g.phase = 'count'; render() }} />
-      )}
+      </Presence>
       {g.phase === 'count' && <Countdown onDone={spawn} />}
     </div>
   )
